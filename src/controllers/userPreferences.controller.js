@@ -15,7 +15,12 @@ export const getAllUserPreference = (req, res) => {
         if (error) {
             res.status(400).send(error)
         } else {
-            res.status(200).send(UserPreferences)
+            res.status(200).send({
+                code: "success",
+                total: UserPreferences.length,
+                data: UserPreferences
+            }
+            )
         }
     })
 }
@@ -31,7 +36,10 @@ export const getUserPreferenceById = (req, res) => {
         if (error) {
             res.status(400).send(error)
         } else {
-            res.status(200).send(UserPreferences)
+            res.status(200).send({
+                code: "success",
+                data: UserPreferences
+            })
 
         }
     })
@@ -76,8 +84,9 @@ export const createNewUserPreference = async (req, res) => {
                 })
             } else {
                 res.status(201).json({
-                    success: true,
-                    message: 'UserPreference  created'
+                    code: "success",
+                    message: 'UserPreference  created successfully',
+                    "data": UserPreferenceData
                 })
             }
         })
@@ -116,7 +125,7 @@ export const updateUserPreference = async (req, res) => {
                 })
             } else {
                 res.json({
-                    success: true,
+                    code: "success",
                     message: 'User Preference updated successfully '
                 })
             }
@@ -140,7 +149,7 @@ export const deleteUsersLines = (req, res) => {
             })
         } else {
             res.json({
-                success: true,
+                "code": "success",
                 message: 'User Preference deleted successfully'
             })
         }

@@ -32,7 +32,7 @@ accountPermission.getAllAccountPermission = (result) => {
  */
 accountPermission.getAccountPermissionById = (id, result) => {
     dbPool.query('SELECT * FROM api_key_acc_permission WHERE id= ? ', id, (error, res) => {
-        if (error) {} else {
+        if (error) { } else {
             result(res)
         }
     })
@@ -44,7 +44,6 @@ accountPermission.getAccountPermissionById = (id, result) => {
  */
 accountPermission.createNewAccountPermission = (accountKeyData, result) => {
     dbPool.query('SELECT api_key_id FROM api_key_acc_permission WHERE api_key_id= ?', [accountKeyData.user_id], (error, res) => {
-        console.log(res)
         if (res.length === 0) {
             let action = "create new account permission"
             dbPool.query('INSERT INTO api_key_acc_permission SET ?', accountKeyData, (error, res) => {

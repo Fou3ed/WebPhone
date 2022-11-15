@@ -32,7 +32,7 @@ userPermission.getAllUserPermission = (result) => {
  */
 userPermission.getUserPermissionById = (id, result) => {
     dbPool.query('SELECT * FROM users_permissions WHERE id= ? ', id, (error, res) => {
-        if (error) {} else {
+        if (error) { } else {
             result(res)
         }
     })
@@ -44,8 +44,8 @@ userPermission.getUserPermissionById = (id, result) => {
  */
 userPermission.createNewUserPermission = (usersData, result) => {
     dbPool.query('SELECT user_id FROM users_permissions WHERE user_id= ?', [usersData.user_id], (error, res) => {
-        console.log(usersData)
         if (res.length !== 0) {
+
             let action = "create new user permission"
             dbPool.query('INSERT INTO users_permissions SET ?', usersData, (error, res) => {
                 if (error) {

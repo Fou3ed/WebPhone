@@ -14,7 +14,11 @@ import {
 export const getContactsList = (req, res) => {
     ContactModel.getAllContacts((contacts, error) => {
         if (!error) {
-            res.status(200).send(contacts)
+            res.status(200).send({
+                code: "success",
+                total: contacts.length,
+                data: contacts
+            })
         } else {
             res.status(400).send(error)
 
@@ -34,7 +38,10 @@ export const getContactsById = (req, res) => {
         if (error) {
             res.status(400).send(error)
         } else {
-            res.status(200).send(contacts)
+            res.status(200).send({
+                code: "success",
+                data: contacts
+            })
 
         }
     })
@@ -76,8 +83,8 @@ export const createNewContacts = async (req, res) => {
         })
 
     } else {
-        const accountsData = new ContactModel(req.body);
-        ContactModel.createNewContact(accountsData, (result, error) => {
+        const contactsData = new ContactModel(req.body);
+        ContactModel.createNewContact(contactsData, (result, error) => {
             if (error) {
                 res.send(error)
                 res.status(500).send({
@@ -95,8 +102,9 @@ export const createNewContacts = async (req, res) => {
                 })
             } else {
                 res.status(201).json({
-                    success: true,
-                    message: 'contact created'
+                    code: "success",
+                    message: 'contact created',
+                    data: contactsData
                 })
             }
         })
@@ -151,7 +159,7 @@ export const updateContacts = async (req, res) => {
                 })
             } else {
                 res.json({
-                    success: true,
+                    code: "success",
                     message: 'contact updated successfully '
                 })
             }
@@ -175,7 +183,7 @@ export const deleteContacts = (req, res) => {
             })
         } else {
             res.json({
-                success: true,
+                code: "success",
                 message: 'contact deleted successfully'
             })
         }

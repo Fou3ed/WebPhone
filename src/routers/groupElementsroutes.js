@@ -27,17 +27,17 @@ router.get('/:id/', getGroupElementsById)
  * http:/localhost:3000/group/
 
  */
-router.post('/', createNewGroupElement)
+router.post('/create', createNewGroupElement)
 /**
  * update groupe element
  * http:/localhost:3000/group/{id}
  * 
  */
-router.put('/:id/', updateGroupElement)
+router.put('/update/:id', updateGroupElement)
 /**
  * Delete groupe element
  * http:/localhost:3000/group/{id}
  */
-router.delete('/:id', deleteGroupElement)
+router.delete('/delete/:id', deleteGroupElement)
 
 export default router

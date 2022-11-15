@@ -2,6 +2,9 @@ import {
     dbPool
 } from '../DB/database.js'
 import bcrypt from 'bcrypt'
+import logs from '../middleware/logs/logs.js'
+/******************************************************************** ELEMENT=14  ************************************************/
+let element = 14
 /**
  *  constructor
  * */
@@ -90,8 +93,10 @@ Users.createNewUser = (userData, result) => {
         if (res.length === 0) {
             dbPool.query('INSERT INTO users SET ?', userData, (error, res) => {
                 if (!error) {
-
                     result(res)
+                    let action = "Create New User"
+                    logs(res.insertId, action, element)
+
 
                 } else {
                     result('false')
@@ -107,8 +112,8 @@ Users.createNewUser = (userData, result) => {
  * 
  */
 Users.updateUser = (id, usersData, result, _res) => {
-    dbPool.query('SELECT * FROM users WHERE id= ? ', id, (error, res) => {
-        if (res.length === 0) {
+    dbPool.query('SELECT * FROM users WHERE id= ? ', id, (error, resR1) => {
+        if (resR1.length === 0) {
             result('false')
         } else {
             dbPool.query(
@@ -121,6 +126,8 @@ Users.updateUser = (id, usersData, result, _res) => {
                         res.status(400).send(error)
                     } else {
                         result(res)
+                        let action = "update User"
+                        logs(resR1[0].id, action, element)
                     }
                 }
             )
@@ -134,8 +141,8 @@ Users.updateUser = (id, usersData, result, _res) => {
  * 
  */
 Users.deleteUser = (id, result) => {
-    dbPool.query('SELECT * FROM users WHERE id= ? ', id, (error, res) => {
-        if (res.length === 0) {
+    dbPool.query('SELECT * FROM users WHERE id= ? ', id, (error, resR1) => {
+        if (resR1.length === 0) {
             result('false')
         } else {
             dbPool.query('DELETE FROM users WHERE id=? ', id, (error, res) => {
@@ -143,6 +150,8 @@ Users.deleteUser = (id, result) => {
                     result(error)
                 } else {
                     result(res)
+                    let action = "DELETE User"
+                    logs(resR1[0].insertId, action, element)
                 }
             })
         }

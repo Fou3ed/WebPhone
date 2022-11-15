@@ -20,7 +20,11 @@ export const getUsersLinesList = (req, res) => {
         if (error) {
             res.status(400).send(error)
         } else {
-            res.status(200).send(users)
+            res.status(200).send({
+                code: "success",
+                total: users.length,
+                data: users
+            })
         }
     })
 }
@@ -36,7 +40,10 @@ export const getUserLineById = (req, res) => {
         if (error) {
             res.status(400).send(error)
         } else {
-            res.status(200).send(users)
+            res.status(200).send({
+                code: "success",
+                data: users
+            })
 
         }
     })
@@ -92,8 +99,9 @@ export const createNewUsersLine = async (req, res) => {
                 })
             } else {
                 res.status(201).json({
-                    success: true,
-                    message: 'users created'
+                    code: "success",
+                    message: 'user line Instance  created successfully',
+                    data: LinesData
                 })
             }
         })
@@ -131,8 +139,9 @@ export const updateUsersLines = async (req, res) => {
                 })
             } else {
                 res.json({
-                    success: true,
-                    message: 'users updated successfully '
+                    code: "success",
+                    message: 'user line Instance  updated successfully',
+                    data: usersData
                 })
             }
         })
@@ -155,8 +164,8 @@ export const deleteUsersLines = (req, res) => {
             })
         } else {
             res.json({
-                success: true,
-                message: 'users deleted successfully'
+                code: "success",
+                message: 'user line deleted successfully'
             })
         }
     })

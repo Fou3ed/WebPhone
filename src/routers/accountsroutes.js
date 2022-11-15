@@ -27,17 +27,17 @@ router.get('/:id/', getAccountsById)
  * http:/localhost:3000/Accounts/
 
  */
-router.post('/', createNewAccounts)
+router.post('/create', createNewAccounts)
 /**
  * update account
  * http:/localhost:3000/Accounts/{id}
  * 
  */
-router.put('/:id/', updateAccounts)
+router.put('/:id/update', updateAccounts)
 /**
  * Delete account
  * http:/localhost:3000/Accounts/{id}
  */
-router.delete('/:id', deleteAccounts)
+router.delete('/:id/delete', deleteAccounts)
 
 export default router

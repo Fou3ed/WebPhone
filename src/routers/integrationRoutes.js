@@ -15,29 +15,29 @@ const router = express.Router()
  * 
  *  http:/localhost:3000/integration/
  */
-router.get('/', getIntegrationList)
+router.get('/account', getIntegrationList)
 /**
  * get integration by ID
  * http:/localhost:3000/integration/{id}
  * 
  */
-router.get('/:id/', getIntegrationById)
+router.get('/account/:id/', getIntegrationById)
 /**
  * Add New integration 
  * http:/localhost:3000/integration/
 
  */
-router.post('/', createNewIntegration)
+router.post('/account/create', createNewIntegration)
 /**
  * update integration
  * http:/localhost:3000/integration/{id}
  * 
  */
-router.put('/:id/', updateIntegration)
+router.put('/account/update/:id/', updateIntegration)
 /**
  * Delete integration
  * http:/localhost:3000/integration/{id}
  */
-router.delete('/:id', DeleteIntegration)
+router.delete('/account/delete/:id/', DeleteIntegration)
 
 export default router

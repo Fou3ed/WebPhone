@@ -27,17 +27,17 @@ router.get('/:id/', getTagsById)
  * http:/localhost:3000/tag/
 
  */
-router.post('/', createNewTag)
+router.post('/create', createNewTag)
 /**
  * update Contact
  * http:/localhost:3000/tag/{id}
  * 
  */
-router.put('/:id/', updateTags)
+router.put('/update/:id', updateTags)
 /**
  * Delete Contact
  * http:/localhost:3000/tag/{id}
  */
-router.delete('/:id', deleteTag)
+router.delete('/delete/:id', deleteTag)
 
 export default router

@@ -21,23 +21,23 @@ router.get('/', getAllUserPermission)
  * http:/localhost:3000/userPermission/{id}
  * 
  */
-router.get('/:id/', getUserPermissionById)
+router.get('/:id', getUserPermissionById)
 /**
  * Add New Permission 
  * http:/localhost:3000/userPermission/
 
  */
-router.post('/', createNewUserPermission)
+router.post('/create', createNewUserPermission)
 /**
  * update Permission
  * http:/localhost:3000/userPermission/{id}
  * 
  */
-router.put('/:id/', updateUserPermission)
+router.put('/update/:id/', updateUserPermission)
 /**
  * Delete Permission
  * http:/localhost:3000/userPermission/{id}
  */
-router.delete('/:id', deleteUsersLines)
+router.delete('/delete/:id/', deleteUsersLines)
 
 export default router

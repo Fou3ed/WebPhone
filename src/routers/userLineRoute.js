@@ -27,17 +27,17 @@ router.get('/:id/', getUserLineById)
  * http:/localhost:3000/userLine/
 
  */
-router.post('/', createNewUsersLine)
+router.post('/create', createNewUsersLine)
 /**
  * update Contact
  * http:/localhost:3000/userLine/{id}
  * 
  */
-router.put('/:id/', updateUsersLines)
+router.put('/update/:id', updateUsersLines)
 /**
  * Delete Contact
  * http:/localhost:3000/userLine/{id}
  */
-router.delete('/:id', deleteUsersLines)
+router.delete('/delete/:id', deleteUsersLines)
 
 export default router

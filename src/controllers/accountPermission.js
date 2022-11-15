@@ -16,7 +16,11 @@ export const getAllAccountPermission = (req, res) => {
         if (error) {
             res.status(400).send(error)
         } else {
-            res.status(200).send(accountPermissions)
+            res.status(200).send({
+                code: "success",
+                total: accountPermissions.length,
+                data: accountPermissions
+            })
         }
     })
 }
@@ -32,7 +36,10 @@ export const getAccountPermissionById = (req, res) => {
         if (error) {
             res.status(400).send(error)
         } else {
-            res.status(200).send(accountPermissions)
+            res.status(200).send({
+                code: "success",
+                data: accountPermissions
+            })
 
         }
     })
@@ -76,8 +83,9 @@ export const createNewAccountPermission = async (req, res) => {
                 })
             } else {
                 res.status(201).json({
-                    success: true,
-                    message: 'accountPermission  created'
+                    code: "success",
+                    message: 'accountPermission  created',
+                    data: accountPermissionData
                 })
             }
         })
@@ -121,7 +129,7 @@ export const updateAccountPermission = async (req, res) => {
                 })
             } else {
                 res.json({
-                    success: true,
+                    code: "success",
                     message: 'account Permission updated successfully '
                 })
             }
@@ -145,7 +153,7 @@ export const deleteAccountsLines = (req, res) => {
             })
         } else {
             res.json({
-                success: true,
+                code: "success",
                 message: 'account Permission deleted successfully'
             })
         }

@@ -10,7 +10,12 @@ export const getAllLogs = (req, res) => {
         if (error) {
             res.status(400).send(error)
         } else {
-            res.status(200).send(logs)
+            res.status(200).send({
+                "code": "success",
+                "total": logs.length,
+                data: logs
+            }
+            )
         }
     })
 }
@@ -26,7 +31,10 @@ export const getLogById = (req, res) => {
         if (error) {
             res.status(400).send(error)
         } else {
-            res.status(200).send(logs)
+            res.status(200).send({
+                "code": "success",
+                data: logs
+            })
 
         }
     })

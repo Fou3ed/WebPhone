@@ -12,7 +12,11 @@ import {
 export const getAllContactTags = (req, res) => {
     ContactTagsModel.getAllContactTags((tags, error) => {
         if (!error) {
-            res.status(200).send(tags)
+            res.status(200).send({
+                code: "success",
+                total: tags.length,
+                data: tags
+            })
 
         } else {
 
@@ -31,7 +35,11 @@ export const getContactTagsById = (req, res) => {
 
     ContactTagsModel.getContactTagsById(req.params.id, (contactTags, error) => {
         if (!error) {
-            res.status(200).send(contactTags)
+            res.status(200).send({
+                code: "success",
+                total: "",
+                data: contactTags
+            })
 
         } else {
             res.status(400).send(error)
@@ -119,8 +127,9 @@ export const updateContactTags = async (req, res) => {
                 })
             } else {
                 res.json({
-                    success: true,
-                    message: 'tag updated successfully '
+                    code: "success",
+                    message: 'tag updated successfully ',
+                    data: contactTagsData
                 })
             }
         })
@@ -143,8 +152,9 @@ export const deleteContactTag = (req, res) => {
             })
         } else {
             res.json({
-                success: true,
-                message: 'tag deleted successfully'
+                code: "success",
+                message: 'tag deleted successfully',
+
             })
         }
     })

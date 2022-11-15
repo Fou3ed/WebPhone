@@ -33,12 +33,12 @@ router.post('/create', createNewUsers)
  * http:/localhost:3000/user/{id}
  * 
  */
-router.put('/:id/update', updateUsers)
+router.put('/update/:id', updateUsers)
 /**
  * Delete Contact
  * http:/localhost:3000/user/{id}
  */
-router.delete('/:id/delete', deleteUsers)
+router.delete('/delete/:id', deleteUsers)
 
 
 export default router

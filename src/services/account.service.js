@@ -13,18 +13,18 @@ var Accounts = function (accounts) {
     this.name = accounts.name
     this.status = accounts.status
     this.date_start = accounts.date_start
-
-
 }
 
 /** get list of accounts
  * */
 Accounts.getAllAccounts = (result) => {
-    dbPool.query('SELECT * FROM accounts', (error, res) => {
+    dbPool.query('SELECT *  FROM accounts', (error, res) => {
         if (!error) {
             result(res)
+
         } else {
             res.status(404).send(error)
+
 
         }
     })
@@ -60,7 +60,11 @@ Accounts.createNewAccount = (accountsData, result) => {
             if (!res) {
                 dbPool.query('INSERT INTO accounts SET ?', accountsData, (error, res) => {
                     if (!error) {
-                        result(res)
+                        result({
+                            "code": "success",
+                            "message": "account created successfully",
+                            "data": [res]
+                        })
                         api_keyGenerator(res.insertId)
                     } else {
                         result(error)

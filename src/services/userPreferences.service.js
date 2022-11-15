@@ -87,7 +87,6 @@ userPreference.updateUserPreference = (id, userPreferenceData, result) => {
                     } else {
                         result(res)
                         let action = "UPDATE user Preference"
-
                         logs(resR1[0].id, action, element)
                     }
                 }

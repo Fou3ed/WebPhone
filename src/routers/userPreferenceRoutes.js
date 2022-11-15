@@ -27,17 +27,17 @@ router.get('/:id/', getUserPreferenceById)
  * http:/localhost:3000/userPreference/
 
  */
-router.post('/', createNewUserPreference)
+router.post('/create', createNewUserPreference)
 /**
  * update Preference
  * http:/localhost:3000/userPreference/{id}
  * 
  */
-router.put('/:id/', updateUserPreference)
+router.put('/update/:id', updateUserPreference)
 /**
  * Delete Preference
  * http:/localhost:3000/userPreference/{id}
  */
-router.delete('/:id', deleteUsersLines)
+router.delete('/delete/:id', deleteUsersLines)
 
 export default router

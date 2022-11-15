@@ -27,17 +27,17 @@ router.get('/:id/', getLineById)
  * http:/localhost:3000/line/
 
  */
-router.post('/', createNewLines)
+router.post('/create', createNewLines)
 /**
  * update Contact
  * http:/localhost:3000/line/{id}
  * 
  */
-router.put('/:id/', updateLines)
+router.put('/update/:id', updateLines)
 /**
  * Delete Contact
  * http:/localhost:3000/line/{id}
  */
-router.delete('/:id', deleteLine)
+router.delete('/delete/:id', deleteLine)
 
 export default router

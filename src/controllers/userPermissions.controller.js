@@ -16,7 +16,11 @@ export const getAllUserPermission = (req, res) => {
         if (error) {
             res.status(400).send(error)
         } else {
-            res.status(200).send(UserPermissions)
+            res.status(200).send({
+                code: "success",
+                total: UserPermissions.length,
+                data: UserPermissions
+            })
         }
     })
 }
@@ -32,7 +36,10 @@ export const getUserPermissionById = (req, res) => {
         if (error) {
             res.status(400).send(error)
         } else {
-            res.status(200).send(UserPermissions)
+            res.status(200).send({
+                code: "success",
+                data: UserPermissions
+            })
 
         }
     })
@@ -77,7 +84,8 @@ export const createNewUserPermission = async (req, res) => {
             } else {
                 res.status(201).json({
                     success: true,
-                    message: 'UserPermission  created'
+                    message: 'UserPermission  created successfully ',
+                    data: UserPermissionData
                 })
             }
         })
@@ -122,8 +130,9 @@ export const updateUserPermission = async (req, res) => {
                 })
             } else {
                 res.json({
-                    success: true,
-                    message: 'User Permission updated successfully '
+                    code: "success",
+                    message: 'User Permission updated successfully',
+                    data: UserPermissionData
                 })
             }
         })

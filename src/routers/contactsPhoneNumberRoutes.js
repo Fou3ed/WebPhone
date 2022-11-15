@@ -27,17 +27,17 @@ router.get('/:id/', getPhoneNumberById)
  * http:/localhost:3000/notes/
 
  */
-router.post('/', createNewContactPh_Number)
+router.post('/create', createNewContactPh_Number)
 /**
  * update account
  * http:/localhost:3000/notes/{id}
  * 
  */
-router.put('/:id/', updateContactPh_number)
+router.put('/update/:id', updateContactPh_number)
 /**
  * Delete account
  * http:/localhost:3000/notes/{id}
  */
-router.delete('/:id', deletePhNum)
+router.delete('/delete/:id', deletePhNum)
 
 export default router

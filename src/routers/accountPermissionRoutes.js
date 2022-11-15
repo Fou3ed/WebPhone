@@ -27,17 +27,17 @@ router.get('/:id/', getAccountPermissionById)
  * http:/localhost:3000/accountPermission/
 
  */
-router.post('/', createNewAccountPermission)
+router.post('/create', createNewAccountPermission)
 /**
  * update Permission
  * http:/localhost:3000/accountPermission/{id}
  * 
  */
-router.put('/:id/', updateAccountPermission)
+router.put('/update/:id', updateAccountPermission)
 /**
  * Delete Permission
  * http:/localhost:3000/accountPermission/{id}
  */
-router.delete('/:id', deleteAccountsLines)
+router.delete('/delete/:id', deleteAccountsLines)
 
 export default router

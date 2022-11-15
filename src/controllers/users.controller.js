@@ -2,7 +2,6 @@ import UsersModel from '../services/users.service.js'
 import * as EmailValidator from 'email-validator';
 import validateDate from 'validate-date'
 import jwt from 'jsonwebtoken'
-import bcrypt from 'bcrypt'
 
 function checkTheme(theme) {
     return isNaN(theme) || theme > 2 || theme < 1
@@ -64,7 +63,11 @@ export const getUsersList = (req, res) => {
         if (error) {
             res.status(400).send(error)
         } else {
-            res.status(200).send(users)
+            res.status(200).send({
+                code: "success",
+                total: users.length,
+                data: [users]
+            })
         }
     })
 }
@@ -80,7 +83,10 @@ export const getUserById = (req, res) => {
         if (error) {
             res.status(400).send(error)
         } else {
-            res.status(200).send(users)
+            res.status(200).send({
+                code: "success",
+                data: [users]
+            })
 
         }
     })
@@ -147,8 +153,9 @@ export const createNewUsers = async (req, res) => {
                 })
             } else {
                 res.status(201).json({
-                    success: true,
-                    message: 'users created'
+                    code: "success",
+                    message: 'users created successfully',
+                    data: accountsData
                 })
             }
         })
@@ -204,8 +211,10 @@ export const updateUsers = async (req, res) => {
                 })
             } else {
                 res.json({
-                    success: true,
-                    message: 'users updated successfully '
+
+                    code: "success",
+                    message: 'users updated successfully',
+                    data: UsersData
                 })
             }
         })
@@ -228,7 +237,7 @@ export const deleteUsers = (req, res) => {
             })
         } else {
             res.json({
-                success: true,
+                code: "success",
                 message: 'users deleted successfully'
             })
         }

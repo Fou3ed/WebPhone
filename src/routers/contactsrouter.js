@@ -27,17 +27,17 @@ router.get('/:id/', getContactsById)
  * http:/localhost:3000/Contacts/
 
  */
-router.post('/', createNewContacts)
+router.post('/create', createNewContacts)
 /**
  * update Contact
  * http:/localhost:3000/Contacts/{id}
  * 
  */
-router.put('/:id/', updateContacts)
+router.put('/update/:id', updateContacts)
 /**
  * Delete Contact
  * http:/localhost:3000/Contacts/{id}
  */
-router.delete('/:id', deleteContacts)
+router.delete('/delete/:id', deleteContacts)
 
 export default router

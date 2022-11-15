@@ -15,7 +15,11 @@ import {
 export const getContactPhNumbers = (req, res) => {
     C_PhNumModel.getAllNumbers((PhNumbers, error) => {
         if (!error) {
-            res.status(200).send(PhNumbers)
+            res.status(200).send({
+                code: "success",
+                total: PhNumbers.length,
+                data: PhNumbers
+            })
         } else {
             res.status(400).send(error)
 
@@ -32,7 +36,11 @@ export const getPhoneNumberById = (req, res) => {
 
     C_PhNumModel.getNumberById(req.params.id, (PhNumbers, error) => {
         if (!error) {
-            res.status(200).send(PhNumbers)
+            res.status(200).send({
+                code: "success",
+                total: "",
+                data: PhNumbers
+            })
 
 
         } else {
@@ -93,8 +101,9 @@ export const createNewContactPh_Number = async (req, res) => {
 
             } else {
                 res.status(201).json({
-                    success: true,
-                    message: 'contact phone number created'
+                    code: "success",
+                    message: 'contact phone number created',
+                    data: contactsData
                 })
             }
         })
@@ -145,7 +154,7 @@ export const updateContactPh_number = async (req, res) => {
                 })
             } else
                 res.json({
-                    success: true,
+                    code: "success",
                     message: 'contact phone number updated successfully '
                 })
         })
@@ -168,7 +177,7 @@ export const deletePhNum = (req, res) => {
             })
         } else {
             res.json({
-                success: true,
+                code: "success",
                 message: 'contact phone number deleted'
             })
         }

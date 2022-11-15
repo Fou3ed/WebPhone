@@ -27,17 +27,17 @@ router.get('/:id/', getGroupsById)
  * http:/localhost:3000/group/
 
  */
-router.post('/', createNewGroups)
+router.post('/create', createNewGroups)
 /**
  * update group
  * http:/localhost:3000/group/{id}
  * 
  */
-router.put('/:id/', updateGroups)
+router.put('/update/:id/', updateGroups)
 /**
  * Delete group
  * http:/localhost:3000/group/{id}
  */
-router.delete('/:id', deleteGroup)
+router.delete('/delete/:id/', deleteGroup)
 
 export default router

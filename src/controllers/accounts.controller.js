@@ -16,9 +16,17 @@ import {
 export const getAccountsList = (req, res) => {
     AccountModel.getAllAccounts((accounts, error) => {
         if (!error) {
-            res.status(200).send(accounts)
+            res.status(200).send({
+                "code": "success",
+                "total": accounts.length,
+                "data": [accounts]
+            })
         } else {
-            res.status(400).send(error)
+            res.status(400).send({
+                success: false,
+                message: 'Bad request',
+                code: 'account_Get_Operation_Invalid'
+            })
         }
     })
 }
@@ -28,10 +36,12 @@ export const getAccountsList = (req, res) => {
  * 
  */
 export const getAccountsById = (req, res) => {
-
     AccountModel.getAccountById(req.params.id, (accounts, error) => {
         if (!error) {
-            res.status(200).send(accounts)
+            res.status(200).send({
+                "code": "success",
+                "data": [accounts]
+            })
         } else {
             res.status(400).send({
                 success: false,
@@ -90,8 +100,9 @@ export const createNewAccounts = async (req, res) => {
                 })
             } else {
                 res.status(201).json({
-                    success: true,
-                    code: 'account_created'
+                    code: "success",
+                    message: 'account created successfully',
+                    Data: [accountsData]
                 })
             }
         })
@@ -140,8 +151,9 @@ export const updateAccounts = async (req, res) => {
                 })
             } else {
                 res.json({
-                    success: true,
-                    message: 'account updated successfully '
+                    code: "success",
+                    message: 'account updated successfully',
+                    Data: [accountsData]
                 })
             }
         })
@@ -164,8 +176,9 @@ export const deleteAccounts = (req, res) => {
             })
         } else {
             res.status(200).send({
-                success: true,
-                message: 'account deleted'
+                code: "success",
+                message: 'account deleted successfully',
+
             })
         }
     })

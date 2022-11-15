@@ -15,7 +15,11 @@ export const getGroupElement = (req, res) => {
         if (error) {
             res.status(400).send(error)
         } else {
-            res.status(200).send(groups)
+            res.status(200).send({
+                code: "success",
+                total: groups.length,
+                data: groups
+            })
         }
     })
 }
@@ -31,7 +35,10 @@ export const getGroupElementsById = (req, res) => {
         if (error) {
             res.status(400).send(error)
         } else {
-            res.status(200).send(groups)
+            res.status(200).send({
+                code: "success",
+                data: groups
+            })
 
         }
     })
@@ -74,8 +81,9 @@ export const createNewGroupElement = async (req, res) => {
                 })
             } else {
                 res.status(201).json({
-                    success: true,
-                    message: 'group element created'
+                    code: "success",
+                    message: 'group element created',
+                    data: groupsData
                 })
             }
         })
@@ -114,7 +122,7 @@ export const updateGroupElement = async (req, res) => {
                 })
             } else {
                 res.json({
-                    success: true,
+                    code: "success",
                     message: 'group element updated successfully '
                 })
             }
@@ -138,7 +146,7 @@ export const deleteGroupElement = (req, res) => {
             })
         } else {
             res.json({
-                success: true,
+                code: "success",
                 message: 'group element deleted successfully'
             })
         }

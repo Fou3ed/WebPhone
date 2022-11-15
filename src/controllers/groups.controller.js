@@ -13,7 +13,12 @@ function checkClass(classes) {
 export const getGroup = (req, res) => {
     GroupModel.getAllGroups((groups, error) => {
         if (!error) {
-            res.status(200).send(groups)
+            res.status(200).send({
+                code: "success",
+                total: groups.length,
+                data: groups
+            }
+            )
 
         } else {
             res.status(400).send(error)
@@ -31,7 +36,11 @@ export const getGroupsById = (req, res) => {
 
     GroupModel.getGroupById(req.params.id, (groups, error) => {
         if (!error) {
-            res.status(200).send(groups)
+            res.status(200).send({
+                code: "success",
+                total: "",
+                data: groups
+            })
 
         } else {
             res.status(400).send(error)
@@ -54,8 +63,8 @@ export const createNewGroups = async (req, res) => {
             code: 'group_class_Invalid'
         })
     } else {
-        const accountsData = new GroupModel(req.body);
-        GroupModel.createNewGroup(accountsData, (result, error) => {
+        const groupsData = new GroupModel(req.body);
+        GroupModel.createNewGroup(groupsData, (result, error) => {
             if (error) {
                 res.send(error)
                 res.status(500).send({
@@ -71,8 +80,9 @@ export const createNewGroups = async (req, res) => {
                 })
             } else {
                 res.status(201).send({
-                    success: true,
-                    message: 'group created'
+                    code: "success",
+                    message: 'group created successfully',
+                    data: groupsData
                 })
             }
         })
@@ -106,7 +116,7 @@ export const updateGroups = async (req, res) => {
                 })
             } else {
                 res.json({
-                    success: true,
+                    code: "success",
                     message: 'group updated successfully '
                 })
             }
@@ -130,7 +140,7 @@ export const deleteGroup = (req, res) => {
             })
         } else {
             res.json({
-                success: true,
+                code: "success",
                 message: 'group deleted successfully'
             })
         }

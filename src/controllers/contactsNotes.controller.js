@@ -9,11 +9,16 @@ import NotesModel from '../services/contactsNotes.service.js'
  */
 export const getAllNotes = (req, res) => {
     NotesModel.getAllNotes((notes, error) => {
-        if (error) {
-            res.status(400).send(error)
+        if (!error) {
+            res.status(200).send({
+                code: "success",
+                total: notes.length,
+                data: notes
+            })
+
 
         } else {
-            res.status(200).send(notes)
+            res.status(400).send(error)
 
         }
     })
@@ -27,11 +32,15 @@ export const getAllNotes = (req, res) => {
 export const getNotesById = (req, res) => {
 
     NotesModel.getNoteById(req.params.id, (notes, error) => {
-        if (error) {
-            res.status(400).send(error)
+        if (!error) {
+            res.status(200).send({
+                code: "success",
+                data: notes
+            })
 
         } else {
-            res.status(200).send(notes)
+            res.status(400).send(error)
+
 
         }
     })
@@ -61,8 +70,9 @@ export const createNewNotes = async (req, res) => {
             })
         } else {
             res.status(201).json({
-                success: true,
-                message: 'note created'
+                code: "success",
+                message: 'note created',
+                data: contactsData
             })
         }
     })
@@ -84,11 +94,12 @@ export const updateNotes = async (req, res) => {
                 message: 'Note not found',
                 code: 'note_ID_Invalid'
             })
+        } else {
+            res.json({
+                code: "success",
+                message: 'note updated successfully '
+            })
         }
-        res.json({
-            success: true,
-            message: 'note updated successfully '
-        })
     })
 }
 /**
@@ -108,8 +119,8 @@ export const deleteNotes = (req, res) => {
             })
         } else {
             res.json({
-                success: true,
-                message: 'note deleted'
+                code: "success",
+                message: 'note deleted successfully'
             })
         }
     })

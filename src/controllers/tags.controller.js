@@ -10,7 +10,11 @@ import TagsModel from '../services/tags.service.js'
 export const getAllTags = (req, res) => {
     TagsModel.getAllTags((tags, error) => {
         if (!error) {
-            res.status(200).send(tags)
+            res.status(200).send({
+                code: "success",
+                total: tags.length,
+                data: tags
+            })
 
         } else {
             res.status(400).send(error)
@@ -28,7 +32,10 @@ export const getTagsById = (req, res) => {
 
     TagsModel.getTagsById(req.params.id, (tags, error) => {
         if (!error) {
-            res.status(200).send(tags)
+            res.status(200).send({
+                code: "success",
+                data: tags
+            })
 
         } else {
             res.status(400).send(error)
@@ -70,8 +77,9 @@ export const createNewTag = async (req, res) => {
                 })
             } else {
                 res.status(201).json({
-                    success: true,
-                    message: 'tag created'
+                    code: "success",
+                    message: 'tag created',
+                    data: tagsData
                 })
             }
         })
@@ -105,7 +113,7 @@ export const updateTags = async (req, res) => {
                 })
             } else {
                 res.json({
-                    success: true,
+                    code: "success",
                     message: 'tag updated successfully '
                 })
             }
@@ -129,8 +137,9 @@ export const deleteTag = (req, res) => {
             })
         } else {
             res.json({
-                success: true,
-                message: 'tag deleted successfully'
+                code: "success",
+                message: 'tag deleted successfully',
+
             })
         }
     })

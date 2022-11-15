@@ -18,7 +18,11 @@ export const getIntegrationList = (req, res) => {
         if (error) {
             res.status(400).send(error)
         } else {
-            res.status(200).send(integrations)
+            res.status(200).send({
+                code: "success",
+                total: integrations.length,
+                data: integrations
+            })
         }
     })
 }
@@ -34,7 +38,10 @@ export const getIntegrationById = (req, res) => {
         if (error) {
             res.status(400).send(error)
         } else {
-            res.status(200).send(integrations)
+            res.status(200).send({
+                code: "success",
+                data: integrations
+            })
 
         }
     })
@@ -84,8 +91,9 @@ export const createNewIntegration = async (req, res) => {
                 })
             } else {
                 res.status(201).json({
-                    success: true,
-                    message: 'integration created'
+                    code: "success",
+                    message: 'integration created successfully',
+                    data: [integrationData]
                 })
             }
         })
@@ -130,7 +138,7 @@ export const updateIntegration = async (req, res) => {
                 })
             } else {
                 res.json({
-                    success: true,
+                    code: "success",
                     message: 'integration updated successfully '
                 })
             }
@@ -154,7 +162,7 @@ export const DeleteIntegration = (req, res) => {
             })
         } else {
             res.json({
-                success: true,
+                code: "success",
                 message: 'integration deleted successfully'
             })
         }

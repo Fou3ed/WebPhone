@@ -27,17 +27,17 @@ router.get('/:id/', getNotesById)
  * http:/localhost:3000/notes/
 
  */
-router.post('/', createNewNotes)
+router.post('/create', createNewNotes)
 /**
  * update account
  * http:/localhost:3000/notes/{id}
  * 
  */
-router.put('/:id/', updateNotes)
+router.put('/update/:id', updateNotes)
 /**
  * Delete account
  * http:/localhost:3000/notes/{id}
  */
-router.delete('/:id', deleteNotes)
+router.delete('/delete/:id', deleteNotes)
 
 export default router

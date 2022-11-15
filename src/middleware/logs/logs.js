@@ -11,8 +11,10 @@ var logs = function (element_id, action, element) {
         (error, res) => {
             if (!error) {
                 console.log("saved in logs")
+
             } else {
                 console.log(error)
+
             }
         }
     )

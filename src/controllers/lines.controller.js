@@ -15,7 +15,11 @@ import {
 export const getAllLines = (req, res) => {
     LineModel.getAllLines((lines, error) => {
         if (!error) {
-            res.status(200).send(lines)
+            res.status(200).send({
+                code: "success",
+                total: lines.length,
+                data: lines
+            })
 
         } else {
             res.status(400).send(error)
@@ -33,7 +37,10 @@ export const getLineById = (req, res) => {
 
     LineModel.getLinesById(req.params.id, (lines, error) => {
         if (!error) {
-            res.status(200).send(lines)
+            res.status(200).send({
+                code: "success",
+                data: lines
+            })
 
         } else {
             res.status(400).send(error)
@@ -74,8 +81,8 @@ export const createNewLines = async (req, res) => {
             code: 'line_dateStart_Invalid'
         })
     } else {
-        const accountsData = new LineModel(req.body);
-        LineModel.createNewLines(accountsData, (result, error) => {
+        const linesData = new LineModel(req.body);
+        LineModel.createNewLines(linesData, (result, error) => {
             if (error) {
                 res.send(error)
                 res.status(500).send({
@@ -93,8 +100,9 @@ export const createNewLines = async (req, res) => {
                 })
             } else {
                 res.status(201).json({
-                    success: true,
-                    message: 'line created'
+                    code: "success",
+                    message: 'line created',
+                    data: linesData
                 })
             }
         })
@@ -144,8 +152,9 @@ export const updateLines = async (req, res) => {
                 })
             } else {
                 res.json({
-                    success: true,
-                    message: 'line updated successfully '
+                    code: "success",
+                    message: 'line updated successfully ',
+
                 })
             }
         })
@@ -168,7 +177,7 @@ export const deleteLine = (req, res) => {
             })
         } else {
             res.send({
-                success: true,
+                code: "success",
                 message: 'line deleted successfully'
             })
         }
