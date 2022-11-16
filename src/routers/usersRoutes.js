@@ -5,6 +5,7 @@ import {
     createNewUsers,
     updateUsers,
     deleteUsers,
+    loginUser,
 
 } from '../controllers/users.controller.js'
 const router = express.Router()
@@ -39,6 +40,10 @@ router.put('/update/:id', updateUsers)
  * http:/localhost:3000/user/{id}
  */
 router.delete('/delete/:id', deleteUsers)
+/**
+ * LOGIN User
+ */
+router.post('/login',loginUser)
 
 
 export default router

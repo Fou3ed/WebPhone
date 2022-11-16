@@ -7,7 +7,6 @@ import {
  */
 
 const checkKey = async (req, _res, next) => {
-
     let key = req.get("Authorization")
     let permission = (req.method + req.originalUrl)
     let action = permission.replace(/[0-9]/g, '')

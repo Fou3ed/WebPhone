@@ -31,7 +31,7 @@ export default {
                 /**
                  * Create contacts route
                  */
-                app.use('/contacts', checkKey, ContactsRoute)
+                app.use('/contacts', ContactsRoute)
                 /**
                  * Create notes route
                  */
@@ -72,7 +72,7 @@ export default {
                 /**
                  * Create user route
                  */
-                app.use('/users', checkKey, user)
+                app.use('/users',  user)
                 /**
                  * Create userPermission route
                  */

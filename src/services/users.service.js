@@ -29,12 +29,15 @@ var Users = function (users) {
 //login User
 Users.LoginUser = (usersData, result) => {
     dbPool.query(
-        'SELECT login,password FROM users WHERE account_id=2  ',
+        'SELECT id,account_id,login,password FROM users WHERE account_id=2  ',
         [usersData.login, usersData.password],
         async (error, res) => {
             console.log(res)
             if (error) {
-                res.send(error)
+                res.status(404).send({
+                    code: "success",
+                    message: "user not found"
+                })
             } else if (res.length === 0) {
                 result({
                     status: 'false'
@@ -71,6 +74,7 @@ Users.getAllUsers = (result) => {
     })
 }
 
+
 /**get user by id 
  */
 Users.getUserById = (id, result) => {
@@ -89,15 +93,15 @@ Users.getUserById = (id, result) => {
  * Create new user
  */
 Users.createNewUser = (userData, result) => {
-    dbPool.query('SELECT account_id FROM users WHERE account_id=?', [userData.id], (error, res) => {
-        if (res.length === 0) {
-            dbPool.query('INSERT INTO users SET ?', userData, (error, res) => {
+    dbPool.query('SELECT * FROM users WHERE account_id=?', [userData.account_id], async (error, res) => {
+        const hashedPassword = await bcrypt.hash(userData.password, 10)
+        if (res.length !== 0) {
+            userData.password = hashedPassword
+            dbPool.query('INSERT INTO users SET ?', userData, async (error, res) => {
                 if (!error) {
                     result(res)
                     let action = "Create New User"
                     logs(res.insertId, action, element)
-
-
                 } else {
                     result('false')
                 }
@@ -122,7 +126,6 @@ Users.updateUser = (id, usersData, result, _res) => {
                 (error, res) => {
 
                     if (error) {
-                        console.log(error)
                         res.status(400).send(error)
                     } else {
                         result(res)

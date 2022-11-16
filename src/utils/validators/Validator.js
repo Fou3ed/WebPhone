@@ -35,6 +35,10 @@ function checkSource(source) {
 function checkFavorite(favorite) {
     return isNaN(favorite) || favorite > 1 || favorite < 0
 }
+/**
+ * get login user name
+ */
+
 
 export {
     checkClass,
