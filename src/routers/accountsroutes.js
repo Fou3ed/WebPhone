@@ -6,6 +6,7 @@ import {
     updateAccounts,
     deleteAccounts,
 } from '../controllers/accounts.controller.js'
+import checkKey from '../middleware/check api_key/check_api_key.js'
 
 const router = express.Router()
 
@@ -33,11 +34,11 @@ router.post('/create', createNewAccounts)
  * http:/localhost:3000/Accounts/{id}
  * 
  */
-router.put('/:id/update', updateAccounts)
+router.put('/update/:id', updateAccounts)
 /**
  * Delete account
  * http:/localhost:3000/Accounts/{id}
  */
-router.delete('/:id/delete', deleteAccounts)
+router.delete('/delete/:id', deleteAccounts)
 
 export default router

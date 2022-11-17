@@ -2,9 +2,11 @@ import {
     dbPool
 } from '../DB/database.js'
 import api_keyGenerator from '../middleware/api_keys/api_key_account.js'
+import app_log from '../middleware/logs/application_logs.js'
 
+/*********************************************************ELEMENT : 15  *******************************************/
 
-
+let element = 15
 
 /**
  *  constructor

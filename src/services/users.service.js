@@ -2,9 +2,11 @@ import {
     dbPool
 } from '../DB/database.js'
 import bcrypt from 'bcrypt'
-import logs from '../middleware/logs/logs.js'
+import app_logs from '../middleware/logs/application_logs.js'
+import checkKey from '../middleware/check api_key/check_api_key.js'
 /******************************************************************** ELEMENT=14  ************************************************/
 let element = 14
+
 /**
  *  constructor
  * */
@@ -29,10 +31,9 @@ var Users = function (users) {
 //login User
 Users.LoginUser = (usersData, result) => {
     dbPool.query(
-        'SELECT id,account_id,login,password FROM users WHERE account_id=2  ',
+        'SELECT id,account_id,login,password FROM users WHERE login=?  ',
         [usersData.login, usersData.password],
         async (error, res) => {
-            console.log(res)
             if (error) {
                 res.status(404).send({
                     code: "success",
@@ -45,16 +46,17 @@ Users.LoginUser = (usersData, result) => {
             } else {
                 let Password = res[0].password
                 const ValidPassword = await bcrypt.compare(usersData.password, Password)
-                console.log(usersData.password, Password)
-                console.log(ValidPassword, 'lenna')
-                if (ValidPassword) return result({
+                if (!ValidPassword) return result({
                     status: 'false'
                 })
+                console.log(res)
+                let action = "log In"
+                logs(res[0].account_id, res[0].id, action, element, res[0].id)
                 result({
                     status: 'true',
-                    login: res[0].login,
                     id: res[0].id
-                })
+                }
+                )
             }
         }
     )
@@ -100,8 +102,11 @@ Users.createNewUser = (userData, result) => {
             dbPool.query('INSERT INTO users SET ?', userData, async (error, res) => {
                 if (!error) {
                     result(res)
-                    let action = "Create New User"
-                    logs(res.insertId, action, element)
+
+                    //app_logs(account_id,action,element,res.insertId)
+                    //let action = "Create New User"
+                    //app_logs(userData.account_id,action,element, res.insertId)
+
                 } else {
                     result('false')
                 }
@@ -124,18 +129,16 @@ Users.updateUser = (id, usersData, result, _res) => {
                 'UPDATE users SET username=? ,login=?,  password=? , default_theme=? , default_language=? , default_timezone=? ,default_ring_sound=?,email=?,status=?,date_start=?,date_end=? WHERE id = ?',
                 [usersData.username, usersData.login, usersData.password, usersData.default_theme, usersData.default_language, usersData.default_timezone, usersData.default_ring_sound, usersData.email, usersData.status, usersData.date_start, usersData.date_end, id],
                 (error, res) => {
-
                     if (error) {
                         res.status(400).send(error)
                     } else {
                         result(res)
                         let action = "update User"
-                        logs(resR1[0].id, action, element)
+                        app_logs(resR1[0].account_id, action, element, resR1[0].id)
                     }
                 }
             )
         }
-
     })
 }
 
@@ -154,7 +157,8 @@ Users.deleteUser = (id, result) => {
                 } else {
                     result(res)
                     let action = "DELETE User"
-                    logs(resR1[0].insertId, action, element)
+                    app_logs(resR1[0].account_id, action, element, resR1[0].id)
+
                 }
             })
         }

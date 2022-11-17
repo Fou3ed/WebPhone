@@ -27,64 +27,64 @@ export default {
                 /**
                  * Create accounts route
                  */
-                app.use('/accounts', AccountsRoute)
+                app.use('/accounts', checkKey, AccountsRoute)
                 /**
                  * Create contacts route
                  */
-                app.use('/contacts', ContactsRoute)
+                app.use('/contacts', checkKey, ContactsRoute)
                 /**
                  * Create notes route
                  */
-                app.use('/notes', NotesRoute)
+                app.use('/notes', checkKey, NotesRoute)
                 /**
                  * Create contacts phone numbers route
                  */
-                app.use('/phoneNumber', ContactPhoneNumber)
+                app.use('/phoneNumber', checkKey, ContactPhoneNumber)
                 /**
                  * Create contacts groupe route
                  */
-                app.use('/groups', group)
+                app.use('/groups', checkKey, group)
 
                 /**
                  * Create groupe elements route
                  */
-                app.use('/groupsElement', groupeElement)
+                app.use('/groupsElement', checkKey, groupeElement)
                 /**
                  * Create integrations route
                  */
-                app.use('/integration', integration)
+                app.use('/integration', checkKey, integration)
                 /**
                  * Create lines route
                  */
-                app.use('/line', line)
+                app.use('/line', checkKey, line)
                 /**
                  * Create tags route
                  */
-                app.use('/tags', tag)
+                app.use('/tags', checkKey, tag)
                 /**
                  * Create contact tags route
                  */
-                app.use('/contactTag', contactTags)
+                app.use('/contactTag', checkKey, contactTags)
                 /**
                  * Create user line route
                  */
-                app.use('/usersLines', UsersLine)
+                app.use('/usersLines', checkKey, UsersLine)
                 /**
                  * Create user route
                  */
-                app.use('/users',  user)
+                app.use('/users', checkKey, user)
                 /**
                  * Create userPermission route
                  */
-                app.use('/usersPermissions', userPermission)
+                app.use('/usersPermissions', checkKey, userPermission)
                 /**
                  * Create userPreference route
                  */
-                app.use('/userPreference', userPreference)
+                app.use('/userPreference', checkKey, userPreference)
                 /**
                  * Create accountPermission route
                  */
-                app.use('/accountPermission', accountPermission)
+                app.use('/accountPermission', checkKey, accountPermission)
                 /**
                  * Create accountPermission route
                  */

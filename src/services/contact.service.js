@@ -47,7 +47,7 @@ Contacts.getContactById = (id, result) => {
  * Create new contact
  */
 Contacts.createNewContact = (accountsData, result) => {
-    dbPool.query('SELECT account_id FROM contacts WHERE account_id=?', [accountsData.id], (error, res) => {
+    dbPool.query('SELECT * FROM contacts WHERE account_id=?', [accountsData.id], (error, res) => {
         if (res.length === 0) {
             dbPool.query('INSERT INTO contacts SET ?', accountsData, (error, res) => {
                 let action = 'CREATE NEW CONTACT'
@@ -55,8 +55,6 @@ Contacts.createNewContact = (accountsData, result) => {
                     result('false')
                 } else {
                     result(res)
-                    logs(res.insertId, action, element)
-
                 }
             })
         } else {

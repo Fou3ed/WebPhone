@@ -1,11 +1,7 @@
 import UsersModel from '../services/users.service.js'
 import * as EmailValidator from 'email-validator';
 import validateDate from 'validate-date'
-import jwt from 'jsonwebtoken'
 import login_check from '../utils/validators/login_exist.js';
-import {
-    dbPool
-} from '../DB/database.js';
 
 function checkTheme(theme) {
     return isNaN(theme) || theme > 2 || theme < 1
@@ -29,7 +25,7 @@ export const loginUser = async (req, res) => {
         })
     } else if (req.body.login.length === 0 || req.body.password.length === 0) {
         res.status(400).send({
-            message: 'login ou password invalid'
+            message: 'login ou password is empty'
         })
     } else {
         const usersData = new UsersModel(req.body)
@@ -37,22 +33,19 @@ export const loginUser = async (req, res) => {
             if (error) {
                 res.send(error)
             } else if (result.status == 'false') {
-                res.status(404).send({
-                    message: 'Login ou password invalid'
+                res.status(401).send({
+                    message: 'wrong  infos'
                 })
             } else if (result.status == 'true') {
-                const token = jwt.sign({
-                    id: usersData.id
-                }, 'User', {
-                    expiresIn: '2h',
-                })
                 const message = {
                     id: result.id,
-                    login: result.login,
-                    Token: token
+                    login: req.body.login,
                 }
-                console.log(message)
-                res.status(200).send(message)
+                res.status(200).send({
+                    code: "success",
+                    message: "logging success",
+                    data: message
+                })
             }
         })
     }
@@ -179,57 +172,71 @@ export const createNewUsers = async (req, res, next) => {
  * 
  */
 export const updateUsers = async (req, res) => {
-    if (checkTheme(req.body.default_theme)) {
-        res.status(400).send({
-            success: false,
-            message: 'theme must be 1 or 2',
-            code: 'user_defaultheme_Invalid'
-        })
-    } else if (!EmailValidator.validate(req.body.email)) {
-        res.status(400).send({
-            success: false,
-            message: 'Email Invalid',
-            code: 'user_Email_Invalid'
-        })
-    } else if (checkLanguage(req.body.default_language)) {
-        res.status(400).send({
-            success: false,
-            message: 'language code Invalid',
-            code: 'user_defaultLanguage_Invalid'
-        })
-    } else if (checkStatus(req.body.status)) {
-        res.status(400).send({
-            success: false,
-            message: 'status must be 1-2 or 3',
-            code: 'user_status_Invalid'
-        })
-    } else if (!validateDate(req.body.date_start)) {
-        res.status(400).send({
-            success: false,
-            message: 'date format Invalid',
-            code: 'user_dateStart_Invalid'
-        })
-    } else {
-        const UsersData = new UsersModel(req.body);
-        UsersModel.updateUser(req.params.id, UsersData, (result, error) => {
-            if (error) {
-                res.status(400).send(error)
-            } else if (result == 'false') {
-                res.json({
-                    success: false,
-                    message: 'users ID not found',
-                    code: 'users_ID_Invalid'
-                })
-            } else {
-                res.json({
+    login_check(req.body.login).then(_res => {
+        if (_res.length > 0) {
+            res.status(409).send({
+                success: "false",
+                message: "login already exist",
+                code: "login_Invalid"
+            })
+        } else if (!req.body.username || !req.body.login || !req.body.password || !req.body.default_theme || !req.body.default_language || !req.body.default_timezone || !req.body.default_ring_sound || !req.body.email || !req.body.status || !req.body.date_start) {
+            res.status(400).send({
+                success: false,
+                message: 'wrong parameters',
+                code: 'users_information_Invalid'
+            })
+        } else if (checkTheme(req.body.default_theme)) {
+            res.status(400).send({
+                success: false,
+                message: 'theme must be 1 or 2',
+                code: 'user_defaultheme_Invalid'
+            })
+        } else if (!EmailValidator.validate(req.body.email)) {
+            res.status(400).send({
+                success: false,
+                message: 'Email Invalid',
+                code: 'user_Email_Invalid'
+            })
+        } else if (checkLanguage(req.body.default_language)) {
+            res.status(400).send({
+                success: false,
+                message: 'language code Invalid',
+                code: 'user_defaultLanguage_Invalid'
+            })
+        } else if (checkStatus(req.body.status)) {
+            res.status(400).send({
+                success: false,
+                message: 'status must be 1-2 or 3',
+                code: 'user_status_Invalid'
+            })
+        } else if (!validateDate(req.body.date_start)) {
+            res.status(400).send({
+                success: false,
+                message: 'date format Invalid',
+                code: 'user_dateStart_Invalid'
+            })
+        } else {
+            const UsersData = new UsersModel(req.body);
+            UsersModel.updateUser(req.params.id, UsersData, (result, error) => {
+                if (error) {
+                    res.status(400).send(error)
+                } else if (result == 'false') {
+                    res.json({
+                        success: false,
+                        message: 'users ID not found',
+                        code: 'users_ID_Invalid'
+                    })
+                } else {
+                    res.json({
 
-                    code: "success",
-                    message: 'users updated successfully',
-                    data: UsersData
-                })
-            }
-        })
-    }
+                        code: "success",
+                        message: 'users updated successfully',
+                        data: UsersData
+                    })
+                }
+            })
+        }
+    })
 }
 
 
