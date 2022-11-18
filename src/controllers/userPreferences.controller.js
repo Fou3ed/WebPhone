@@ -66,7 +66,7 @@ export const createNewUserPreference = async (req, res) => {
         })
     } else {
         const UserPreferenceData = new UserPreferenceModel(req.body);
-        UserPreferenceModel.createNewUserPreference(UserPreferenceData, (result, error) => {
+        UserPreferenceModel.createNewUserPreference(UserPreferenceData, req.dataPacket, (result, error) => {
             if (error) {
                 res.send(error)
                 res.status(500).send({
@@ -114,7 +114,7 @@ export const updateUserPreference = async (req, res) => {
         })
     } else {
         const UserPreferenceData = new UserPreferenceModel(req.body);
-        UserPreferenceModel.updateUserPreference(req.params.id, UserPreferenceData, (result, error) => {
+        UserPreferenceModel.updateUserPreference(req.params.id, UserPreferenceData, req.dataPacket, (result, error) => {
             if (error) {
                 res.status(400).send(error)
             } else if (result == 'false') {
@@ -138,7 +138,7 @@ export const updateUserPreference = async (req, res) => {
  * 
  */
 export const deleteUsersLines = (req, res) => {
-    UserPreferenceModel.deleteUserPreference(req.params.id, (result, error) => {
+    UserPreferenceModel.deleteUserPreference(req.params.id, req.dataPacket, (result, error) => {
         if (error) {
             res.send(error)
         } else if (result == 'false') {

@@ -1,3 +1,10 @@
+/**
+ * Swagger documentation
+ */
+import swaggerUi from 'swagger-ui-express'
+import swaggerDocs from '../docs/swagger.js'
+
+
 import AccountsRoute from '../routers/accountsroutes.js'
 import ContactsRoute from '../routers/contactsrouter.js'
 import NotesRoute from '../routers/contactsNotesRoutes.js'
@@ -14,6 +21,8 @@ import userPermission from '../routers/userPermissionsRoutes.js'
 import userPreference from '../routers/userPreferenceRoutes.js'
 import accountPermission from '../routers/accountPermissionRoutes.js'
 import logs from '../routers/LogsRouter.js'
+import app_logs from '../routers/app_logsRoutes.js'
+import message from '../routers/messagesRoutes.js'
 import checkKey from '../middleware/check api_key/check_api_key.js'
 import {
         REST
@@ -24,6 +33,10 @@ export default {
          */
         create() {
                 const app = REST.getApp()
+                /**
+                 * API Documentation
+                 */
+                app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs))
                 /**
                  * Create accounts route
                  */
@@ -86,9 +99,23 @@ export default {
                  */
                 app.use('/accountPermission', checkKey, accountPermission)
                 /**
-                 * Create accountPermission route
+                 * Create user log route
                  */
                 app.use('/logs', logs)
+                /**
+                 * Create application log route
+                 */
+                app.use('/appLogs', app_logs)
+                /**
+                 * Create messages route
+                 */
+                app.use('/message', checkKey, message)
+                /**
+                 * Redirect to documentation if url is invalid
+                 */
+                app.all('*', (req, res) => {
+                        res.redirect('/api-docs')
+                })
 
 
 

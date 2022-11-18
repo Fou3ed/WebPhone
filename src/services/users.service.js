@@ -4,6 +4,7 @@ import {
 import bcrypt from 'bcrypt'
 import app_logs from '../middleware/logs/application_logs.js'
 import checkKey from '../middleware/check api_key/check_api_key.js'
+import logs from '../middleware/logs/logs.js'
 /******************************************************************** ELEMENT=14  ************************************************/
 let element = 14
 
@@ -39,29 +40,27 @@ Users.LoginUser = (usersData, result) => {
                     code: "success",
                     message: "user not found"
                 })
-            } else if (res.length === 0) {
+            } else if (!res.length) {
                 result({
                     status: 'false'
                 })
             } else {
+                let action = "POST/users/login/"
+                app_logs(res[0].account_id, action, element, res[0].id)
                 let Password = res[0].password
                 const ValidPassword = await bcrypt.compare(usersData.password, Password)
                 if (!ValidPassword) return result({
                     status: 'false'
                 })
-                console.log(res)
-                let action = "log In"
-                logs(res[0].account_id, res[0].id, action, element, res[0].id)
                 result({
                     status: 'true',
                     id: res[0].id
-                }
-                )
+                })
+
             }
         }
     )
 }
-
 
 /** get list of users
  * */
@@ -94,7 +93,8 @@ Users.getUserById = (id, result) => {
  * 
  * Create new user
  */
-Users.createNewUser = (userData, result) => {
+Users.createNewUser = (userData, dataPacket, result) => {
+
     dbPool.query('SELECT * FROM users WHERE account_id=?', [userData.account_id], async (error, res) => {
         const hashedPassword = await bcrypt.hash(userData.password, 10)
         if (res.length !== 0) {
@@ -102,11 +102,8 @@ Users.createNewUser = (userData, result) => {
             dbPool.query('INSERT INTO users SET ?', userData, async (error, res) => {
                 if (!error) {
                     result(res)
-
-                    //app_logs(account_id,action,element,res.insertId)
-                    //let action = "Create New User"
-                    //app_logs(userData.account_id,action,element, res.insertId)
-
+                    app_logs(dataPacket.account_id, dataPacket.action, element, res.insertId)
+                    logs(dataPacket.account_id, dataPacket.action, element, res.insertId)
                 } else {
                     result('false')
                 }
@@ -120,7 +117,8 @@ Users.createNewUser = (userData, result) => {
  * Update user
  * 
  */
-Users.updateUser = (id, usersData, result, _res) => {
+Users.updateUser = (id, usersData, dataPacket, result, _res) => {
+
     dbPool.query('SELECT * FROM users WHERE id= ? ', id, (error, resR1) => {
         if (resR1.length === 0) {
             result('false')
@@ -133,8 +131,8 @@ Users.updateUser = (id, usersData, result, _res) => {
                         res.status(400).send(error)
                     } else {
                         result(res)
-                        let action = "update User"
-                        app_logs(resR1[0].account_id, action, element, resR1[0].id)
+                        app_logs(dataPacket.account_id, dataPacket.action, element, id)
+                        logs(dataPacket.account_id, dataPacket.action, element, id)
                     }
                 }
             )
@@ -146,7 +144,7 @@ Users.updateUser = (id, usersData, result, _res) => {
  * Delete users
  * 
  */
-Users.deleteUser = (id, result) => {
+Users.deleteUser = (id, dataPacket, result) => {
     dbPool.query('SELECT * FROM users WHERE id= ? ', id, (error, resR1) => {
         if (resR1.length === 0) {
             result('false')
@@ -156,8 +154,10 @@ Users.deleteUser = (id, result) => {
                     result(error)
                 } else {
                     result(res)
-                    let action = "DELETE User"
-                    app_logs(resR1[0].account_id, action, element, resR1[0].id)
+                    app_logs(dataPacket.account_id, dataPacket.action, element, id)
+                    logs(dataPacket.account_id, dataPacket.action, element, id)
+
+
 
                 }
             })

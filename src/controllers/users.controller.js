@@ -28,7 +28,7 @@ export const loginUser = async (req, res) => {
             message: 'login ou password is empty'
         })
     } else {
-        const usersData = new UsersModel(req.body)
+        const usersData = new UsersModel(req.body, req.dataPacket)
         UsersModel.LoginUser(usersData, (result, error) => {
             if (error) {
                 res.send(error)
@@ -140,7 +140,7 @@ export const createNewUsers = async (req, res, next) => {
             })
         } else {
             const accountsData = new UsersModel(req.body);
-            UsersModel.createNewUser(accountsData, (result, error) => {
+            UsersModel.createNewUser(accountsData, req.dataPacket, (result, error) => {
                 if (error) {
                     res.send(error)
                     res.status(500).send({
@@ -217,7 +217,7 @@ export const updateUsers = async (req, res) => {
             })
         } else {
             const UsersData = new UsersModel(req.body);
-            UsersModel.updateUser(req.params.id, UsersData, (result, error) => {
+            UsersModel.updateUser(req.params.id, UsersData, req.dataPacket, (result, error) => {
                 if (error) {
                     res.status(400).send(error)
                 } else if (result == 'false') {
@@ -246,7 +246,7 @@ export const updateUsers = async (req, res) => {
  * 
  */
 export const deleteUsers = (req, res) => {
-    UsersModel.deleteUser(req.params.id, (result, error) => {
+    UsersModel.deleteUser(req.params.id, req.dataPacket, (result, error) => {
         if (error) {
             res.send(error)
         } else if (result == 'false') {

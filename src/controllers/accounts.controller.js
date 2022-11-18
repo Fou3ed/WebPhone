@@ -83,7 +83,7 @@ export const createNewAccounts = async (req, res) => {
         })
     } else {
         const accountsData = new AccountModel(req.body);
-        AccountModel.createNewAccount(accountsData, (result, error) => {
+        AccountModel.createNewAccount(accountsData, req.dataPacket, (result, error) => {
             if (error) {
                 res.send(error)
                 res.status(500).send({
@@ -139,7 +139,7 @@ export const updateAccounts = async (req, res) => {
         })
     } else {
         const accountsData = new AccountModel(req.body);
-        AccountModel.updateAccount(req.params.id, accountsData, (result, error) => {
+        AccountModel.updateAccount(req.params.id, accountsData, req.dataPacket, (result, error) => {
             if (error) {
                 res.status(400).send(error)
             } else if (result == 'false') {
@@ -164,7 +164,7 @@ export const updateAccounts = async (req, res) => {
  * 
  */
 export const deleteAccounts = (req, res) => {
-    AccountModel.deleteAccount(req.params.id, (result, error) => {
+    AccountModel.deleteAccount(req.params.id, req.dataPacket, (result, error) => {
         if (error) {
             res.send(error)
         } else if (result == 'false') {

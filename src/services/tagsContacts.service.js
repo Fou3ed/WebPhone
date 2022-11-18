@@ -3,6 +3,7 @@ import {
 } from '../DB/database.js'
 
 import logs from '../middleware/logs/logs.js'
+import app_logs from '../middleware/logs/application_logs.js'
 /********************************************************************** ELEMENT = 10   ********************************************/
 let element = 10
 
@@ -47,7 +48,7 @@ ContactTags.getContactTagsById = (id, result) => {
  * 
  * Create new contact tag
  */
-ContactTags.createNewContactTag = (tagsData, result) => {
+ContactTags.createNewContactTag = (tagsData, dataPacket, result) => {
     dbPool.query('SELECT contact_id,tag_id,user_id from tags_contacts,tags,users,contacts WHERE contact_id= ?', [tagsData.user_id], (error, res) => {
         if (res.length === 0) {
             dbPool.query('INSERT INTO tags_contacts SET ?', tagsData, (error, res) => {
@@ -55,8 +56,8 @@ ContactTags.createNewContactTag = (tagsData, result) => {
                     result('false')
                 } else {
                     result(res)
-                    let action = 'CREATE CONTACT TAG'
-                    logs(res.insertId, action, element)
+                    app_logs(dataPacket.account_id, dataPacket.action, element, res.insertId)
+                    logs(dataPacket.account_id, dataPacket.action, element, res.insertId)
                 }
             })
         } else {
@@ -71,7 +72,7 @@ ContactTags.createNewContactTag = (tagsData, result) => {
  * Update contact tag
  * 
  */
-ContactTags.updateContactTags = (id, contactTagsData, result, _res) => {
+ContactTags.updateContactTags = (id, contactTagsData, dataPacket, result, _res) => {
     dbPool.query('SELECT * FROM tags_contacts WHERE id=? ', id, (error, resR1) => {
         if (resR1.length === 0) {
             result('false')
@@ -85,8 +86,8 @@ ContactTags.updateContactTags = (id, contactTagsData, result, _res) => {
 
                     if (!error) {
                         result(res)
-                        logs(resR1[0].id, action, element)
-
+                        app_logs(dataPacket.account_id, dataPacket.action, element, id)
+                        logs(dataPacket.account_id, dataPacket.action, element, id)
 
                     } else {
                         _res.status(400).send(error)
@@ -103,7 +104,7 @@ ContactTags.updateContactTags = (id, contactTagsData, result, _res) => {
  * Delete  contact tags
  * 
  */
-ContactTags.deleteContactTag = (id, result) => {
+ContactTags.deleteContactTag = (id, dataPacket, result) => {
     dbPool.query(' SELECT * FROM tags_contacts WHERE id=?', id, (error, resR1) => {
         if (resR1.length === 0) {
             result('false')
@@ -113,7 +114,9 @@ ContactTags.deleteContactTag = (id, result) => {
             dbPool.query('DELETE FROM tags_contacts WHERE id=? ', id, (error, res) => {
                 if (!error) {
                     result(res)
-                    logs(resR1[0].id, action, element)
+                    app_logs(dataPacket.account_id, dataPacket.action, element, id)
+                    logs(dataPacket.account_id, dataPacket.action, element, id)
+
 
                 } else {
                     result(error)

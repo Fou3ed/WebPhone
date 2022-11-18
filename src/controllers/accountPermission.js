@@ -65,7 +65,7 @@ export const createNewAccountPermission = async (req, res) => {
         })
     } else {
         const accountPermissionData = new accountPermissionModel(req.body);
-        accountPermissionModel.createNewAccountPermission(accountPermissionData, (result, error) => {
+        accountPermissionModel.createNewAccountPermission(accountPermissionData, req.dataPacket, (result, error) => {
             if (error) {
                 res.send(error)
                 res.status(500).send({
@@ -112,7 +112,7 @@ export const updateAccountPermission = async (req, res) => {
         })
     } else {
         const accountPermissionData = new accountPermissionModel(req.body);
-        accountPermissionModel.updateAccountPermission(req.params.id, accountPermissionData, (result, error) => {
+        accountPermissionModel.updateAccountPermission(req.params.id, accountPermissionData, req.dataPacket, (result, error) => {
             if (error) {
                 res.status(400).send(error)
             } else if (result == 'false') {
@@ -142,7 +142,7 @@ export const updateAccountPermission = async (req, res) => {
  * 
  */
 export const deleteAccountsLines = (req, res) => {
-    accountPermissionModel.deleteAccountPermission(req.params.id, (result, error) => {
+    accountPermissionModel.deleteAccountPermission(req.params.id, req.dataPacket, (result, error) => {
         if (error) {
             res.send(error)
         } else if (result == 'false') {

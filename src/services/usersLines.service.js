@@ -2,7 +2,7 @@ import {
     dbPool
 } from '../DB/database.js'
 import logs from '../middleware/logs/logs.js'
-
+import app_logs from '../middleware/logs/application_logs.js'
 /*******************************************************************  ELEMENT = 11  ******************************************/
 let element = 11
 
@@ -45,15 +45,17 @@ UsersLines.getUserLineById = (id, result) => {
  * 
  * Create new user line
  */
-UsersLines.createNewUserLine = (usersData, result) => {
+UsersLines.createNewUserLine = (usersData, dataPacket, result) => {
     dbPool.query('SELECT user_id FROM users_lines where user_id=?', [usersData.id], (error, res) => {
         if (res.length === 0) {
             dbPool.query('INSERT INTO users_lines SET ?', usersData, (error, res) => {
                 if (error) {
                     result('false')
                 } else {
-                    let action = 'CREATE NEW user line'
-                    logs(res.insertId, action, element)
+                    app_logs(dataPacket.account_id, dataPacket.action, element, res.insertId)
+                    logs(dataPacket.account_id, dataPacket.action, element, res.insertId)
+                    console.log(dataPacket)
+
                     result(res)
                 }
             })
@@ -68,7 +70,7 @@ UsersLines.createNewUserLine = (usersData, result) => {
  * Update user line
  * 
  */
-UsersLines.updateUserLine = (id, usersData, result, _res) => {
+UsersLines.updateUserLine = (id, usersData, dataPacket, result, _res) => {
 
     dbPool.query('SELECT * FROM users_lines WHERE id= ? ', id, (error, resR1) => {
         if (resR1.length === 0) {
@@ -82,8 +84,12 @@ UsersLines.updateUserLine = (id, usersData, result, _res) => {
                         _res.status(400).send(error)
                     } else {
                         result(res)
-                        let action = 'UPDATE USER LINE'
-                        logs(resR1[0].id, action, element)
+                        app_logs(dataPacket.account_id, dataPacket.action, element, id)
+                        logs(dataPacket.account_id, dataPacket.action, element, id)
+
+
+
+
 
                     }
                 }
@@ -97,7 +103,7 @@ UsersLines.updateUserLine = (id, usersData, result, _res) => {
  * Delete user line
  * 
  */
-UsersLines.deleteUserLine = (id, result) => {
+UsersLines.deleteUserLine = (id, dataPacket, result) => {
     dbPool.query('SELECT ul.*, u.account_id  FROM users_lines ul INNER JOIN users u on ul.id=? ', id, (error, resR1) => {
         if (resR1.length === 0) {
             result('false')
@@ -108,7 +114,10 @@ UsersLines.deleteUserLine = (id, result) => {
                     result(error)
                 } else {
                     result(res)
-                    logs(resR1[0].id, action, element)
+                    app_logs(dataPacket.account_id, dataPacket.action, element, id)
+                    logs(dataPacket.account_id, dataPacket.action, element, id)
+
+
 
                 }
             })

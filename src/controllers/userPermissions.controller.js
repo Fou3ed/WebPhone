@@ -54,7 +54,7 @@ export const createNewUserPermission = async (req, res) => {
     if (!req.body.action || !req.body.status) {
         res.status(400).send({
             success: false,
-            message: 'wrong parameters',
+            message: 'wrong parameters ',
             code: 'UserPermission _information_Invalid'
         })
     } else if (checkStatus(req.body.status)) {
@@ -65,7 +65,7 @@ export const createNewUserPermission = async (req, res) => {
         })
     } else {
         const UserPermissionData = new UserPermissionModel(req.body);
-        UserPermissionModel.createNewUserPermission(UserPermissionData, (result, error) => {
+        UserPermissionModel.createNewUserPermission(UserPermissionData, req.dataPacket, (result, error) => {
             if (error) {
                 res.send(error)
                 res.status(500).send({
@@ -78,7 +78,7 @@ export const createNewUserPermission = async (req, res) => {
             if (result == 'false') {
                 res.status(400).send({
                     success: false,
-                    message: 'wrong parameters',
+                    message: 'wrong parameters ',
                     code: 'UserPermission _information_Invalid'
                 })
             } else {
@@ -113,7 +113,7 @@ export const updateUserPermission = async (req, res) => {
     } else {
         const UserPermissionData = new UserPermissionModel(req.body);
 
-        UserPermissionModel.updateUserPermission(req.params.id, UserPermissionData, (result, error) => {
+        UserPermissionModel.updateUserPermission(req.params.id, UserPermissionData, req.dataPacket, (result, error) => {
             if (error) {
                 res.status(400).send(error)
             } else if (result == 'false') {
@@ -144,7 +144,7 @@ export const updateUserPermission = async (req, res) => {
  * 
  */
 export const deleteUsersLines = (req, res) => {
-    UserPermissionModel.deleteUserPermission(req.params.id, (result, error) => {
+    UserPermissionModel.deleteUserPermission(req.params.id, req.dataPacket, (result, error) => {
         if (error) {
             res.send(error)
         } else if (result == 'false') {

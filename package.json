@@ -23,11 +23,15 @@
     "email-validator": "^2.0.4",
     "express": "^4.18.2",
     "generate-api-key": "^1.0.2",
+    "insomnia-documenter": "^0.5.4",
     "ip-regex": "^5.0.0",
     "is-ip": "^5.0.0",
     "jsonwebtoken": "^8.5.1",
     "mysql": "^2.18.1",
     "randombytes": "^2.1.0",
+    "swagger": "^0.7.5",
+    "swagger-jsdoc": "^6.2.5",
+    "swagger-ui-express": "^4.6.0",
     "validate-date": "^2.0.0"
   },
   "devDependencies": {

@@ -2,7 +2,7 @@ import {
     dbPool
 } from "../DB/database.js";
 import logs from '../middleware/logs/logs.js'
-
+import app_logs from '../middleware/logs/application_logs.js'
 
 
 
@@ -60,14 +60,14 @@ PhoneNumber.getNumberById = (id, result) => {
  * Create new contact phone number
  *  
  */
-PhoneNumber.createNewNumber = (contactsData, result) => {
+PhoneNumber.createNewNumber = (contactsData, dataPacket, result) => {
     dbPool.query('SELECT contact_id FROM contacts_numbers where contact_id=?', [contactsData.id], (error, res) => {
         if (res) {
             dbPool.query('INSERT INTO contacts_numbers SET ?', contactsData, (error, res) => {
                 if (!error) {
                     result(res)
-                    let action = 'CREATE NEW PHONE NUMBER'
-                    logs(res.insertId, action, element)
+                    app_logs(dataPacket.account_id, dataPacket.action, element, res.insertId)
+                    logs(dataPacket.account_id, dataPacket.action, element, res.insertId)
 
                 } else {
                     result('false')
@@ -85,7 +85,7 @@ PhoneNumber.createNewNumber = (contactsData, result) => {
  * 
  * 
  */
-PhoneNumber.updateNumber = (id, numbersData, result, _res) => {
+PhoneNumber.updateNumber = (id, numbersData, dataPacket, result, _res) => {
     dbPool.query('SELECT * FROM contacts_numbers WHERE id= ? ', id, (error, resR1) => {
         if (resR1.length === 0) {
             result('false')
@@ -96,8 +96,9 @@ PhoneNumber.updateNumber = (id, numbersData, result, _res) => {
                 (error, res) => {
                     if (!error) {
                         result(res)
-                        let action = 'UPDATE PHONE NUMBER'
-                        logs(resR1[0].id, action, element)
+                        app_logs(dataPacket.account_id, dataPacket.action, element, id)
+                        logs(dataPacket.account_id, dataPacket.action, element, id)
+
 
                     } else {
                         _res.send(error)
@@ -112,7 +113,7 @@ PhoneNumber.updateNumber = (id, numbersData, result, _res) => {
 /**
  * Delete account
  */
-PhoneNumber.deleteNumber = (id, result) => {
+PhoneNumber.deleteNumber = (id, dataPacket, result) => {
     dbPool.query('SELECT * FROM contacts_numbers WHERE id= ? ', id, (error, resR1) => {
         if (resR1.length === 0) {
             result('false')
@@ -120,12 +121,10 @@ PhoneNumber.deleteNumber = (id, result) => {
             dbPool.query('DELETE FROM contacts_numbers WHERE id=? ', id, (error, res) => {
                 if (error) {
                     result(error)
-
                 } else {
                     result(res)
-                    let action = 'DELETE PHONE NUMBER'
-                    logs(resR1[0].id, action, element)
-
+                    app_logs(dataPacket.account_id, dataPacket.action, element, id)
+                    logs(dataPacket.account_id, dataPacket.action, element, id)
                 }
             })
         }

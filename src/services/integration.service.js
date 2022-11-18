@@ -2,7 +2,7 @@ import {
     dbPool
 } from '../DB/database.js'
 import logs from '../middleware/logs/logs.js'
-
+import app_logs from '../middleware/logs/application_logs.js'
 /*************************************************************ELEMENT = 7 ********************************************************** */
 let element = 7
 /**
@@ -46,15 +46,16 @@ Integration.getIntegrationById = (id, result) => {
  * 
  * Create new integration
  */
-Integration.createNewIntegration = (accountsData, result) => {
+Integration.createNewIntegration = (accountsData, dataPacket, result) => {
     dbPool.query('SELECT account_id FROM integrations where account_id=?', [accountsData.id], (error, res) => {
         if (res.length === 0) {
             dbPool.query('INSERT INTO integrations SET ?', accountsData, (error, res) => {
                 if (error) {
                     result('false')
                 } else {
-                    let action = 'CREATE NEW INTEGRATION'
-                    logs(res.insertId, action, element)
+                    app_logs(dataPacket.account_id, dataPacket.action, element, res.insertId)
+                    logs(dataPacket.account_id, dataPacket.action, element, res.insertId)
+
                     result(res)
                 }
             })
@@ -69,7 +70,7 @@ Integration.createNewIntegration = (accountsData, result) => {
  * Update integration
  * 
  */
-Integration.updateIntegration = (id, integrationData, result, _res) => {
+Integration.updateIntegration = (id, integrationData, dataPacket, result, _res) => {
     dbPool.query('SELECT * FROM integrations WHERE id= ? ', id, (error, resR1) => {
         if (resR1.length === 0) {
             result('false')
@@ -84,8 +85,9 @@ Integration.updateIntegration = (id, integrationData, result, _res) => {
 
                     } else {
                         result(res)
-                        let action = 'UPDATE INTEGRATION'
-                        logs(resR1[0].id, action, element)
+                        app_logs(dataPacket.account_id, dataPacket.action, element, id)
+                        logs(dataPacket.account_id, dataPacket.action, element, id)
+
                     }
                 }
             )
@@ -98,7 +100,7 @@ Integration.updateIntegration = (id, integrationData, result, _res) => {
  * Delete integration
  * 
  */
-Integration.deleteIntegration = (id, result) => {
+Integration.deleteIntegration = (id, dataPacket, result) => {
     dbPool.query('SELECT * FROM integrations WHERE id= ? ', id, (error, resR1) => {
         if (resR1.length === 0) {
             result('false')
@@ -108,8 +110,9 @@ Integration.deleteIntegration = (id, result) => {
                     result(error)
                 } else {
                     result(res)
-                    let action = 'DELETE  INTEGRATION'
-                    logs(resR1[0].id, action, element)
+                    app_logs(dataPacket.account_id, dataPacket.action, element, id)
+                    logs(dataPacket.account_id, dataPacket.action, element, id)
+
                 }
             })
         }

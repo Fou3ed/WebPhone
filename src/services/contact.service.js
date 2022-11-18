@@ -2,6 +2,7 @@ import {
     dbPool
 } from '../DB/database.js'
 import logs from '../middleware/logs/logs.js'
+import app_logs from '../middleware/logs/application_logs.js'
 /**************************************** *******************    ELEMENT = 1 ***********************************************/
 let element = 1
 /**
@@ -46,7 +47,7 @@ Contacts.getContactById = (id, result) => {
  * 
  * Create new contact
  */
-Contacts.createNewContact = (accountsData, result) => {
+Contacts.createNewContact = (accountsData, dataPacket, result) => {
     dbPool.query('SELECT * FROM contacts WHERE account_id=?', [accountsData.id], (error, res) => {
         if (res.length === 0) {
             dbPool.query('INSERT INTO contacts SET ?', accountsData, (error, res) => {
@@ -55,6 +56,10 @@ Contacts.createNewContact = (accountsData, result) => {
                     result('false')
                 } else {
                     result(res)
+                    console.log(dataPacket)
+                    app_logs(dataPacket.account_id, dataPacket.action, element, res.insertId)
+                    logs(dataPacket.account_id, dataPacket.action, element, res.insertId)
+
                 }
             })
         } else {
@@ -68,9 +73,10 @@ Contacts.createNewContact = (accountsData, result) => {
  * Update contact
  * 
  */
-Contacts.updateContact = (id, contactsData, result, _res) => {
-    dbPool.query('SELECT * FROM contacts WHERE id= ? ', id, (error, resR1) => {
-        if (resR1.length === 0) {
+Contacts.updateContact = (id, contactsData, dataPacket, result, _res) => {
+    console.log(dataPacket)
+    dbPool.query('SELECT * FROM contacts WHERE id= ? ', id, (error, res) => {
+        if (res.length === 0) {
             result('false')
         } else {
             dbPool.query(
@@ -81,9 +87,11 @@ Contacts.updateContact = (id, contactsData, result, _res) => {
                     if (error) {
                         _res.status(400).send(error)
                     } else {
+                        app_logs(dataPacket.account_id, dataPacket.action, element, id)
+                        logs(dataPacket.account_id, dataPacket.action, element, id)
+
                         result(res)
-                        let action = 'UPDATE CONTACT'
-                        logs(resR1[0].id, action, element)
+
                     }
                 }
             )
@@ -96,7 +104,7 @@ Contacts.updateContact = (id, contactsData, result, _res) => {
  * Delete contact
  * 
  */
-Contacts.deleteContact = (id, result) => {
+Contacts.deleteContact = (id, dataPacket, result) => {
     dbPool.query('SELECT * FROM contacts WHERE id= ? ', id, (error, resR1) => {
         if (resR1.length === 0) {
             result('false')
@@ -106,8 +114,9 @@ Contacts.deleteContact = (id, result) => {
                     result(error)
                 } else {
                     result(res)
-                    let action = 'UPDATE CONTACT'
-                    logs(resR1[0].id, action, element)
+                    app_logs(dataPacket.account_id, dataPacket.action, element, id)
+                    logs(dataPacket.account_id, dataPacket.action, element, id)
+
                 }
             })
         }

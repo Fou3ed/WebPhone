@@ -2,6 +2,7 @@ import {
     dbPool
 } from '../DB/database.js'
 import logs from '../middleware/logs/logs.js'
+import app_logs from '../middleware/logs/application_logs.js'
 /**************************************************************ELEMENT = 8 ****************************************************/
 
 let element = 8
@@ -57,7 +58,7 @@ Lines.getLinesById = (id, result) => {
  * 
  * Create new lines
  */
-Lines.createNewLines = (linesData, result) => {
+Lines.createNewLines = (linesData, dataPacket, result) => {
     dbPool.query(`SELECT account_id FROM lines where account_id=?`, [linesData.id], (error, res) => {
         if (!res) {
             dbPool.query('INSERT INTO `lines` SET ?', linesData, (error, res) => {
@@ -65,8 +66,9 @@ Lines.createNewLines = (linesData, result) => {
                     result('false')
                 } else {
                     result(res)
-                    let action = 'CREATE NEW LINE '
-                    logs(res.insertId, action, element)
+                    app_logs(dataPacket.account_id, dataPacket.action, element, res.insertId)
+                    logs(dataPacket.account_id, dataPacket.action, element, res.insertId)
+
 
                 }
             })
@@ -82,7 +84,7 @@ Lines.createNewLines = (linesData, result) => {
  * Update line
  * 
  */
-Lines.updateLine = (id, lineData, result, _res) => {
+Lines.updateLine = (id, lineData, dataPacket, result, _res) => {
     dbPool.query('SELECT * FROM `lines` WHERE id= ? ', id, (error, resR1) => {
         if (resR1.length === 0) {
             result('false')
@@ -94,9 +96,8 @@ Lines.updateLine = (id, lineData, result, _res) => {
 
                     if (!error) {
                         result(res)
-                        let action = 'UPDATE LINE '
-                        logs(resR1[0].id, action, element)
-
+                        app_logs(dataPacket.account_id, dataPacket.action, element, id)
+                        logs(dataPacket.account_id, dataPacket.action, element, id)
                     } else {
                         _res.status(400).send(error)
 
@@ -112,18 +113,16 @@ Lines.updateLine = (id, lineData, result, _res) => {
  * Delete line
  * 
  */
-Lines.deleteLine = (id, result) => {
+Lines.deleteLine = (id, dataPacket, result) => {
     dbPool.query('SELECT * FROM `lines` WHERE id= ? ', id, (error, resR1) => {
         if (resR1.length === 0) {
             result('false')
         } else {
             dbPool.query('DELETE FROM `lines` WHERE id=? ', id, (error, res) => {
                 if (!error) {
-                    let action = 'DELETE LINE'
-                    logs(resR1[0].id, action, element)
+                    app_logs(dataPacket.account_id, dataPacket.action, element, id)
+                    logs(dataPacket.account_id, dataPacket.action, element, id)
                     result(res)
-
-
                 } else {
                     result(error)
 

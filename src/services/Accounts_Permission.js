@@ -2,6 +2,7 @@ import {
     dbPool
 } from '../DB/database.js'
 import logs from '../middleware/logs/logs.js'
+import app_logs from '../middleware/logs/application_logs.js'
 /*********************************************************** ELEMENT =14  ****************************************************************/
 
 let element = 14
@@ -42,7 +43,7 @@ accountPermission.getAccountPermissionById = (id, result) => {
  * 
  * Create new account permission
  */
-accountPermission.createNewAccountPermission = (accountKeyData, result) => {
+accountPermission.createNewAccountPermission = (accountKeyData, dataPacket, result) => {
     dbPool.query('SELECT api_key_id FROM api_key_acc_permission WHERE api_key_id= ?', [accountKeyData.user_id], (error, res) => {
         if (res.length === 0) {
             let action = "create new account permission"
@@ -51,7 +52,8 @@ accountPermission.createNewAccountPermission = (accountKeyData, result) => {
                     result('false')
                 } else {
                     result(res)
-                    logs(res.insertId, action, element)
+                    app_logs(dataPacket.account_id, dataPacket.action, element, res.insertId)
+
                 }
             })
         } else {
@@ -65,7 +67,7 @@ accountPermission.createNewAccountPermission = (accountKeyData, result) => {
  * Update account Permission
  * 
  */
-accountPermission.updateAccountPermission = (id, accountPermissionData, result, _res) => {
+accountPermission.updateAccountPermission = (id, accountPermissionData, dataPacket, result, _res) => {
     dbPool.query('SELECT * FROM api_key_acc_permission WHERE id = ? ', id, (error, resR1) => {
         console.log(resR1)
         if (resR1.length === 0) {
@@ -84,8 +86,8 @@ accountPermission.updateAccountPermission = (id, accountPermissionData, result, 
                         _res.status(400).send(error)
                     } else {
                         result(res)
-                        let action = 'update account_permissions'
-                        logs(resR1[0].id, action, element)
+                        app_logs(dataPacket.account_id, dataPacket.action, element, id)
+
                     }
                 }
             )
@@ -98,7 +100,7 @@ accountPermission.updateAccountPermission = (id, accountPermissionData, result, 
  * Delete accountPermission
  * 
  */
-accountPermission.deleteAccountPermission = (id, result) => {
+accountPermission.deleteAccountPermission = (id, dataPacket, result) => {
     dbPool.query('SELECT * FROM api_key_acc_permission WHERE id = ? ', id, (error, resR1) => {
         if (resR1.length === 0) {
             result('false')
@@ -107,7 +109,8 @@ accountPermission.deleteAccountPermission = (id, result) => {
 
             dbPool.query('DELETE FROM api_key_acc_permission WHERE id=? ', id, (error, res) => {
                 if (!error) {
-                    logs(resR1[0].id, action, element)
+                    app_logs(dataPacket.account_id, dataPacket.action, element, id)
+
                     result(res)
 
                 } else {

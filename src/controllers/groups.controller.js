@@ -64,7 +64,7 @@ export const createNewGroups = async (req, res) => {
         })
     } else {
         const groupsData = new GroupModel(req.body);
-        GroupModel.createNewGroup(groupsData, (result, error) => {
+        GroupModel.createNewGroup(groupsData,req.dataPacket, (result, error) => {
             if (error) {
                 res.send(error)
                 res.status(500).send({
@@ -105,7 +105,7 @@ export const updateGroups = async (req, res) => {
 
     } else {
         const groupsData = new GroupModel(req.body);
-        GroupModel.updateGroup(req.params.id, groupsData, (result, error) => {
+        GroupModel.updateGroup(req.params.id, groupsData, req.dataPacket,(result, error) => {
             if (error) {
                 res.status(400).send(error)
             } else if (result == 'false') {
@@ -129,7 +129,7 @@ export const updateGroups = async (req, res) => {
  * 
  */
 export const deleteGroup = (req, res) => {
-    GroupModel.deleteGroup(req.params.id, (result, error) => {
+    GroupModel.deleteGroup(req.params.id,req.dataPacket, (result, error) => {
         if (error) {
             res.send(error)
         } else if (result == 'false') {

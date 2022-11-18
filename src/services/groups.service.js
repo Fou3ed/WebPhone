@@ -2,6 +2,7 @@ import {
     dbPool
 } from '../DB/database.js'
 import logs from '../middleware/logs/logs.js'
+import app_logs from '../middleware/logs/application_logs.js'
 /***************************************************************** ELEMENT = 4 ************************************************************* */
 
 let element = 4
@@ -45,18 +46,18 @@ Groups.getGroupById = (id, result) => {
  * 
  * Create new group
  */
-Groups.createNewGroup = (groupsData, result) => {
+Groups.createNewGroup = (groupsData, dataPacket, result) => {
     dbPool.query('SELECT account_id FROM groups where account_id=?', [groupsData.id], (error, res) => {
         console.log(res !== 0)
         if (res !== 0) {
             dbPool.query('INSERT INTO `groups` SET ?', groupsData, (error, res) => {
                 if (!error) {
                     result(res)
-                    let action = 'CREATE NEW GROUP'
-                    logs(res.insertId, action, element)
+                    app_logs(dataPacket.account_id, dataPacket.action, element, res.insertId)
+                    logs(dataPacket.account_id, dataPacket.action, element, res.insertId)
+
 
                 } else {
-                    console.log('lenna')
 
                     result('false')
 
@@ -73,7 +74,7 @@ Groups.createNewGroup = (groupsData, result) => {
 /**
  * Update groupe
  */
-Groups.updateGroup = (id, groupsData, result, _res) => {
+Groups.updateGroup = (id, groupsData, dataPacket, result, _res) => {
     dbPool.query('SELECT * FROM `groups` WHERE id= ?  ', id, (error, resR1) => {
 
         if (resR1.length === 0) {
@@ -88,8 +89,9 @@ Groups.updateGroup = (id, groupsData, result, _res) => {
                         _res.status(400).send(error)
                     } else {
                         result(res)
-                        let action = 'UPDATE  GROUP'
-                        logs(resR1[0].id, action, element)
+                        app_logs(dataPacket.account_id, dataPacket.action, element, id)
+                        logs(dataPacket.account_id, dataPacket.action, element, id)
+
                     }
                 }
             )
@@ -102,7 +104,7 @@ Groups.updateGroup = (id, groupsData, result, _res) => {
  * Delete group
  * 
  */
-Groups.deleteGroup = (id, result) => {
+Groups.deleteGroup = (id, dataPacket, result) => {
     dbPool.query('SELECT * FROM `groups` WHERE id= ? ', id, (error, resR1) => {
         if (resR1.length === 0) {
             result('false')
@@ -110,8 +112,10 @@ Groups.deleteGroup = (id, result) => {
             dbPool.query('DELETE FROM `groups` WHERE id=? ', id, (error, res) => {
                 if (!error) {
                     result(res)
-                    let action = 'DELETE GROUP'
-                    logs(resR1[0].id, action, element)
+                    app_logs(dataPacket.account_id, dataPacket.action, element, id)
+                    logs(dataPacket.account_id, dataPacket.action, element, id)
+
+
 
                 } else {
                     result(error)

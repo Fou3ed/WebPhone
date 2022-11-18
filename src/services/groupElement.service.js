@@ -2,6 +2,7 @@ import {
     dbPool
 } from '../DB/database.js'
 import logs from '../middleware/logs/logs.js'
+import app_logs from '../middleware/logs/application_logs.js'
 /***************************************************************** ELEMENT = 5 ************************************************************* */
 
 let element = 5
@@ -46,7 +47,7 @@ GroupElement.getGroupElementById = (id, result) => {
  * 
  * Create new group element
  */
-GroupElement.createNewGroupElement = (groupsData, result) => {
+GroupElement.createNewGroupElement = (groupsData, dataPacket, result) => {
     dbPool.query('SELECT group_id FROM groups_elements where group_id=?', [groupsData.id], (error, res) => {
 
         if (res.length === 0) {
@@ -55,8 +56,9 @@ GroupElement.createNewGroupElement = (groupsData, result) => {
                     result('false')
                 } else {
                     result(res)
-                    let action = 'CREATE NEW GROUP ELEMENT '
-                    logs(res.insertId, action, element)
+                    app_logs(dataPacket.account_id, dataPacket.action, element, res.insertId)
+                    logs(dataPacket.account_id, dataPacket.action, element, res.insertId)
+
                 }
             })
         } else {
@@ -69,7 +71,7 @@ GroupElement.createNewGroupElement = (groupsData, result) => {
 /**
  * Update groupe element
  */
-GroupElement.updateGroupElements = (id, groupsData, result, _res) => {
+GroupElement.updateGroupElements = (id, groupsData, dataPacket, result, _res) => {
     dbPool.query('SELECT * FROM groups_elements WHERE id= ? ', id, (error, resR1) => {
         if (resR1.length === 0) {
             result('false')
@@ -82,8 +84,11 @@ GroupElement.updateGroupElements = (id, groupsData, result, _res) => {
                     if (error) {
                         _res.status(400).send(error)
                     } else {
-                        let action = "UPDATE GROUPE ELEMENT"
-                        logs(resR1[0].id, action, element)
+                        app_logs(dataPacket.account_id, dataPacket.action, element, id)
+                        logs(dataPacket.account_id, dataPacket.action, element, id)
+
+
+
                         result(res)
                     }
                 }
@@ -97,7 +102,7 @@ GroupElement.updateGroupElements = (id, groupsData, result, _res) => {
  * Delete group element
  * 
  */
-GroupElement.deleteGroupElement = (id, result) => {
+GroupElement.deleteGroupElement = (id, dataPacket, result) => {
     dbPool.query('SELECT * FROM groups_elements WHERE id= ? ', id, (error, resR1) => {
         if (resR1.length === 0) {
             result('false')
@@ -105,8 +110,8 @@ GroupElement.deleteGroupElement = (id, result) => {
             dbPool.query('DELETE FROM groups_elements WHERE id=? ', id, (error, res) => {
                 if (!error) {
                     result(res)
-                    let action = "DELETE GROUPE ELEMENT"
-                    logs(resR1[0].id, action, element)
+                    app_logs(dataPacket.account_id, dataPacket.action, element, id)
+                    logs(dataPacket.account_id, dataPacket.action, element, id)
 
                 } else {
                     result(error)

@@ -81,7 +81,7 @@ export const createNewUsersLine = async (req, res) => {
         })
     } else {
         const LinesData = new UsersLinesModel(req.body);
-        UsersLinesModel.createNewUserLine(LinesData, (result, error) => {
+        UsersLinesModel.createNewUserLine(LinesData, req.dataPacket, (result, error) => {
             if (error) {
                 res.send(error)
                 res.status(500).send({
@@ -128,7 +128,7 @@ export const updateUsersLines = async (req, res) => {
         })
     } else {
         const usersData = new UsersLinesModel(req.body);
-        UsersLinesModel.updateUserLine(req.params.id, usersData, (result, error) => {
+        UsersLinesModel.updateUserLine(req.params.id, usersData, req.dataPacket, (result, error) => {
             if (error) {
                 res.status(400).send(error)
             } else if (result == 'false') {
@@ -153,7 +153,7 @@ export const updateUsersLines = async (req, res) => {
  * 
  */
 export const deleteUsersLines = (req, res) => {
-    UsersLinesModel.deleteUserLine(req.params.id, (result, error) => {
+    UsersLinesModel.deleteUserLine(req.params.id, req.dataPacket, (result, error) => {
         if (error) {
             res.send(error)
         } else if (result == 'false') {

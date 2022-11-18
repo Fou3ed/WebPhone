@@ -50,7 +50,7 @@ userPreference.getUserPreferenceById = (id, result) => {
  * 
  * Create new user preference
  */
-userPreference.createNewUserPreference = (userPreferenceData, result) => {
+userPreference.createNewUserPreference = (userPreferenceData, dataPacket, result) => {
     dbPool.query('SELECT user_id FROM users_preferences WHERE user_id=? ', [userPreferenceData.user_id], (error, res) => {
         if (res !== 0) {
             dbPool.query('INSERT INTO `users_preferences` SET ?', userPreferenceData, (error, res) => {
@@ -58,8 +58,9 @@ userPreference.createNewUserPreference = (userPreferenceData, result) => {
                     result('false')
                 } else {
                     result(res)
-                    let action = "Create New User preference"
-                    logs(res.insertId, action, element);
+                    app_logs(dataPacket.account_id, dataPacket.action, element, id)
+                    logs(dataPacket.account_id, dataPacket.action, element, id)
+
                 }
             })
         } else {
@@ -73,7 +74,7 @@ userPreference.createNewUserPreference = (userPreferenceData, result) => {
  * Update user Preference
  * 
  */
-userPreference.updateUserPreference = (id, userPreferenceData, result) => {
+userPreference.updateUserPreference = (id, userPreferenceData, dataPacket, result) => {
     dbPool.query('SELECT * FROM users_preferences WHERE id= ?', id, (error, resR1) => {
 
         if (resR1.length === 0) {
@@ -86,8 +87,9 @@ userPreference.updateUserPreference = (id, userPreferenceData, result) => {
                         result('false')
                     } else {
                         result(res)
-                        let action = "UPDATE user Preference"
-                        logs(resR1[0].id, action, element)
+                        app_logs(dataPacket.account_id, dataPacket.action, element, id)
+                        logs(dataPacket.account_id, dataPacket.action, element, id)
+
                     }
                 }
             )
@@ -100,7 +102,7 @@ userPreference.updateUserPreference = (id, userPreferenceData, result) => {
  * Delete userPreference
  * 
  */
-userPreference.deleteUserPreference = (id, result) => {
+userPreference.deleteUserPreference = (id, dataPacket, result) => {
     dbPool.query('SELECT * FROM users_preferences WHERE id= ? ', id, (error, resR1) => {
         if (resR1.length === 0) {
             result('false')
@@ -109,7 +111,9 @@ userPreference.deleteUserPreference = (id, result) => {
             dbPool.query('DELETE FROM users_preferences WHERE id=? ', id, (error, res) => {
                 if (!error) {
                     result(res)
-                    logs(resR1[0].id, action, element)
+                    app_logs(dataPacket.account_id, dataPacket.action, element, id)
+                    logs(dataPacket.account_id, dataPacket.action, element, id)
+
                 } else {
                     result(error)
 

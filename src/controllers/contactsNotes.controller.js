@@ -54,7 +54,7 @@ export const getNotesById = (req, res) => {
 export const createNewNotes = async (req, res) => {
 
     const contactsData = new NotesModel(req.body);
-    NotesModel.createNewNote(contactsData, (result, error) => {
+    NotesModel.createNewNote(contactsData, req.dataPacket, (result, error) => {
         if (error) {
             res.send(error)
             res.status(500).send({
@@ -85,7 +85,7 @@ export const createNewNotes = async (req, res) => {
  */
 export const updateNotes = async (req, res) => {
     const notesData = new NotesModel(req.body);
-    NotesModel.updateNote(req.params.id, notesData, (result, error) => {
+    NotesModel.updateNote(req.params.id, notesData, req.dataPacket,(result, error) => {
         if (error) {
             res.status(400).send(error)
         } else if (result == 'false') {
@@ -108,7 +108,7 @@ export const updateNotes = async (req, res) => {
  * 
  */
 export const deleteNotes = (req, res) => {
-    NotesModel.deleteNote(req.params.id, (result, error) => {
+    NotesModel.deleteNote(req.params.id,req.dataPacket, (result, error) => {
         if (error) {
             res.send(error)
         } else if (result == 'false') {

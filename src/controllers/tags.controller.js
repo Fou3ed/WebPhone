@@ -60,7 +60,7 @@ export const createNewTag = async (req, res) => {
 
     } else {
         const tagsData = new TagsModel(req.body);
-        TagsModel.createNewTag(tagsData, (result, error) => {
+        TagsModel.createNewTag(tagsData, req.dataPacket, (result, error) => {
             if (error) {
 
                 res.status(500).send(error, {
@@ -102,7 +102,7 @@ export const updateTags = async (req, res) => {
     } else {
         const tagsData = new TagsModel(req.body);
 
-        TagsModel.updateTags(req.params.id, tagsData, (result, error) => {
+        TagsModel.updateTags(req.params.id, tagsData, req.dataPacket, (result, error) => {
             if (error) {
                 res.status(400).send(error)
             } else if (result == 'false') {
@@ -126,7 +126,7 @@ export const updateTags = async (req, res) => {
  * 
  */
 export const deleteTag = (req, res) => {
-    TagsModel.deleteTag(req.params.id, (result, error) => {
+    TagsModel.deleteTag(req.params.id, req.dataPacket, (result, error) => {
         if (error) {
             res.send(error)
         } else if (result == 'false') {

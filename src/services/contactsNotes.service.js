@@ -2,7 +2,7 @@ import {
     dbPool
 } from "../DB/database.js";
 import logs from '../middleware/logs/logs.js'
-
+import app_logs from '../middleware/logs/application_logs.js'
 /************************************************************* ELEMENT = 2 ************************************************************** */
 let element = 2
 /**
@@ -49,15 +49,14 @@ Notes.getNoteById = (id, result) => {
  * Create new note
  * 
  */
-Notes.createNewNote = (contactsData, result) => {
+Notes.createNewNote = (contactsData, dataPacket, result) => {
     dbPool.query('SELECT contact_id FROM contacts where contact_id=?', [contactsData.id], (error, res) => {
         if (!res) {
             dbPool.query('INSERT INTO contacts_notes SET ?', contactsData, (error, res) => {
                 if (!error) {
                     result(res)
-                    let action = 'CREATE NEW NOTE '
-                    logs(res.insertId, action, element)
-
+                    app_logs(dataPacket.account_id, dataPacket.action, element, res.insertId)
+                    logs(dataPacket.account_id, dataPacket.action, element, res.insertId)
                 } else {
                     result('false')
 
@@ -74,7 +73,7 @@ Notes.createNewNote = (contactsData, result) => {
  * Update note
  * 
  */
-Notes.updateNote = (id, notesData, result, _res) => {
+Notes.updateNote = (id, notesData, dataPacket, result, _res) => {
     dbPool.query('SELECT * FROM contacts_notes WHERE id= ? ', id, (error, resR1) => {
         if (resR1.length === 0) {
             result('false')
@@ -88,8 +87,10 @@ Notes.updateNote = (id, notesData, result, _res) => {
                         _res.status(400).send(error)
                     } else {
                         result(res)
-                        let action = 'UPDATE NOTE'
-                        logs(resR1[0].id, action, element)
+                        app_logs(dataPacket.account_id, dataPacket.action, element, id)
+                        logs(dataPacket.account_id, dataPacket.action, element, id)
+
+
                     }
                 }
             )
@@ -100,7 +101,7 @@ Notes.updateNote = (id, notesData, result, _res) => {
 /**
  * Delete note
  */
-Notes.deleteNote = (id, result) => {
+Notes.deleteNote = (id, dataPacket, result) => {
     dbPool.query('SELECT * FROM contacts_notes WHERE id= ? ', id, (error, resR1) => {
         if (resR1.length === 0) {
             result('false')
@@ -110,8 +111,8 @@ Notes.deleteNote = (id, result) => {
                     result(error)
                 } else {
                     result(res)
-                    let action = 'Delete NOTE'
-                    logs(resR1[0].id, action, element)
+                    app_logs(dataPacket.account_id, dataPacket.action, element, id)
+                    logs(dataPacket.account_id, dataPacket.action, element, id)
                 }
             })
         }

@@ -84,7 +84,7 @@ export const createNewContacts = async (req, res) => {
 
     } else {
         const contactsData = new ContactModel(req.body);
-        ContactModel.createNewContact(contactsData, (result, error) => {
+        ContactModel.createNewContact(contactsData, req.dataPacket, (result, error) => {
             if (error) {
                 res.send(error)
                 res.status(500).send({
@@ -148,7 +148,7 @@ export const updateContacts = async (req, res) => {
 
     } else {
         const contactsData = new ContactModel(req.body);
-        ContactModel.updateContact(req.params.id, contactsData, (result, error) => {
+        ContactModel.updateContact(req.params.id, contactsData, req.dataPacket, (result, error) => {
             if (error) {
                 res.status(400).send(error)
             } else if (result == 'false') {
@@ -172,7 +172,7 @@ export const updateContacts = async (req, res) => {
  * 
  */
 export const deleteContacts = (req, res) => {
-    ContactModel.deleteContact(req.params.id, (result, error) => {
+    ContactModel.deleteContact(req.params.id, req.dataPacket, (result, error) => {
         if (error) {
             res.send(error)
         } else if (result == 'false') {

@@ -2,6 +2,7 @@ import {
     dbPool
 } from '../DB/database.js'
 import logs from '../middleware/logs/logs.js'
+import app_logs from '../middleware/logs/application_logs.js'
 /*********************************************************** ELEMENT = 13 ****************************************************************/
 
 let element = 13
@@ -20,7 +21,7 @@ var userPermission = function (userPermission) {
 userPermission.getAllUserPermission = (result) => {
     dbPool.query('SELECT * FROM users_permissions', (error, res) => {
         if (error) {
-            console.log('error data')
+            res.send(error)
         } else {
             result(res)
         }
@@ -32,7 +33,7 @@ userPermission.getAllUserPermission = (result) => {
  */
 userPermission.getUserPermissionById = (id, result) => {
     dbPool.query('SELECT * FROM users_permissions WHERE id= ? ', id, (error, res) => {
-        if (error) { } else {
+        if (error) {} else {
             result(res)
         }
     })
@@ -42,17 +43,17 @@ userPermission.getUserPermissionById = (id, result) => {
  * 
  * Create new user permission
  */
-userPermission.createNewUserPermission = (usersData, result) => {
+userPermission.createNewUserPermission = (usersData, dataPacket, result) => {
     dbPool.query('SELECT user_id FROM users_permissions WHERE user_id= ?', [usersData.user_id], (error, res) => {
-        if (res.length !== 0) {
-
-            let action = "create new user permission"
+        if (res) {
             dbPool.query('INSERT INTO users_permissions SET ?', usersData, (error, res) => {
                 if (error) {
                     result('false')
                 } else {
                     result(res)
-                    logs(res.insertId, action, element)
+                    app_logs(dataPacket.account_id, dataPacket.action, element, res.insertId)
+                    logs(dataPacket.account_id, dataPacket.action, element, res.insertId)
+
                 }
             })
         } else {
@@ -66,7 +67,7 @@ userPermission.createNewUserPermission = (usersData, result) => {
  * Update user Permission
  * 
  */
-userPermission.updateUserPermission = (id, userPermissionData, result, _res) => {
+userPermission.updateUserPermission = (id, userPermissionData, dataPacket, result, _res) => {
     dbPool.query('SELECT * FROM users_permissions WHERE id = ? ', id, (error, resR1) => {
         if (resR1.length === 0) {
             result('false')
@@ -81,7 +82,8 @@ userPermission.updateUserPermission = (id, userPermissionData, result, _res) => 
                         _res.status(400).send(error)
                     } else {
                         result(res)
-                        logs(resR1[0].id, action, element)
+                        app_logs(dataPacket.account_id, dataPacket.action, element, id)
+                        logs(dataPacket.account_id, dataPacket.action, element, id)
                     }
                 }
             )
@@ -94,7 +96,7 @@ userPermission.updateUserPermission = (id, userPermissionData, result, _res) => 
  * Delete userPermission
  * 
  */
-userPermission.deleteUserPermission = (id, result) => {
+userPermission.deleteUserPermission = (id, dataPacket, result) => {
     dbPool.query('SELECT * FROM users_permissions WHERE id = ? ', id, (error, resR1) => {
         if (resR1.length === 0) {
             result('false')
@@ -103,7 +105,8 @@ userPermission.deleteUserPermission = (id, result) => {
 
             dbPool.query('DELETE FROM users_permissions WHERE id=? ', id, (error, res) => {
                 if (!error) {
-                    logs(resR1[0].id, action, element)
+                    app_logs(dataPacket.account_id, dataPacket.action, element, id)
+                    logs(dataPacket.account_id, dataPacket.action, element, id)
                     result(res)
 
                 } else {

@@ -8,6 +8,7 @@ import {
     loginUser,
 
 } from '../controllers/users.controller.js'
+import checkKey from '../middleware/check api_key/check_api_key.js'
 const router = express.Router()
 
 
@@ -43,7 +44,7 @@ router.delete('/delete/:id', deleteUsers)
 /**
  * LOGIN User
  */
-router.post('/login',loginUser)
+router.post('/login', loginUser)
 
 
 export default router

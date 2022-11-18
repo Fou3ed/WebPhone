@@ -2,7 +2,7 @@ import {
     dbPool
 } from '../DB/database.js'
 import api_keyGenerator from '../middleware/api_keys/api_key_account.js'
-import app_log from '../middleware/logs/application_logs.js'
+import app_logs from '../middleware/logs/application_logs.js'
 
 /*********************************************************ELEMENT : 15  *******************************************/
 
@@ -16,7 +16,11 @@ var Accounts = function (accounts) {
     this.status = accounts.status
     this.date_start = accounts.date_start
 }
-
+/**
+ * 
+ * @swagger
+ * 
+ */
 /** get list of accounts
  * */
 Accounts.getAllAccounts = (result) => {
@@ -54,7 +58,7 @@ Accounts.getAccountById = (id, result) => {
  * Create new account
  * 
  */
-Accounts.createNewAccount = (accountsData, result) => {
+Accounts.createNewAccount = (accountsData, dataPacket, result) => {
     dbPool.query(
         'SELECT name,status,data_start,date_end FROM accounts',
         [accountsData.name, accountsData.status, accountsData.date_start],
@@ -68,6 +72,8 @@ Accounts.createNewAccount = (accountsData, result) => {
                             "data": [res]
                         })
                         api_keyGenerator(res.insertId)
+                        app_logs(dataPacket.account_id, dataPacket.action, element, res.insertId)
+
                     } else {
                         result(error)
                     }
@@ -82,22 +88,25 @@ Accounts.createNewAccount = (accountsData, result) => {
  * Update account
  * 
  */
-Accounts.updateAccount = (id, accountsData, result, _res) => {
+
+Accounts.updateAccount = (id, accountsData, dataPacket, result, _res) => {
     dbPool.query('SELECT * FROM accounts WHERE id= ? ', id, (error, res) => {
         if (res.length === 0) {
             result('false')
         } else {
             dbPool.query(
-                'UPDATE accounts SET name=? , status=?,date_start=?,date_end=?  WHERE (id = ?)',
-                [accountsData.name, accountsData.status, accountsData.date_start, accountsData.date_end, id],
+                'UPDATE accounts SET name=? , status=?,date_start=?  WHERE (id = ?)',
+                [accountsData.name, accountsData.status, accountsData.date_start, id],
+
                 (error, res) => {
 
                     if (error) {
-                        console.log(error)
-
                         _res.status(400).send(error)
                     } else {
+
                         result(res)
+                        app_logs(dataPacket.account_id, dataPacket.action, element, id)
+
                     }
                 }
             )
@@ -110,7 +119,7 @@ Accounts.updateAccount = (id, accountsData, result, _res) => {
 /**
  * Delete account
  */
-Accounts.deleteAccount = (id, result) => {
+Accounts.deleteAccount = (id, dataPacket, result) => {
     dbPool.query('SELECT * FROM accounts WHERE id= ? ', id, (error, res) => {
         if (res.length === 0) {
             result('false')
@@ -118,10 +127,9 @@ Accounts.deleteAccount = (id, result) => {
             dbPool.query('DELETE FROM accounts WHERE id=? ', id, (error, res) => {
                 if (!error) {
                     result(res)
-
+                    app_logs(dataPacket.account_id, dataPacket.action, element, id)
                 } else {
                     result(error)
-
                 }
             })
         }
