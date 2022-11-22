@@ -2,6 +2,7 @@ import {
     dbPool
 } from '../DB/database.js'
 import logs from '../middleware/logs/logs.js'
+import app_logs from '../middleware/logs/application_logs.js'
 /***********************************************ELEMENT = 12 ***********************************************************/
 let element = 12
 
@@ -58,8 +59,8 @@ userPreference.createNewUserPreference = (userPreferenceData, dataPacket, result
                     result('false')
                 } else {
                     result(res)
-                    app_logs(dataPacket.account_id, dataPacket.action, element, id)
-                    logs(dataPacket.account_id, dataPacket.action, element, id)
+                    app_logs(dataPacket.account_id, dataPacket.action, element, res.insertId)
+                    logs(dataPacket.account_id, dataPacket.action, element, res.insertId)
 
                 }
             })

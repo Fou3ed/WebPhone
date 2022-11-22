@@ -22,7 +22,7 @@ var UsersLines = function (userLine) {
 UsersLines.getAllUsersLines = (result) => {
     dbPool.query('SELECT * FROM users_lines', (error, res) => {
         if (error) {
-            console.log('error data')
+            res.send(error)
         } else {
             result(res)
         }
@@ -54,7 +54,6 @@ UsersLines.createNewUserLine = (usersData, dataPacket, result) => {
                 } else {
                     app_logs(dataPacket.account_id, dataPacket.action, element, res.insertId)
                     logs(dataPacket.account_id, dataPacket.action, element, res.insertId)
-                    console.log(dataPacket)
 
                     result(res)
                 }

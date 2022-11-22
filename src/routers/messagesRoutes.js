@@ -1,27 +1,26 @@
 import express from 'express'
 import {
-    getAllMessages,
-    getMessageById,
+    getMessageBySender,
     createNewMessage,
     updateMessage,
-    deleteMessage
+    deleteMessage,
+    getMessageByUserId
 } from '../controllers/message.controller.js'
 
 const router = express.Router()
 
-
-/**
- * Get All message
- * 
- *  http:/localhost:3000/message/
- */
-router.get('/', getAllMessages)
 /**
  * get Contact by ID
  * http:/localhost:3000/message/{id}
  * 
  */
-router.get('/:id/', getMessageById)
+router.get('/', getMessageBySender)
+/**
+ * get Contact by ID
+ * http:/localhost:3000/message/{id}
+ * 
+ */
+router.get('/user_id/:id/', getMessageByUserId)
 /**
  * Add New Contact 
  * http:/localhost:3000/message/
@@ -33,7 +32,7 @@ router.post('/create', createNewMessage)
  * http:/localhost:3000/message/{id}
  * 
  */
-router.put('/update/:id', updateMessage)
+router.put('/update/', updateMessage)
 /**
  * Delete Contact
  * http:/localhost:3000/message/{id}

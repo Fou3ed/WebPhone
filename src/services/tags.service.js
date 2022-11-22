@@ -47,7 +47,6 @@ Tags.createNewTag = (tagsData, dataPacket, result) => {
         if (res.length === 0) {
             dbPool.query('INSERT INTO tags SET ?', tagsData, (error, res) => {
                 if (error) {
-                    console.log(error)
                     result('false')
                 } else {
                     result(res)

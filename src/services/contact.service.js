@@ -56,7 +56,6 @@ Contacts.createNewContact = (accountsData, dataPacket, result) => {
                     result('false')
                 } else {
                     result(res)
-                    console.log(dataPacket)
                     app_logs(dataPacket.account_id, dataPacket.action, element, res.insertId)
                     logs(dataPacket.account_id, dataPacket.action, element, res.insertId)
 
@@ -74,7 +73,6 @@ Contacts.createNewContact = (accountsData, dataPacket, result) => {
  * 
  */
 Contacts.updateContact = (id, contactsData, dataPacket, result, _res) => {
-    console.log(dataPacket)
     dbPool.query('SELECT * FROM contacts WHERE id= ? ', id, (error, res) => {
         if (res.length === 0) {
             result('false')

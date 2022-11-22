@@ -48,7 +48,6 @@ Groups.getGroupById = (id, result) => {
  */
 Groups.createNewGroup = (groupsData, dataPacket, result) => {
     dbPool.query('SELECT account_id FROM groups where account_id=?', [groupsData.id], (error, res) => {
-        console.log(res !== 0)
         if (res !== 0) {
             dbPool.query('INSERT INTO `groups` SET ?', groupsData, (error, res) => {
                 if (!error) {

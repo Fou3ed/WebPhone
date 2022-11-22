@@ -21,7 +21,7 @@ var accountPermission = function (accountPermission) {
 accountPermission.getAllAccountPermission = (result) => {
     dbPool.query('SELECT * FROM api_key_acc_permission', (error, res) => {
         if (error) {
-            console.log('error data')
+            send(error)
         } else {
             result(res)
         }
@@ -69,7 +69,7 @@ accountPermission.createNewAccountPermission = (accountKeyData, dataPacket, resu
  */
 accountPermission.updateAccountPermission = (id, accountPermissionData, dataPacket, result, _res) => {
     dbPool.query('SELECT * FROM api_key_acc_permission WHERE id = ? ', id, (error, resR1) => {
-        console.log(resR1)
+
         if (resR1.length === 0) {
 
             result('false')
@@ -82,7 +82,7 @@ accountPermission.updateAccountPermission = (id, accountPermissionData, dataPack
                 (error, res) => {
 
                     if (error) {
-                        console.log(error)
+
                         _res.status(400).send(error)
                     } else {
                         result(res)

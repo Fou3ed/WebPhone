@@ -13,25 +13,33 @@ var message = function (message) {
     this.receiver = message.receiver
     this.message = message.message
     this.time_sent = message.time_sent
+    this.time_seen = message.time_seen
+    this.status = message.status
 }
-/** get list of message
- * */
-message.getAllMessages = (result) => {
-    dbPool.query('SELECT * FROM messaging', (error, res) => {
+
+
+/**
+ * get message between sender and receiver
+ */
+message.getMessageBySender = async (sender, receiver, result) => {
+    let offset = 0
+    dbPool.query('SELECT *,count(*) OVER() as count,messaging.* FROM messaging   WHERE sender=? and receiver=? ORDER BY time_sent DESC LIMIT 10 OFFSET  ? ', [sender, receiver, offset], (error, res) => {
+
         if (!error) {
             result(res)
-
         } else {
-            res.send(error)
+            console.log(error)
+            res.status(400).send(error)
         }
     })
 }
 
 /**
- * get message by id 
+ * get message by user_id
  */
-message.getMessageById = (id, result) => {
-    dbPool.query('SELECT * FROM messaging WHERE id= ? ', id, (error, res) => {
+message.getMessageByUserId = (id, result) => {
+    let offset = 0
+    dbPool.query('SELECT M.*,count(*) over() as count , UL.user_id,U.username FROM webphone.messaging M INNER JOIN users_lines UL ON M.sender=UL.id  INNER JOIN users U ON U.id=? ORDER BY time_sent  DESC LIMIT 10 OFFSET ? ', [id, offset], (error, res) => {
         if (!error) {
             result(res)
         } else {
@@ -40,14 +48,15 @@ message.getMessageById = (id, result) => {
     })
 }
 
+
+
 /**
  * 
  * Create new message
  */
 message.createNewMessage = (messageData, dataPacket, result) => {
-    dbPool.query('INSERT INTO messaging SET sender=?,receiver=?,message=?,time_sent=CURRENT_TIMESTAMP ',
-        [messageData.sender, messageData.receiver, messageData.message], (error, res) => {
-            console.log(messageData)
+    dbPool.query('INSERT INTO messaging SET sender=?,receiver=?,message=?,time_sent=CURRENT_TIMESTAMP,time_seen=?,status=? ',
+        [messageData.sender, messageData.receiver, messageData.message, messageData.time_seen, messageData.status], (error, res) => {
             if (error) {
                 result('false')
 
@@ -61,22 +70,21 @@ message.createNewMessage = (messageData, dataPacket, result) => {
 
 
 
+
 /**
- * Update message
+ * Update message seen 
  * 
  */
-message.updateMessage = (id, messageData, dataPacket, result, _res) => {
-    dbPool.query('SELECT * FROM messaging WHERE id= ? ', id, (error, resR1) => {
-        console.log(resR1)
-
+message.updateMessage = (sender, receiver, messageData, dataPacket, result, _res) => {
+    dbPool.query('SELECT id,time_sent FROM messaging WHERE sender=? and receiver=? order BY time_sent desc ', [sender, receiver], (error, resR1) => {
         if (resR1.length === 0) {
             result('false')
         } else {
+            let id = resR1[0].id
             dbPool.query(
-                'UPDATE messaging SET sender=?,receiver=?,message=?,time_sent=CURRENT_TIMESTAMP  WHERE (id = ?)',
-                [messageData.sender, messageData.receiver, messageData.message, messageData.time_sent, id],
+                'UPDATE messaging SET time_seen=? WHERE id<=? and time_seen="" ',
+                [messageData.time_seen, id],
                 (error, res) => {
-                    console.log(messageData)
                     if (!error) {
                         result(res)
                         app_logs(dataPacket.account_id, dataPacket.action, element, id)

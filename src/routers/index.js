@@ -1,8 +1,4 @@
-/**
- * Swagger documentation
- */
-import swaggerUi from 'swagger-ui-express'
-import swaggerDocs from '../docs/swagger.js'
+
 
 
 import AccountsRoute from '../routers/accountsroutes.js'
@@ -33,10 +29,7 @@ export default {
          */
         create() {
                 const app = REST.getApp()
-                /**
-                 * API Documentation
-                 */
-                app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs))
+
                 /**
                  * Create accounts route
                  */
@@ -110,12 +103,6 @@ export default {
                  * Create messages route
                  */
                 app.use('/message', checkKey, message)
-                /**
-                 * Redirect to documentation if url is invalid
-                 */
-                app.all('*', (req, res) => {
-                        res.redirect('/api-docs')
-                })
 
 
 

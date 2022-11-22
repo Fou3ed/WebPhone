@@ -1,21 +1,24 @@
 import messageModel from '../services/messaging.service.js'
 
+
+
 /**
  * 
- * Get list of messages
+ * Get message Between sender and receiver
  * 
  */
-export const getAllMessages = (req, res) => {
-    messageModel.getAllMessages((messages, error) => {
+export const getMessageBySender = (req, res) => {
+    messageModel.getMessageBySender(req.query.sender_id, req.query.receiver_id, (messages, error) => {
         if (!error) {
             res.status(200).send({
-                code: "success",
                 total: messages.length,
+                code: "success",
                 data: messages
             })
 
         } else {
             res.status(400).send(error)
+
 
         }
     })
@@ -26,18 +29,17 @@ export const getAllMessages = (req, res) => {
  * Get message BY ID
  * 
  */
-export const getMessageById = (req, res) => {
-    messageModel.getMessageById(req.params.id, (messages, error) => {
+export const getMessageByUserId = (req, res) => {
+    messageModel.getMessageByUserId(req.params.id, (messages, error) => {
         if (!error) {
             res.status(200).send({
+                total: messages.length,
                 code: "success",
                 data: messages
             })
 
         } else {
             res.status(400).send(error)
-
-
         }
     })
 }
@@ -82,7 +84,7 @@ export const createNewMessage = async (req, res) => {
  * 
  */
 export const updateMessage = async (req, res) => {
-    if (!req.body.from || !req.body.to || !req.body.message || !req.body.time_sent) {
+    if (!req.body.time_seen) {
         res.status(400).send({
             success: false,
             message: 'wrong parameters',
@@ -90,7 +92,8 @@ export const updateMessage = async (req, res) => {
         })
     } else {
         const messageData = new messageModel(req.body);
-        messageModel.updateMessage(req.params.id, messageData, req.dataPacket, (result, error) => {
+        messageModel.updateMessage(req.query.sender_id, req.query.receiver_id, messageData, req.dataPacket, (result, error) => {
+
             if (error) {
                 res.status(400).send(error)
             } else if (result == 'false') {
@@ -102,7 +105,7 @@ export const updateMessage = async (req, res) => {
             } else {
                 res.json({
                     code: "success",
-                    message: 'line updated successfully ',
+                    message: 'date_seen updated successfully ',
 
                 })
             }
