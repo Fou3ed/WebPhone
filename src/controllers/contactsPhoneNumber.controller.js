@@ -13,7 +13,7 @@ import {
  * 
  */
 export const getContactPhNumbers = (req, res) => {
-    C_PhNumModel.getAllNumbers((PhNumbers, error) => {
+    C_PhNumModel.getAllNumbers(req.params.id, (PhNumbers, error) => {
         if (!error) {
             res.status(200).send({
                 code: "success",
@@ -34,7 +34,7 @@ export const getContactPhNumbers = (req, res) => {
  */
 export const getPhoneNumberById = (req, res) => {
 
-    C_PhNumModel.getNumberById(req.params.id,  (PhNumbers, error) => {
+    C_PhNumModel.getNumberById(req.params.id, (PhNumbers, error) => {
         if (!error) {
             res.status(200).send({
                 code: "success",
@@ -83,7 +83,7 @@ export const createNewContactPh_Number = async (req, res) => {
         })
     } else {
         const contactsData = new C_PhNumModel(req.body);
-        C_PhNumModel.createNewNumber(contactsData,req.dataPacket, (result, error) => {
+        C_PhNumModel.createNewNumber(contactsData, req.dataPacket, (result, error) => {
             if (error) {
                 res.send(error)
                 res.status(500).send({
@@ -103,7 +103,7 @@ export const createNewContactPh_Number = async (req, res) => {
                 res.status(201).json({
                     code: "success",
                     message: 'contact phone number created',
-                    data: contactsData
+                    data: { ...contactsData, id: result.insertId }
                 })
             }
         })
@@ -143,7 +143,7 @@ export const updateContactPh_number = async (req, res) => {
     } else {
         const phoneNumData = new C_PhNumModel(req.body);
 
-        C_PhNumModel.updateNumber(req.params.id, phoneNumData,req.dataPacket, (result, error) => {
+        C_PhNumModel.updateNumber(req.params.id, phoneNumData, req.dataPacket, (result, error) => {
             if (error) {
                 res.status(400).send(error)
             } else if (result == 'false') {
@@ -166,7 +166,7 @@ export const updateContactPh_number = async (req, res) => {
  * 
  */
 export const deletePhNum = (req, res) => {
-    C_PhNumModel.deleteNumber(req.params.id,req.dataPacket, (result, error) => {
+    C_PhNumModel.deleteNumber(req.params.id, req.dataPacket, (result, error) => {
         if (error) {
             res.send(error)
         } else if (result == 'false') {

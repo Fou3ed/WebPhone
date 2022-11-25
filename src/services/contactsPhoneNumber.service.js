@@ -23,11 +23,11 @@ var PhoneNumber = function (phoneNumber) {
 }
 
 
-/** get all contact phone number
+/** get all contact phone number by contact_id 
  * s
  * */
-PhoneNumber.getAllNumbers = (result) => {
-    dbPool.query('SELECT * FROM contacts_numbers ', (error, res) => {
+PhoneNumber.getAllNumbers = (id,result) => {
+    dbPool.query('SELECT * FROM contacts_numbers WHERE contact_id=?',id, (error, res) => {
         if (!error) {
             result(res)
 

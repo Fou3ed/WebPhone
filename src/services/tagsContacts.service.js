@@ -19,8 +19,8 @@ var ContactTags = function (contactTags) {
 
 /** get list of  contact tags
  * */
-ContactTags.getAllContactTags = (result) => {
-    dbPool.query('SELECT * FROM tags_contacts', (error, res) => {
+ContactTags.getAllContactTags = (id, result) => {
+    dbPool.query('SELECT * FROM tags_contacts WHERE contact_id=?', id, (error, res) => {
         if (!error) {
             result(res)
 

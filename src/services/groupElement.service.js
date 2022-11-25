@@ -16,17 +16,41 @@ var GroupElement = function (G_Element) {
     this.element_id = G_Element.element_id
 
 }
-/** get list of group element
+/** get list of group element by group id
  * */
-GroupElement.getAllGroupElement = (result) => {
-    dbPool.query('SELECT * FROM groups_elements', (error, res) => {
-        if (!error) {
-            result(res)
 
-        } else {
-            res.status(400).send(error)
-        }
-    })
+GroupElement.getAllGroupElement = (id, classs, result) => {
+    console.log(id)
+    const Class = classs
+    switch (Class) {
+        case '1': dbPool.query('SELECT GE.*,G.class,C.* FROM webphone.groups_elements GE INNER JOIN webphone.groups G on GE.group_id=G.id AND group_id=? INNER JOIN webphone.contacts C ON C.id=GE.element_id ', id, (error, res) => {
+            if (!error) {
+                result(res)
+
+            } else {
+                res.status(400).send(error)
+            }
+        })
+            break;
+        case '2': dbPool.query('SELECT GE.*,G.class,L.* FROM webphone.groups_elements GE INNER JOIN webphone.groups G on GE.group_id=G.id AND group_id=? INNER JOIN webphone.lines L ON L.id=GE.element_id', id, (error, res) => {
+            if (!error) {
+                result(res)
+
+            } else {
+                res.status(400).send(error)
+            }
+        })
+            break;
+        case '3': dbPool.query('SELECT GE.*,G.class,U.* FROM webphone.groups_elements GE INNER JOIN webphone.groups G on GE.group_id=G.id AND group_id=? INNER JOIN webphone.users U ON U.id=GE.element_id ', id, (error, res) => {
+            if (!error) {
+                result(res)
+
+            } else {
+                res.status(400).send(error)
+            }
+        })
+    }
+
 }
 
 /**
@@ -80,7 +104,6 @@ GroupElement.updateGroupElements = (id, groupsData, dataPacket, result, _res) =>
                 'UPDATE groups_elements SET element=?, element_id=? WHERE (id = ?)',
                 [groupsData.element, groupsData.element_id, id],
                 (error, res) => {
-
                     if (error) {
                         _res.status(400).send(error)
                     } else {

@@ -8,7 +8,7 @@ import NotesModel from '../services/contactsNotes.service.js'
  * 
  */
 export const getAllNotes = (req, res) => {
-    NotesModel.getAllNotes((notes, error) => {
+    NotesModel.getAllNotes(req.params.id, (notes, error) => {
         if (!error) {
             res.status(200).send({
                 code: "success",
@@ -72,7 +72,7 @@ export const createNewNotes = async (req, res) => {
             res.status(201).json({
                 code: "success",
                 message: 'note created',
-                data: contactsData
+                data: { ...contactsData, id: result.insertId }
             })
         }
     })
@@ -85,7 +85,7 @@ export const createNewNotes = async (req, res) => {
  */
 export const updateNotes = async (req, res) => {
     const notesData = new NotesModel(req.body);
-    NotesModel.updateNote(req.params.id, notesData, req.dataPacket,(result, error) => {
+    NotesModel.updateNote(req.params.id, notesData, req.dataPacket, (result, error) => {
         if (error) {
             res.status(400).send(error)
         } else if (result == 'false') {
@@ -108,7 +108,7 @@ export const updateNotes = async (req, res) => {
  * 
  */
 export const deleteNotes = (req, res) => {
-    NotesModel.deleteNote(req.params.id,req.dataPacket, (result, error) => {
+    NotesModel.deleteNote(req.params.id, req.dataPacket, (result, error) => {
         if (error) {
             res.send(error)
         } else if (result == 'false') {

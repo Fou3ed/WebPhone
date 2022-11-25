@@ -7,11 +7,11 @@ function checkElement(element) {
 
 /**
  * 
- * Get list of groups
+ * Get list of group element by group id
  * 
  */
 export const getGroupElement = (req, res) => {
-    GroupElementModel.getAllGroupElement((groups, error) => {
+    GroupElementModel.getAllGroupElement(req.query.group_id, req.query.class, (groups, error) => {
         if (error) {
             res.status(400).send(error)
         } else {
@@ -56,12 +56,6 @@ export const createNewGroupElement = async (req, res) => {
             message: 'wrong parameters',
             code: 'groupElement_information_Invalid'
         })
-    } else if (checkElement(req.body.element)) {
-        res.status(400).send({
-            success: false,
-            message: 'element should be 1 to 6',
-            code: 'contactNumbers_element_Invalid'
-        })
     } else {
         const groupsData = new GroupElementModel(req.body);
         GroupElementModel.createNewGroupElement(groupsData, req.dataPacket, (result, error) => {
@@ -83,7 +77,7 @@ export const createNewGroupElement = async (req, res) => {
                 res.status(201).json({
                     code: "success",
                     message: 'group element created',
-                    data: groupsData
+                    data: { ...groupsData, id: result.insertId }
                 })
             }
         })

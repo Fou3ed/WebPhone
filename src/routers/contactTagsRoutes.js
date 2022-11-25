@@ -15,7 +15,7 @@ const router = express.Router()
  * 
  *  http:/localhost:3000/contactTag/
  */
-router.get('/', getAllContactTags)
+router.get('/contact/:id/', getAllContactTags)
 /**
  * get tag by ID
  * http:/localhost:3000/contactTag/{id}

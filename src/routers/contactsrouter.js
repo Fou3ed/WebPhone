@@ -15,7 +15,7 @@ const router = express.Router()
  * 
  *  http:/localhost:3000/Contacts/
  */
-router.get('/', getContactsList)
+router.get('/user/:id/', getContactsList)
 /**
  * get Contact by ID
  * http:/localhost:3000/Contacts/{id}

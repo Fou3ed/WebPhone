@@ -12,7 +12,7 @@ import {
  * 
  */
 export const getContactsList = (req, res) => {
-    ContactModel.getAllContacts((contacts, error) => {
+    ContactModel.getAllContacts(req.params.id, (contacts, error) => {
         if (!error) {
             res.status(200).send({
                 code: "success",

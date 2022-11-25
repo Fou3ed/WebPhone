@@ -15,7 +15,7 @@ const router = express.Router()
  * 
  *  http:/localhost:3000/notes/
  */
-router.get('/', getContactPhNumbers)
+router.get('/contact/:id/', getContactPhNumbers)
 /**
  * get account by ID
  * http:/localhost:3000/notes/{id}

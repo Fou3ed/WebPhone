@@ -6,11 +6,11 @@ import {
 
 /**
  * 
- * Get list of contact tags
+ * Get list of contact tags by contact_id
  * 
  */
 export const getAllContactTags = (req, res) => {
-    ContactTagsModel.getAllContactTags((tags, error) => {
+    ContactTagsModel.getAllContactTags(req.params.id, (tags, error) => {
         if (!error) {
             res.status(200).send({
                 code: "success",
@@ -88,7 +88,8 @@ export const createNewContactTag = async (req, res) => {
             } else {
                 res.status(201).json({
                     success: true,
-                    message: 'tag created'
+                    message: 'tag created',
+                    data: { ...accountsData, id: result.insertId }
                 })
             }
         })

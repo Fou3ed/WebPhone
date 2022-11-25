@@ -16,10 +16,10 @@ var Contacts = function (contacts) {
     this.source = contacts.source
     this.favorite = contacts.favorite
 }
-/** get list of contacts
+/** get list of contacts by user id 
  * */
-Contacts.getAllContacts = (result) => {
-    dbPool.query('SELECT * FROM contacts', (error, res) => {
+Contacts.getAllContacts = (id,result) => {
+    dbPool.query('SELECT C.*,L.user_id FROM webphone.contacts C INNER JOIN webphone.logs L ON L.user_id=? AND L.element=1 AND L.element_id=C.id ',id, (error, res) => {
         if (!error) {
             result(res)
         } else {

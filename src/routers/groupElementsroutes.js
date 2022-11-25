@@ -15,7 +15,7 @@ const router = express.Router()
  * 
  *  http:/localhost:3000/group/
  */
-router.get('/', getGroupElement)
+router.get('/group/', getGroupElement)
 /**
  * get groupe element by ID
  * http:/localhost:3000/group/{id}

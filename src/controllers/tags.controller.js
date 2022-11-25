@@ -79,7 +79,7 @@ export const createNewTag = async (req, res) => {
                 res.status(201).json({
                     code: "success",
                     message: 'tag created',
-                    data: tagsData
+                    data: { ...tagsData, id: result.insertId }
                 })
             }
         })
