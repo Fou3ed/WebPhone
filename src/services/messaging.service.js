@@ -48,8 +48,6 @@ message.getMessageByUserId = (id, result) => {
     })
 }
 
-
-
 /**
  * 
  * Create new message
@@ -59,7 +57,6 @@ message.createNewMessage = (messageData, dataPacket, result) => {
         [messageData.sender, messageData.receiver, messageData.message, messageData.time_seen, messageData.status], (error, res) => {
             if (error) {
                 result('false')
-
             } else {
                 result(res)
                 app_logs(dataPacket.account_id, dataPacket.action, element, res.insertId)
@@ -91,7 +88,6 @@ message.updateMessage = (sender, receiver, messageData, dataPacket, result, _res
                         logs(dataPacket.account_id, dataPacket.action, element, id)
                     } else {
                         _res.status(400).send(error)
-
                     }
                 }
             )

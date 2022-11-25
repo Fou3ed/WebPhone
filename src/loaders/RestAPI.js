@@ -1,6 +1,7 @@
 import config from '../config/config.js'
 import express from 'express'
 import router from '../routers/index.js'
+import cors from "cors";
 
 
 class RestAPI {
@@ -9,6 +10,8 @@ class RestAPI {
      */
     constructor() {
         this.app = express()
+        this.app.use(cors())
+
     }
     /**
      * Initializes the express Server
@@ -33,7 +36,6 @@ class RestAPI {
         this.app.listen(config.express_server_port, () => {
             console.log('server is working on port  :', config.express_server_port)
         })
-        
     }
     /**
      * 

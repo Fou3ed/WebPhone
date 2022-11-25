@@ -2,6 +2,7 @@ import express from 'express'
 import {
     getUsersLinesList,
     getUserLineById,
+    getUserLineByUserId,
     createNewUsersLine,
     updateUsersLines,
     deleteUsersLines
@@ -22,6 +23,12 @@ router.get('/', getUsersLinesList)
  * 
  */
 router.get('/:id/', getUserLineById)
+/**
+ * get Contact by user ID
+ * http:/localhost:3000/userLine/{id}
+ * 
+ */
+router.get('/user_id/:id/', getUserLineByUserId)
 /**
  * Add New Contact 
  * http:/localhost:3000/userLine/

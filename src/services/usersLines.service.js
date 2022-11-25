@@ -41,6 +41,18 @@ UsersLines.getUserLineById = (id, result) => {
     })
 }
 
+/**get user line by user_id 
+ */
+UsersLines.getUserLineByUserId = (id, result) => {
+    dbPool.query('SELECT UL.*,L.* FROM webphone.users_lines UL INNER JOIN webphone.lines L ON UL.user_id= ? ', id, (error, res) => {
+        if (error) {
+            res.status(400).send(error)
+        } else {
+            result(res)
+        }
+    })
+}
+
 /**
  * 
  * Create new user line

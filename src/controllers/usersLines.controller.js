@@ -48,6 +48,25 @@ export const getUserLineById = (req, res) => {
         }
     })
 }
+/**
+ * 
+ * Get user line by user_ID
+ * 
+ */
+ export const getUserLineByUserId = (req, res) => {
+
+    UsersLinesModel.getUserLineByUserId(req.params.id, (users, error) => {
+        if (error) {
+            res.status(400).send(error)
+        } else {
+            res.status(200).send({
+                code: "success",
+                data: users
+            })
+
+        }
+    })
+}
 
 /**
  * 

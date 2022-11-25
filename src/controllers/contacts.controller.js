@@ -101,10 +101,12 @@ export const createNewContacts = async (req, res) => {
                     code: 'contact_information_Invalid'
                 })
             } else {
+
                 res.status(201).json({
                     code: "success",
                     message: 'contact created',
-                    data: contactsData
+                    data: { ...contactsData, new_id: result.insertId }
+
                 })
             }
         })

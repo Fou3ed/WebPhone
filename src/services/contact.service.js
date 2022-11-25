@@ -51,7 +51,6 @@ Contacts.createNewContact = (accountsData, dataPacket, result) => {
     dbPool.query('SELECT * FROM contacts WHERE account_id=?', [accountsData.id], (error, res) => {
         if (res.length === 0) {
             dbPool.query('INSERT INTO contacts SET ?', accountsData, (error, res) => {
-                let action = 'CREATE NEW CONTACT'
                 if (error) {
                     result('false')
                 } else {
