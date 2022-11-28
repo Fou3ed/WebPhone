@@ -65,7 +65,7 @@ export const createNewUserPermission = async (req, res) => {
         })
     } else {
         const UserPermissionData = new UserPermissionModel(req.body);
-        UserPermissionModel.createNewUserPermission(UserPermissionData, req.dataPacket, (result, error) => {
+        UserPermissionModel.createNewUserPermission(UserPermissionData, req.dataPacket, req.body.ip_address, (result, error) => {
             if (error) {
                 res.send(error)
                 res.status(500).send({
@@ -113,7 +113,7 @@ export const updateUserPermission = async (req, res) => {
     } else {
         const UserPermissionData = new UserPermissionModel(req.body);
 
-        UserPermissionModel.updateUserPermission(req.params.id, UserPermissionData, req.dataPacket, (result, error) => {
+        UserPermissionModel.updateUserPermission(req.params.id, UserPermissionData, req.dataPacket, req.body.ip_address, (result, error) => {
             if (error) {
                 res.status(400).send(error)
             } else if (result == 'false') {

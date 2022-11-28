@@ -60,7 +60,8 @@ export const createNewTag = async (req, res) => {
 
     } else {
         const tagsData = new TagsModel(req.body);
-        TagsModel.createNewTag(tagsData, req.dataPacket, (result, error) => {
+        TagsModel.createNewTag(tagsData, req.dataPacket, req.body.user_id, req.body.ip_address, (result, error) => {
+            console.log(req.body)
             if (error) {
 
                 res.status(500).send(error, {
@@ -102,7 +103,7 @@ export const updateTags = async (req, res) => {
     } else {
         const tagsData = new TagsModel(req.body);
 
-        TagsModel.updateTags(req.params.id, tagsData, req.dataPacket, (result, error) => {
+        TagsModel.updateTags(req.params.id, tagsData, req.dataPacket, req.body.user_id, req.body.ip_address, (result, error) => {
             if (error) {
                 res.status(400).send(error)
             } else if (result == 'false') {

@@ -73,7 +73,7 @@ export const createNewIntegration = async (req, res) => {
         })
     } else {
         const integrationData = new IntegrationModel(req.body);
-        IntegrationModel.createNewIntegration(integrationData, req.dataPacket, (result, error) => {
+        IntegrationModel.createNewIntegration(integrationData, req.dataPacket, req.body.user_id, req.body.ip_address, (result, error) => {
             if (error) {
                 res.send(error)
                 res.status(500).send({
@@ -127,7 +127,7 @@ export const updateIntegration = async (req, res) => {
     } else {
         const integrationData = new IntegrationModel(req.body);
 
-        IntegrationModel.updateIntegration(req.params.id, integrationData, req.dataPacket, (result, error) => {
+        IntegrationModel.updateIntegration(req.params.id, integrationData, req.dataPacket, req.body.user_id, req.body.ip_address, (result, error) => {
             if (error) {
                 res.status(400).send(error)
             } else if (result == 'false') {

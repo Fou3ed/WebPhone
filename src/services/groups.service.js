@@ -46,14 +46,14 @@ Groups.getGroupById = (id, result) => {
  * 
  * Create new group
  */
-Groups.createNewGroup = (groupsData, dataPacket, result) => {
+Groups.createNewGroup = (groupsData, dataPacket, user_id, ip_address, result) => {
     dbPool.query('SELECT account_id FROM groups where account_id=?', [groupsData.id], (error, res) => {
         if (res !== 0) {
             dbPool.query('INSERT INTO `groups` SET ?', groupsData, (error, res) => {
                 if (!error) {
                     result(res)
                     app_logs(dataPacket.account_id, dataPacket.action, element, res.insertId)
-                    logs(dataPacket.account_id, dataPacket.action, element, res.insertId)
+                    logs(dataPacket.account_id, user_id, dataPacket.action, element, res.insertId, ip_address)
 
 
                 } else {
@@ -73,7 +73,7 @@ Groups.createNewGroup = (groupsData, dataPacket, result) => {
 /**
  * Update groupe
  */
-Groups.updateGroup = (id, groupsData, dataPacket, result, _res) => {
+Groups.updateGroup = (id, groupsData, dataPacket, user_id, ip_address, result, _res) => {
     dbPool.query('SELECT * FROM `groups` WHERE id= ?  ', id, (error, resR1) => {
 
         if (resR1.length === 0) {
@@ -89,7 +89,7 @@ Groups.updateGroup = (id, groupsData, dataPacket, result, _res) => {
                     } else {
                         result(res)
                         app_logs(dataPacket.account_id, dataPacket.action, element, id)
-                        logs(dataPacket.account_id, dataPacket.action, element, id)
+                        logs(dataPacket.account_id, user_id, dataPacket.action, element, id, ip_address)
 
                     }
                 }

@@ -58,7 +58,7 @@ Lines.getLinesById = (id, result) => {
  * 
  * Create new lines
  */
-Lines.createNewLines = (linesData, dataPacket, result) => {
+Lines.createNewLines = (linesData, dataPacket, user_id, ip_address, result) => {
     dbPool.query(`SELECT account_id FROM lines where account_id=?`, [linesData.id], (error, res) => {
         if (!res) {
             dbPool.query('INSERT INTO `lines` SET ?', linesData, (error, res) => {
@@ -67,7 +67,7 @@ Lines.createNewLines = (linesData, dataPacket, result) => {
                 } else {
                     result(res)
                     app_logs(dataPacket.account_id, dataPacket.action, element, res.insertId)
-                    logs(dataPacket.account_id, dataPacket.action, element, res.insertId)
+                    logs(dataPacket.account_id, user_id, dataPacket.action, element, res.insertId, ip_address)
 
 
                 }
@@ -84,7 +84,7 @@ Lines.createNewLines = (linesData, dataPacket, result) => {
  * Update line
  * 
  */
-Lines.updateLine = (id, lineData, dataPacket, result, _res) => {
+Lines.updateLine = (id, lineData, dataPacket, user_id, ip_address, result, _res) => {
     dbPool.query('SELECT * FROM `lines` WHERE id= ? ', id, (error, resR1) => {
         if (resR1.length === 0) {
             result('false')
@@ -97,7 +97,7 @@ Lines.updateLine = (id, lineData, dataPacket, result, _res) => {
                     if (!error) {
                         result(res)
                         app_logs(dataPacket.account_id, dataPacket.action, element, id)
-                        logs(dataPacket.account_id, dataPacket.action, element, id)
+                        logs(dataPacket.account_id, user_id, dataPacket.action, element, id, ip_address)
                     } else {
                         _res.status(400).send(error)
 

@@ -64,7 +64,7 @@ export const createNewGroups = async (req, res) => {
         })
     } else {
         const groupsData = new GroupModel(req.body);
-        GroupModel.createNewGroup(groupsData,req.dataPacket, (result, error) => {
+        GroupModel.createNewGroup(groupsData,req.dataPacket, req.body.user_id, req.body.ip_address, (result, error) => {
             if (error) {
                 res.send(error)
                 res.status(500).send({
@@ -105,7 +105,7 @@ export const updateGroups = async (req, res) => {
 
     } else {
         const groupsData = new GroupModel(req.body);
-        GroupModel.updateGroup(req.params.id, groupsData, req.dataPacket,(result, error) => {
+        GroupModel.updateGroup(req.params.id, groupsData, req.dataPacket, req.body.user_id, req.body.ip_address,(result, error) => {
             if (error) {
                 res.status(400).send(error)
             } else if (result == 'false') {

@@ -117,7 +117,7 @@ Users.createNewUser = (userData, dataPacket, result) => {
  * Update user
  * 
  */
-Users.updateUser = (id, usersData, dataPacket, result, _res) => {
+Users.updateUser = (id, usersData, dataPacket, user_id, ip_address, result, _res) => {
 
     dbPool.query('SELECT * FROM users WHERE id= ? ', id, (error, resR1) => {
         if (resR1.length === 0) {
@@ -132,7 +132,7 @@ Users.updateUser = (id, usersData, dataPacket, result, _res) => {
                     } else {
                         result(res)
                         app_logs(dataPacket.account_id, dataPacket.action, element, id)
-                        logs(dataPacket.account_id, dataPacket.action, element, id)
+                        logs(dataPacket.account_id, user_id, dataPacket.action, element, id, ip_address)
                     }
                 }
             )
@@ -144,7 +144,7 @@ Users.updateUser = (id, usersData, dataPacket, result, _res) => {
  * Delete users
  * 
  */
-Users.deleteUser = (id, dataPacket, result) => {
+Users.deleteUser = (id, dataPacket, user_id, ip_address, result) => {
     dbPool.query('SELECT * FROM users WHERE id= ? ', id, (error, resR1) => {
         if (resR1.length === 0) {
             result('false')
@@ -155,7 +155,7 @@ Users.deleteUser = (id, dataPacket, result) => {
                 } else {
                     result(res)
                     app_logs(dataPacket.account_id, dataPacket.action, element, id)
-                    logs(dataPacket.account_id, dataPacket.action, element, id)
+                    logs(dataPacket.account_id, user_id, dataPacket.action, element, id, ip_address)
 
 
 

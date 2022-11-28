@@ -48,7 +48,8 @@ ContactTags.getContactTagsById = (id, result) => {
  * 
  * Create new contact tag
  */
-ContactTags.createNewContactTag = (tagsData, dataPacket, result) => {
+ContactTags.createNewContactTag = (tagsData, dataPacket, user_id, ip_address, result) => {
+    console.log(user_id)
     dbPool.query('SELECT contact_id,tag_id,user_id from tags_contacts,tags,users,contacts WHERE contact_id= ?', [tagsData.user_id], (error, res) => {
         if (res.length === 0) {
             dbPool.query('INSERT INTO tags_contacts SET ?', tagsData, (error, res) => {
@@ -57,7 +58,7 @@ ContactTags.createNewContactTag = (tagsData, dataPacket, result) => {
                 } else {
                     result(res)
                     app_logs(dataPacket.account_id, dataPacket.action, element, res.insertId)
-                    logs(dataPacket.account_id, dataPacket.action, element, res.insertId)
+                    logs(dataPacket.account_id, user_id, dataPacket.action, element, res.insertId, ip_address)
                 }
             })
         } else {
@@ -72,7 +73,7 @@ ContactTags.createNewContactTag = (tagsData, dataPacket, result) => {
  * Update contact tag
  * 
  */
-ContactTags.updateContactTags = (id, contactTagsData, dataPacket, result, _res) => {
+ContactTags.updateContactTags = (id, contactTagsData, dataPacket, user_id, ip_address, result, _res) => {
     dbPool.query('SELECT * FROM tags_contacts WHERE id=? ', id, (error, resR1) => {
         if (resR1.length === 0) {
             result('false')
@@ -87,7 +88,7 @@ ContactTags.updateContactTags = (id, contactTagsData, dataPacket, result, _res) 
                     if (!error) {
                         result(res)
                         app_logs(dataPacket.account_id, dataPacket.action, element, id)
-                        logs(dataPacket.account_id, dataPacket.action, element, id)
+                        logs(dataPacket.account_id, user_id, dataPacket.action, element, id, ip_address)
 
                     } else {
                         _res.status(400).send(error)

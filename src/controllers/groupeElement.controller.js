@@ -58,7 +58,7 @@ export const createNewGroupElement = async (req, res) => {
         })
     } else {
         const groupsData = new GroupElementModel(req.body);
-        GroupElementModel.createNewGroupElement(groupsData, req.dataPacket, (result, error) => {
+        GroupElementModel.createNewGroupElement(groupsData, req.dataPacket,  req.body.user_id, req.body.ip_address,(result, error) => {
             if (error) {
                 res.send(error)
                 res.status(500).send({
@@ -105,7 +105,7 @@ export const updateGroupElement = async (req, res) => {
     } else {
         const groupElementData = new GroupElementModel(req.body);
 
-        GroupElementModel.updateGroupElements(req.params.id, groupElementData, req.dataPacket, (result, error) => {
+        GroupElementModel.updateGroupElements(req.params.id, groupElementData, req.dataPacket,  req.body.user_id, req.body.ip_address,(result, error) => {
             if (error) {
                 res.status(400).send(error)
             } else if (result == 'false') {

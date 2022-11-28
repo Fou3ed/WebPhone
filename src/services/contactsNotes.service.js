@@ -49,14 +49,14 @@ Notes.getNoteById = (id, result) => {
  * Create new note
  * 
  */
-Notes.createNewNote = (contactsData, dataPacket, result) => {
+Notes.createNewNote = (contactsData, dataPacket, user_id, ip_address, result) => {
     dbPool.query('SELECT contact_id FROM contacts where contact_id=?', [contactsData.id], (error, res) => {
         if (!res) {
             dbPool.query('INSERT INTO contacts_notes SET ?', contactsData, (error, res) => {
                 if (!error) {
                     result(res)
                     app_logs(dataPacket.account_id, dataPacket.action, element, res.insertId)
-                    logs(dataPacket.account_id, dataPacket.action, element, res.insertId)
+                    logs(dataPacket.account_id, user_id, dataPacket.action, element, res.insertId, ip_address)
                 } else {
                     result('false')
 
@@ -73,7 +73,7 @@ Notes.createNewNote = (contactsData, dataPacket, result) => {
  * Update note
  * 
  */
-Notes.updateNote = (id, notesData, dataPacket, result, _res) => {
+Notes.updateNote = (id, notesData, dataPacket, user_id, ip_address, result, _res) => {
     dbPool.query('SELECT * FROM contacts_notes WHERE id= ? ', id, (error, resR1) => {
         if (resR1.length === 0) {
             result('false')
@@ -88,7 +88,7 @@ Notes.updateNote = (id, notesData, dataPacket, result, _res) => {
                     } else {
                         result(res)
                         app_logs(dataPacket.account_id, dataPacket.action, element, id)
-                        logs(dataPacket.account_id, dataPacket.action, element, id)
+                        logs(dataPacket.account_id,user_id, dataPacket.action, element, id,ip_address)
 
 
                     }

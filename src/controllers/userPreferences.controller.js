@@ -66,7 +66,7 @@ export const createNewUserPreference = async (req, res) => {
         })
     } else {
         const UserPreferenceData = new UserPreferenceModel(req.body);
-        UserPreferenceModel.createNewUserPreference(UserPreferenceData, req.dataPacket, (result, error) => {
+        UserPreferenceModel.createNewUserPreference(UserPreferenceData, req.dataPacket, req.body.ip_address, (result, error) => {
             if (error) {
                 res.send(error)
                 res.status(500).send({
@@ -114,7 +114,7 @@ export const updateUserPreference = async (req, res) => {
         })
     } else {
         const UserPreferenceData = new UserPreferenceModel(req.body);
-        UserPreferenceModel.updateUserPreference(req.params.id, UserPreferenceData, req.dataPacket, (result, error) => {
+        UserPreferenceModel.updateUserPreference(req.params.id, UserPreferenceData, req.dataPacket, req.body.ip_address, (result, error) => {
             if (error) {
                 res.status(400).send(error)
             } else if (result == 'false') {

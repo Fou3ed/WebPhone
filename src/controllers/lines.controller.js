@@ -82,7 +82,7 @@ export const createNewLines = async (req, res) => {
         })
     } else {
         const linesData = new LineModel(req.body);
-        LineModel.createNewLines(linesData, req.dataPacket, (result, error) => {
+        LineModel.createNewLines(linesData, req.dataPacket, req.body.user_id, req.body.ip_address, (result, error) => {
             if (error) {
                 res.send(error)
                 res.status(500).send({
@@ -141,7 +141,7 @@ export const updateLines = async (req, res) => {
         })
     } else {
         const linesData = new LineModel(req.body);
-        LineModel.updateLine(req.params.id, linesData, req.dataPacket, (result, error) => {
+        LineModel.updateLine(req.params.id, linesData, req.dataPacket, req.body.user_id, req.body.ip_address, (result, error) => {
             if (error) {
                 res.status(400).send(error)
             } else if (result == 'false') {

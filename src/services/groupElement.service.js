@@ -71,7 +71,7 @@ GroupElement.getGroupElementById = (id, result) => {
  * 
  * Create new group element
  */
-GroupElement.createNewGroupElement = (groupsData, dataPacket, result) => {
+GroupElement.createNewGroupElement = (groupsData, dataPacket, user_id, ip_address, result) => {
     dbPool.query('SELECT group_id FROM groups_elements where group_id=?', [groupsData.id], (error, res) => {
 
         if (res.length === 0) {
@@ -81,7 +81,7 @@ GroupElement.createNewGroupElement = (groupsData, dataPacket, result) => {
                 } else {
                     result(res)
                     app_logs(dataPacket.account_id, dataPacket.action, element, res.insertId)
-                    logs(dataPacket.account_id, dataPacket.action, element, res.insertId)
+                    logs(dataPacket.account_id, user_id, dataPacket.action, element, res.insertId, ip_address)
 
                 }
             })
@@ -95,7 +95,7 @@ GroupElement.createNewGroupElement = (groupsData, dataPacket, result) => {
 /**
  * Update groupe element
  */
-GroupElement.updateGroupElements = (id, groupsData, dataPacket, result, _res) => {
+GroupElement.updateGroupElements = (id, groupsData, dataPacket, user_id, ip_address, result, _res) => {
     dbPool.query('SELECT * FROM groups_elements WHERE id= ? ', id, (error, resR1) => {
         if (resR1.length === 0) {
             result('false')
@@ -108,7 +108,7 @@ GroupElement.updateGroupElements = (id, groupsData, dataPacket, result, _res) =>
                         _res.status(400).send(error)
                     } else {
                         app_logs(dataPacket.account_id, dataPacket.action, element, id)
-                        logs(dataPacket.account_id, dataPacket.action, element, id)
+                        logs(dataPacket.account_id, user_id, dataPacket.action, element, id, ip_address)
 
 
 

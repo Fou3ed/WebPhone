@@ -83,7 +83,7 @@ export const createNewContactPh_Number = async (req, res) => {
         })
     } else {
         const contactsData = new C_PhNumModel(req.body);
-        C_PhNumModel.createNewNumber(contactsData, req.dataPacket, (result, error) => {
+        C_PhNumModel.createNewNumber(contactsData, req.dataPacket, req.body.user_id, req.body.ip_address, (result, error) => {
             if (error) {
                 res.send(error)
                 res.status(500).send({
@@ -143,7 +143,7 @@ export const updateContactPh_number = async (req, res) => {
     } else {
         const phoneNumData = new C_PhNumModel(req.body);
 
-        C_PhNumModel.updateNumber(req.params.id, phoneNumData, req.dataPacket, (result, error) => {
+        C_PhNumModel.updateNumber(req.params.id, phoneNumData, req.dataPacket, req.body.user_id, req.body.ip_address, (result, error) => {
             if (error) {
                 res.status(400).send(error)
             } else if (result == 'false') {

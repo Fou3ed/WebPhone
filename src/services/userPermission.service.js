@@ -33,7 +33,7 @@ userPermission.getAllUserPermission = (result) => {
  */
 userPermission.getUserPermissionById = (id, result) => {
     dbPool.query('SELECT * FROM users_permissions WHERE id= ? ', id, (error, res) => {
-        if (error) {} else {
+        if (error) { } else {
             result(res)
         }
     })
@@ -43,7 +43,7 @@ userPermission.getUserPermissionById = (id, result) => {
  * 
  * Create new user permission
  */
-userPermission.createNewUserPermission = (usersData, dataPacket, result) => {
+userPermission.createNewUserPermission = (usersData, dataPacket, ip_address, result) => {
     dbPool.query('SELECT user_id FROM users_permissions WHERE user_id= ?', [usersData.user_id], (error, res) => {
         if (res) {
             dbPool.query('INSERT INTO users_permissions SET ?', usersData, (error, res) => {
@@ -52,7 +52,7 @@ userPermission.createNewUserPermission = (usersData, dataPacket, result) => {
                 } else {
                     result(res)
                     app_logs(dataPacket.account_id, dataPacket.action, element, res.insertId)
-                    logs(dataPacket.account_id, dataPacket.action, element, res.insertId)
+                    logs(dataPacket.account_id, usersData.user_id, dataPacket.action, element, res.insertId, ip_address)
 
                 }
             })
@@ -67,7 +67,7 @@ userPermission.createNewUserPermission = (usersData, dataPacket, result) => {
  * Update user Permission
  * 
  */
-userPermission.updateUserPermission = (id, userPermissionData, dataPacket, result, _res) => {
+userPermission.updateUserPermission = (id, userPermissionData, dataPacket, ip_address, result, _res) => {
     dbPool.query('SELECT * FROM users_permissions WHERE id = ? ', id, (error, resR1) => {
         if (resR1.length === 0) {
             result('false')
@@ -83,7 +83,7 @@ userPermission.updateUserPermission = (id, userPermissionData, dataPacket, resul
                     } else {
                         result(res)
                         app_logs(dataPacket.account_id, dataPacket.action, element, id)
-                        logs(dataPacket.account_id, dataPacket.action, element, id)
+                        logs(dataPacket.account_id, userPermissionData.user_id, dataPacket.action, element, id, ip_address)
                     }
                 }
             )

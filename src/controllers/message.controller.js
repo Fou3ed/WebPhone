@@ -51,7 +51,7 @@ export const getMessageByUserId = (req, res) => {
  */
 export const createNewMessage = async (req, res) => {
     const messageData = new messageModel(req.body);
-    messageModel.createNewMessage(messageData, req.dataPacket, (result, error) => {
+    messageModel.createNewMessage(messageData, req.dataPacket, req.body.user_id, req.body.ip_address, (result, error) => {
         if (error) {
             res.send(error)
             res.status(500).send({
@@ -92,7 +92,7 @@ export const updateMessage = async (req, res) => {
         })
     } else {
         const messageData = new messageModel(req.body);
-        messageModel.updateMessage(req.query.sender_id, req.query.receiver_id, messageData, req.dataPacket, (result, error) => {
+        messageModel.updateMessage(req.query.sender_id, req.query.receiver_id, messageData, req.dataPacket, req.body.user_id, req.body.ip_address, (result, error) => {
 
             if (error) {
                 res.status(400).send(error)

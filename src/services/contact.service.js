@@ -18,8 +18,8 @@ var Contacts = function (contacts) {
 }
 /** get list of contacts by user id 
  * */
-Contacts.getAllContacts = (id,result) => {
-    dbPool.query('SELECT C.*,L.user_id FROM webphone.contacts C INNER JOIN webphone.logs L ON L.user_id=? AND L.element=1 AND L.element_id=C.id ',id, (error, res) => {
+Contacts.getAllContacts = (id, result) => {
+    dbPool.query('SELECT C.*,L.user_id FROM webphone.contacts C INNER JOIN webphone.logs L ON L.user_id=? AND L.element=1 AND L.element_id=C.id ', id, (error, res) => {
         if (!error) {
             result(res)
         } else {
@@ -47,7 +47,7 @@ Contacts.getContactById = (id, result) => {
  * 
  * Create new contact
  */
-Contacts.createNewContact = (accountsData, dataPacket, result) => {
+Contacts.createNewContact = (accountsData, dataPacket, user_id, ip_address, result) => {
     dbPool.query('SELECT * FROM contacts WHERE account_id=?', [accountsData.id], (error, res) => {
         if (res.length === 0) {
             dbPool.query('INSERT INTO contacts SET ?', accountsData, (error, res) => {
@@ -56,7 +56,7 @@ Contacts.createNewContact = (accountsData, dataPacket, result) => {
                 } else {
                     result(res)
                     app_logs(dataPacket.account_id, dataPacket.action, element, res.insertId)
-                    logs(dataPacket.account_id, dataPacket.action, element, res.insertId)
+                    logs(dataPacket.account_id, user_id, dataPacket.action, element, res.insertId, ip_address)
 
                 }
             })
@@ -71,7 +71,7 @@ Contacts.createNewContact = (accountsData, dataPacket, result) => {
  * Update contact
  * 
  */
-Contacts.updateContact = (id, contactsData, dataPacket, result, _res) => {
+Contacts.updateContact = (id, contactsData, dataPacket, user_id, ip_address, result, _res) => {
     dbPool.query('SELECT * FROM contacts WHERE id= ? ', id, (error, res) => {
         if (res.length === 0) {
             result('false')
@@ -85,7 +85,7 @@ Contacts.updateContact = (id, contactsData, dataPacket, result, _res) => {
                         _res.status(400).send(error)
                     } else {
                         app_logs(dataPacket.account_id, dataPacket.action, element, id)
-                        logs(dataPacket.account_id, dataPacket.action, element, id)
+                        logs(dataPacket.account_id, user_id, dataPacket.action, element, id, ip_address)
 
                         result(res)
 

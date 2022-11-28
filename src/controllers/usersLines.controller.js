@@ -53,7 +53,7 @@ export const getUserLineById = (req, res) => {
  * Get user line by user_ID
  * 
  */
- export const getUserLineByUserId = (req, res) => {
+export const getUserLineByUserId = (req, res) => {
 
     UsersLinesModel.getUserLineByUserId(req.params.id, (users, error) => {
         if (error) {
@@ -75,6 +75,7 @@ export const getUserLineById = (req, res) => {
  */
 export const createNewUsersLine = async (req, res) => {
     if (!req.body.connect_limit || !req.body.status || !req.body.date_start) {
+
         res.status(400).send({
             success: false,
             message: 'wrong parameters',
@@ -100,7 +101,7 @@ export const createNewUsersLine = async (req, res) => {
         })
     } else {
         const LinesData = new UsersLinesModel(req.body);
-        UsersLinesModel.createNewUserLine(LinesData, req.dataPacket, (result, error) => {
+        UsersLinesModel.createNewUserLine(LinesData, req.dataPacket, req.body.ip_address, (result, error) => {
             if (error) {
                 res.send(error)
                 res.status(500).send({
@@ -110,6 +111,7 @@ export const createNewUsersLine = async (req, res) => {
                 })
             }
             if (result == 'false') {
+
 
                 res.status(400).send({
                     success: false,
@@ -147,7 +149,7 @@ export const updateUsersLines = async (req, res) => {
         })
     } else {
         const usersData = new UsersLinesModel(req.body);
-        UsersLinesModel.updateUserLine(req.params.id, usersData, req.dataPacket, (result, error) => {
+        UsersLinesModel.updateUserLine(req.params.id, usersData, req.dataPacket, req.body.ip_address, (result, error) => {
             if (error) {
                 res.status(400).send(error)
             } else if (result == 'false') {

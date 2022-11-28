@@ -84,7 +84,7 @@ export const createNewContacts = async (req, res) => {
 
     } else {
         const contactsData = new ContactModel(req.body);
-        ContactModel.createNewContact(contactsData, req.dataPacket, (result, error) => {
+        ContactModel.createNewContact(contactsData, req.dataPacket, req.body.user_id, req.body.ip_address, (result, error) => {
             if (error) {
                 res.send(error)
                 res.status(500).send({
@@ -150,7 +150,7 @@ export const updateContacts = async (req, res) => {
 
     } else {
         const contactsData = new ContactModel(req.body);
-        ContactModel.updateContact(req.params.id, contactsData, req.dataPacket, (result, error) => {
+        ContactModel.updateContact(req.params.id, contactsData, req.dataPacket, req.body.user_id, req.body.ip_address, (result, error) => {
             if (error) {
                 res.status(400).send(error)
             } else if (result == 'false') {

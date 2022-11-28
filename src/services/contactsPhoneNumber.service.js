@@ -26,8 +26,8 @@ var PhoneNumber = function (phoneNumber) {
 /** get all contact phone number by contact_id 
  * s
  * */
-PhoneNumber.getAllNumbers = (id,result) => {
-    dbPool.query('SELECT * FROM contacts_numbers WHERE contact_id=?',id, (error, res) => {
+PhoneNumber.getAllNumbers = (id, result) => {
+    dbPool.query('SELECT * FROM contacts_numbers WHERE contact_id=?', id, (error, res) => {
         if (!error) {
             result(res)
 
@@ -60,14 +60,14 @@ PhoneNumber.getNumberById = (id, result) => {
  * Create new contact phone number
  *  
  */
-PhoneNumber.createNewNumber = (contactsData, dataPacket, result) => {
+PhoneNumber.createNewNumber = (contactsData, dataPacket, user_id, ip_address, result) => {
     dbPool.query('SELECT contact_id FROM contacts_numbers where contact_id=?', [contactsData.id], (error, res) => {
         if (res) {
             dbPool.query('INSERT INTO contacts_numbers SET ?', contactsData, (error, res) => {
                 if (!error) {
                     result(res)
                     app_logs(dataPacket.account_id, dataPacket.action, element, res.insertId)
-                    logs(dataPacket.account_id, dataPacket.action, element, res.insertId)
+                    logs(dataPacket.account_id, user_id, dataPacket.action, element, res.insertId, ip_address)
 
                 } else {
                     result('false')
@@ -85,7 +85,7 @@ PhoneNumber.createNewNumber = (contactsData, dataPacket, result) => {
  * 
  * 
  */
-PhoneNumber.updateNumber = (id, numbersData, dataPacket, result, _res) => {
+PhoneNumber.updateNumber = (id, numbersData, dataPacket, user_id, ip_address, result, _res) => {
     dbPool.query('SELECT * FROM contacts_numbers WHERE id= ? ', id, (error, resR1) => {
         if (resR1.length === 0) {
             result('false')
@@ -97,7 +97,7 @@ PhoneNumber.updateNumber = (id, numbersData, dataPacket, result, _res) => {
                     if (!error) {
                         result(res)
                         app_logs(dataPacket.account_id, dataPacket.action, element, id)
-                        logs(dataPacket.account_id, dataPacket.action, element, id)
+                        logs(dataPacket.account_id, user_id, dataPacket.action, element, id, ip_address)
 
 
                     } else {

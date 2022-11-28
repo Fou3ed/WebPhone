@@ -52,7 +52,7 @@ message.getMessageByUserId = (id, result) => {
  * 
  * Create new message
  */
-message.createNewMessage = (messageData, dataPacket, result) => {
+message.createNewMessage = (messageData, dataPacket, user_id, ip_address, result) => {
     dbPool.query('INSERT INTO messaging SET sender=?,receiver=?,message=?,time_sent=CURRENT_TIMESTAMP,time_seen=?,status=? ',
         [messageData.sender, messageData.receiver, messageData.message, messageData.time_seen, messageData.status], (error, res) => {
             if (error) {
@@ -60,7 +60,7 @@ message.createNewMessage = (messageData, dataPacket, result) => {
             } else {
                 result(res)
                 app_logs(dataPacket.account_id, dataPacket.action, element, res.insertId)
-                logs(dataPacket.account_id, dataPacket.action, element, res.insertId)
+                logs(dataPacket.account_id, user_id, dataPacket.action, element, res.insertId, ip_address)
             }
         })
 }
@@ -85,7 +85,7 @@ message.updateMessage = (sender, receiver, messageData, dataPacket, result, _res
                     if (!error) {
                         result(res)
                         app_logs(dataPacket.account_id, dataPacket.action, element, id)
-                        logs(dataPacket.account_id, dataPacket.action, element, id)
+                        logs(dataPacket.account_id, user_id, dataPacket.action, element, id, ip_address)
                     } else {
                         _res.status(400).send(error)
                     }

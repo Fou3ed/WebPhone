@@ -51,7 +51,7 @@ userPreference.getUserPreferenceById = (id, result) => {
  * 
  * Create new user preference
  */
-userPreference.createNewUserPreference = (userPreferenceData, dataPacket, result) => {
+userPreference.createNewUserPreference = (userPreferenceData, dataPacket, ip_address, result) => {
     dbPool.query('SELECT user_id FROM users_preferences WHERE user_id=? ', [userPreferenceData.user_id], (error, res) => {
         if (res !== 0) {
             dbPool.query('INSERT INTO `users_preferences` SET ?', userPreferenceData, (error, res) => {
@@ -60,7 +60,7 @@ userPreference.createNewUserPreference = (userPreferenceData, dataPacket, result
                 } else {
                     result(res)
                     app_logs(dataPacket.account_id, dataPacket.action, element, res.insertId)
-                    logs(dataPacket.account_id, dataPacket.action, element, res.insertId)
+                    logs(dataPacket.account_id, userPreferenceData.user_id, dataPacket.action, element, res.insertId, ip_address)
 
                 }
             })
@@ -75,9 +75,8 @@ userPreference.createNewUserPreference = (userPreferenceData, dataPacket, result
  * Update user Preference
  * 
  */
-userPreference.updateUserPreference = (id, userPreferenceData, dataPacket, result) => {
+userPreference.updateUserPreference = (id, userPreferenceData, dataPacket, ip_address, result) => {
     dbPool.query('SELECT * FROM users_preferences WHERE id= ?', id, (error, resR1) => {
-
         if (resR1.length === 0) {
             result('false')
         } else {
@@ -89,7 +88,8 @@ userPreference.updateUserPreference = (id, userPreferenceData, dataPacket, resul
                     } else {
                         result(res)
                         app_logs(dataPacket.account_id, dataPacket.action, element, id)
-                        logs(dataPacket.account_id, dataPacket.action, element, id)
+                        logs(dataPacket.account_id, userPreferenceData.user_id, dataPacket.action, element, id, ip_address)
+
 
                     }
                 }

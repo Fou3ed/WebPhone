@@ -42,7 +42,7 @@ Tags.getTagsById = (id, result) => {
  * 
  * Create new tag
  */
-Tags.createNewTag = (tagsData, dataPacket, result) => {
+Tags.createNewTag = (tagsData, dataPacket, user_id, ip_address, result) => {
     dbPool.query('SELECT account_id FROM tags WHERE account_id= ?', [tagsData.id], (error, res) => {
         if (res.length === 0) {
             dbPool.query('INSERT INTO tags SET ?', tagsData, (error, res) => {
@@ -51,7 +51,7 @@ Tags.createNewTag = (tagsData, dataPacket, result) => {
                 } else {
                     result(res)
                     app_logs(dataPacket.account_id, dataPacket.action, element, res.insertId)
-                    logs(dataPacket.account_id, dataPacket.action, element, res.insertId)
+                    logs(dataPacket.account_id, user_id, dataPacket.action, element, res.insertId, ip_address)
 
                 }
             })
@@ -66,7 +66,7 @@ Tags.createNewTag = (tagsData, dataPacket, result) => {
  * Update tag
  * 
  */
-Tags.updateTags = (id, tagsData, dataPacket, result, _res) => {
+Tags.updateTags = (id, tagsData, dataPacket, user_id, ip_address, result, _res) => {
     dbPool.query('SELECT * FROM tags WHERE id= ? ', id, (error, resR1) => {
         if (resR1.length === 0) {
             result('false')
@@ -78,7 +78,7 @@ Tags.updateTags = (id, tagsData, dataPacket, result, _res) => {
                     if (!error) {
                         result(res)
                         app_logs(dataPacket.account_id, dataPacket.action, element, id)
-                        logs(dataPacket.account_id, dataPacket.action, element, id)
+                        logs(dataPacket.account_id, user_id, dataPacket.action, element, id, ip_address)
 
 
                     } else {
