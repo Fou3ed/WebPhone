@@ -14,7 +14,6 @@ var userPreference = function (userPreference) {
     this.ip_address = userPreference.ip_address
     this.day_start = userPreference.day_start
     this.day_end = userPreference.day_end
-    this.time_start = userPreference.time_start
     this.time_end = userPreference.time_end
     this.two_factor_auth = userPreference.two_factor_auth
     this.countries_auth = userPreference.countries_auth
@@ -57,6 +56,7 @@ userPreference.createNewUserPreference = (userPreferenceData, dataPacket, ip_add
             dbPool.query('INSERT INTO `users_preferences` SET ?', userPreferenceData, (error, res) => {
                 if (error) {
                     result('false')
+                    console.log(error)
                 } else {
                     result(res)
                     app_logs(dataPacket.account_id, dataPacket.action, element, res.insertId)

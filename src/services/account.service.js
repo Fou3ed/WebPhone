@@ -14,13 +14,9 @@ let element = 15
 var Accounts = function (accounts) {
     this.name = accounts.name
     this.status = accounts.status
-    this.date_start = accounts.date_start
+    this.date_end = accounts.date_end
 }
-/**
- * 
- * @swagger
- * 
- */
+
 /** get list of accounts
  * */
 Accounts.getAllAccounts = (result) => {
@@ -60,10 +56,10 @@ Accounts.getAccountById = (id, result) => {
  */
 Accounts.createNewAccount = (accountsData, dataPacket, result) => {
     dbPool.query(
-        'SELECT name,status,data_start,date_end FROM accounts',
+        'SELECT * FROM accounts',
         [accountsData.name, accountsData.status, accountsData.date_start],
         (error, res) => {
-            if (!res) {
+            if (res.length !== 0) {
                 dbPool.query('INSERT INTO accounts SET ?', accountsData, (error, res) => {
                     if (!error) {
                         result({
@@ -95,15 +91,15 @@ Accounts.updateAccount = (id, accountsData, dataPacket, result, _res) => {
             result('false')
         } else {
             dbPool.query(
-                'UPDATE accounts SET name=? , status=?,date_start=?  WHERE (id = ?)',
-                [accountsData.name, accountsData.status, accountsData.date_start, id],
+                'UPDATE accounts SET name=?,status=?,date_end=? WHERE id = ?',
+                [accountsData.name, accountsData.status, accountsData.date_end, id],
 
                 (error, res) => {
 
                     if (error) {
+                        console.log(error)
                         _res.status(400).send(error)
                     } else {
-
                         result(res)
                         app_logs(dataPacket.account_id, dataPacket.action, element, id)
 

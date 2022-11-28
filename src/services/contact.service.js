@@ -15,6 +15,8 @@ var Contacts = function (contacts) {
     this.country = contacts.country
     this.source = contacts.source
     this.favorite = contacts.favorite
+    this.date_end = contacts.date_end
+    this.status = contacts.status
 }
 /** get list of contacts by user id 
  * */
@@ -77,11 +79,12 @@ Contacts.updateContact = (id, contactsData, dataPacket, user_id, ip_address, res
             result('false')
         } else {
             dbPool.query(
-                'UPDATE contacts SET first_name=? , last_name=?, country=? ,source=? ,favorite=? WHERE (id = ?)',
-                [contactsData.first_name, contactsData.last_name, contactsData.country, contactsData.source, contactsData.favorite, id],
+                'UPDATE contacts SET first_name=? , last_name=?, country=? ,source=? ,favorite=?,date_end=?, status=? WHERE (id = ?)',
+                [contactsData.first_name, contactsData.last_name, contactsData.country, contactsData.source, contactsData.favorite, contactsData.date_end, contactsData.status, id],
                 (error, res) => {
 
                     if (error) {
+                        console.log(error)
                         _res.status(400).send(error)
                     } else {
                         app_logs(dataPacket.account_id, dataPacket.action, element, id)

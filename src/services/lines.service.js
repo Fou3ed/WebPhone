@@ -20,7 +20,7 @@ var Lines = function (lines) {
     this.user = lines.user
     this.password = lines.password
     this.status = lines.status
-    this.date_start = lines.date_start
+    this.date_end = lines.date_end
 
 
 }
@@ -63,6 +63,7 @@ Lines.createNewLines = (linesData, dataPacket, user_id, ip_address, result) => {
         if (!res) {
             dbPool.query('INSERT INTO `lines` SET ?', linesData, (error, res) => {
                 if (error) {
+                    console.log(error)
                     result('false')
                 } else {
                     result(res)
@@ -90,8 +91,8 @@ Lines.updateLine = (id, lineData, dataPacket, user_id, ip_address, result, _res)
             result('false')
         } else {
             dbPool.query(
-                'UPDATE `lines` SET name=?,host=?,port=?,user=?,password=?,status=?,date_start=? WHERE (id = ?)',
-                [lineData.name, lineData.host, lineData.port, lineData.user, lineData.password, lineData.status, lineData.date_start, id],
+                'UPDATE `lines` SET name=?,host=?,port=?,user=?,password=?,status=?,date_end=? WHERE (id = ?)',
+                [lineData.name, lineData.host, lineData.port, lineData.user, lineData.password, lineData.status, lineData.date_end, id],
                 (error, res) => {
 
                     if (!error) {
@@ -99,6 +100,7 @@ Lines.updateLine = (id, lineData, dataPacket, user_id, ip_address, result, _res)
                         app_logs(dataPacket.account_id, dataPacket.action, element, id)
                         logs(dataPacket.account_id, user_id, dataPacket.action, element, id, ip_address)
                     } else {
+                        console.log(error)
                         _res.status(400).send(error)
 
                     }

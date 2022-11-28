@@ -57,7 +57,7 @@ export const getAccountsById = (req, res) => {
  * 
  */
 export const createNewAccounts = async (req, res) => {
-    if (!req.body.name || !req.body.status || !req.body.date_start) {
+    if (!req.body.name || !req.body.status) {
         res.status(400).send({
             success: false,
             message: 'wrong parameters',
@@ -74,12 +74,6 @@ export const createNewAccounts = async (req, res) => {
             success: false,
             message: 'Status should be in 1-3 ',
             code: 'account_status_Invalid'
-        })
-    } else if (!validateDate(req.body.date_start)) {
-        res.status(400).send({
-            success: false,
-            message: 'date must be in YYYY-MM-DD format',
-            code: 'account_dateStart_Invalid'
         })
     } else {
         const accountsData = new AccountModel(req.body);
@@ -113,7 +107,7 @@ export const createNewAccounts = async (req, res) => {
  * 
  */
 export const updateAccounts = async (req, res) => {
-    if (!req.body.name || !req.body.status || !req.body.date_start) {
+    if (!req.body.name || !req.body.status) {
         res.status(400).send({
             success: false,
             message: 'wrong parameters',
@@ -130,12 +124,6 @@ export const updateAccounts = async (req, res) => {
             success: false,
             message: 'Status should be in 1-3 ',
             code: 'account_status_Invalid'
-        })
-    } else if (!validateDate(req.body.date_start)) {
-        res.status(400).send({
-            success: false,
-            message: 'date must be in YYYY-MM-DD format',
-            code: 'account_dateStart_Invalid'
         })
     } else {
         const accountsData = new AccountModel(req.body);

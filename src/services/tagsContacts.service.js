@@ -14,7 +14,6 @@ var ContactTags = function (contactTags) {
     this.contact_id = contactTags.contact_id
     this.tag_id = contactTags.tag_id
     this.user_id = contactTags.user_id
-    this.date_attach = contactTags.date_attach
 }
 
 /** get list of  contact tags
@@ -49,7 +48,6 @@ ContactTags.getContactTagsById = (id, result) => {
  * Create new contact tag
  */
 ContactTags.createNewContactTag = (tagsData, dataPacket, user_id, ip_address, result) => {
-    console.log(user_id)
     dbPool.query('SELECT contact_id,tag_id,user_id from tags_contacts,tags,users,contacts WHERE contact_id= ?', [tagsData.user_id], (error, res) => {
         if (res.length === 0) {
             dbPool.query('INSERT INTO tags_contacts SET ?', tagsData, (error, res) => {
@@ -78,8 +76,6 @@ ContactTags.updateContactTags = (id, contactTagsData, dataPacket, user_id, ip_ad
         if (resR1.length === 0) {
             result('false')
         } else {
-            let action = "Update  Contact Tag"
-
             dbPool.query(
                 'UPDATE `tags_contacts` SET date_attach=? WHERE (id = ?)',
                 [contactTagsData.date_attach, id],

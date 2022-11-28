@@ -53,7 +53,7 @@ export const getIntegrationById = (req, res) => {
  * 
  */
 export const createNewIntegration = async (req, res) => {
-    if (!req.body.app_id || !req.body.status || !req.body.date_start) {
+    if (!req.body.app_id || !req.body.status) {
         res.status(400).send({
             success: false,
             message: 'wrong parameters',
@@ -65,14 +65,9 @@ export const createNewIntegration = async (req, res) => {
             message: 'Status should be in 1-3 ',
             code: 'integration_status_Invalid'
         })
-    } else if (!validateDate(req.body.date_start)) {
-        res.status(400).send({
-            success: false,
-            message: 'date must be in YYYY-MM-DD format',
-            code: 'integration_dateStart_Invalid'
-        })
     } else {
         const integrationData = new IntegrationModel(req.body);
+
         IntegrationModel.createNewIntegration(integrationData, req.dataPacket, req.body.user_id, req.body.ip_address, (result, error) => {
             if (error) {
                 res.send(error)
@@ -106,7 +101,7 @@ export const createNewIntegration = async (req, res) => {
  * 
  */
 export const updateIntegration = async (req, res) => {
-    if (!req.body.app_id || !req.body.status || !req.body.date_start) {
+    if (!req.body.app_id || !req.body.status || !req.body.date_end) {
         res.status(400).send({
             success: false,
             message: 'wrong parameters',
@@ -118,11 +113,11 @@ export const updateIntegration = async (req, res) => {
             message: 'Status should be in 1-3 ',
             code: 'integration_status_Invalid'
         })
-    } else if (!validateDate(req.body.date_start)) {
+    } else if (!validateDate(req.body.date_end)) {
         res.status(400).send({
             success: false,
             message: 'date must be in YYYY-MM-DD format',
-            code: 'integration_dateStart_Invalid'
+            code: 'integration_dateEnd_Invalid'
         })
     } else {
         const integrationData = new IntegrationModel(req.body);

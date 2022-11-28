@@ -74,7 +74,7 @@ export const getUserLineByUserId = (req, res) => {
  * 
  */
 export const createNewUsersLine = async (req, res) => {
-    if (!req.body.connect_limit || !req.body.status || !req.body.date_start) {
+    if (!req.body.connect_limit || !req.body.status) {
 
         res.status(400).send({
             success: false,
@@ -86,12 +86,6 @@ export const createNewUsersLine = async (req, res) => {
             success: false,
             message: 'status must be 1-2 or 3',
             code: 'userLine_status_Invalid'
-        })
-    } else if (!validateDate(req.body.date_start)) {
-        res.status(400).send({
-            success: false,
-            message: 'date format Invalid',
-            code: 'user_dateStart_Invalid'
         })
     } else if (connectLimit(req.body.connect_limit)) {
         res.status(400).send({

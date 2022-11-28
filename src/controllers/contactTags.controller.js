@@ -55,46 +55,33 @@ export const getContactTagsById = (req, res) => {
  * 
  */
 export const createNewContactTag = async (req, res) => {
-    if (!req.body.date_attach) {
-        res.status(400).send({
-            success: false,
-            message: 'wrong parameters',
-            code: 'tag_information_Invalid'
-        })
-    } else if (!validateDate(req.body.date_attach)) {
-        res.status(400).send({
-            success: false,
-            message: 'date must be in YYYY-MM-DD format',
-            code: 'tag_dateAttach_Invalid'
-        })
-    } else {
-        const accountsData = new ContactTagsModel(req.body);
-        ContactTagsModel.createNewContactTag(accountsData, req.dataPacket, req.body.user_id, req.body.ip_address, (result, error) => {
-            if (error) {
-                res.send(error)
-                res.status(500).send({
-                    success: false,
-                    error: 'Internal server error happened',
-                    code: 'tag_creationOperation_Invalid'
-                })
-            }
+    const accountsData = new ContactTagsModel(req.body);
+    ContactTagsModel.createNewContactTag(accountsData, req.dataPacket, req.body.user_id, req.body.ip_address, (result, error) => {
+        if (error) {
+            res.send(error)
+            res.status(500).send({
+                success: false,
+                error: 'Internal server error happened',
+                code: 'tag_creationOperation_Invalid'
+            })
+        }
 
-            if (result == 'false') {
-                res.status(400).send({
-                    success: false,
-                    message: 'wrong parameters',
-                    code: 'tag_information_Invalid'
-                })
-            } else {
-                res.status(201).json({
-                    success: true,
-                    message: 'tag created',
-                    data: { ...accountsData, id: result.insertId }
-                })
-            }
-        })
-    }
+        if (result == 'false') {
+            res.status(400).send({
+                success: false,
+                message: 'wrong parameters',
+                code: 'tag_information_Invalid'
+            })
+        } else {
+            res.status(201).json({
+                success: true,
+                message: 'tag created',
+                data: { ...accountsData, id: result.insertId }
+            })
+        }
+    })
 }
+
 
 /**
  * 

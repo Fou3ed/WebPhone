@@ -22,7 +22,6 @@ var Users = function (users) {
     this.default_ring_sound = users.default_ring_sound
     this.email = users.email
     this.status = users.status
-    this.date_start = users.date_start
     this.date_end = users.date_end
 }
 /**
@@ -105,6 +104,7 @@ Users.createNewUser = (userData, dataPacket, result) => {
                     app_logs(dataPacket.account_id, dataPacket.action, element, res.insertId)
                     logs(dataPacket.account_id, dataPacket.action, element, res.insertId)
                 } else {
+                    console.log(error)
                     result('false')
                 }
             })
@@ -124,11 +124,12 @@ Users.updateUser = (id, usersData, dataPacket, user_id, ip_address, result, _res
             result('false')
         } else {
             dbPool.query(
-                'UPDATE users SET username=? ,login=?,  password=? , default_theme=? , default_language=? , default_timezone=? ,default_ring_sound=?,email=?,status=?,date_start=?,date_end=? WHERE id = ?',
-                [usersData.username, usersData.login, usersData.password, usersData.default_theme, usersData.default_language, usersData.default_timezone, usersData.default_ring_sound, usersData.email, usersData.status, usersData.date_start, usersData.date_end, id],
+                'UPDATE users SET username=? ,login=?,  password=? , default_theme=? , default_language=? , default_timezone=? ,default_ring_sound=?,email=?,status=?,date_end=? WHERE id = ?',
+                [usersData.username, usersData.login, usersData.password, usersData.default_theme, usersData.default_language, usersData.default_timezone, usersData.default_ring_sound, usersData.email, usersData.status, usersData.date_end,  id],
                 (error, res) => {
                     if (error) {
                         res.status(400).send(error)
+                        console.log(error)
                     } else {
                         result(res)
                         app_logs(dataPacket.account_id, dataPacket.action, element, id)

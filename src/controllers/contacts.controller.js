@@ -2,7 +2,8 @@ import ContactModel from '../services/contact.service.js'
 import {
     checkCountryCode,
     checkSource,
-    checkFavorite
+    checkFavorite,
+    checkStatus
 } from '../utils/validators/Validator.js'
 
 
@@ -53,7 +54,7 @@ export const getContactsById = (req, res) => {
  * 
  */
 export const createNewContacts = async (req, res) => {
-    if (!req.body.first_name || !req.body.last_name || !req.body.country || !req.body.source || !req.body.favorite) {
+    if (!req.body.first_name || !req.body.last_name || !req.body.country || !req.body.source || !req.body.favorite || !req.body.status) {
         res.status(400).send({
             success: false,
             message: 'wrong parameters',
@@ -82,6 +83,12 @@ export const createNewContacts = async (req, res) => {
             code: 'contact_favorite_Invalid'
         })
 
+    } else if (checkStatus(req.body.status)) {
+        res.status(400).send({
+            success: false,
+            message: 'Status should be in 1-3 ',
+            code: 'contact_status_Invalid'
+        })
     } else {
         const contactsData = new ContactModel(req.body);
         ContactModel.createNewContact(contactsData, req.dataPacket, req.body.user_id, req.body.ip_address, (result, error) => {
@@ -93,7 +100,6 @@ export const createNewContacts = async (req, res) => {
                     code: 'contact_creationOperation_Invalid'
                 })
             }
-
             if (result == 'false') {
                 res.status(400).send({
                     success: false,
@@ -105,7 +111,10 @@ export const createNewContacts = async (req, res) => {
                 res.status(201).json({
                     code: "success",
                     message: 'contact created',
-                    data: { ...contactsData, new_id: result.insertId }
+                    data: {
+                        ...contactsData,
+                        new_id: result.insertId
+                    }
 
                 })
             }
@@ -119,7 +128,7 @@ export const createNewContacts = async (req, res) => {
  * 
  */
 export const updateContacts = async (req, res) => {
-    if (!req.body.first_name || !req.body.last_name || !req.body.country || !req.body.source || !req.body.favorite) {
+    if (!req.body.first_name || !req.body.last_name || !req.body.country || !req.body.source || !req.body.favorite || !req.body.status) {
         res.status(400).send({
             success: false,
             message: 'wrong parameters',
@@ -148,6 +157,12 @@ export const updateContacts = async (req, res) => {
             code: 'contact_favorite_Invalid'
         })
 
+    } else if (checkStatus(req.body.status)) {
+        res.status(400).send({
+            success: false,
+            message: 'Status should be in 1-3 ',
+            code: 'contact_status_Invalid'
+        })
     } else {
         const contactsData = new ContactModel(req.body);
         ContactModel.updateContact(req.params.id, contactsData, req.dataPacket, req.body.user_id, req.body.ip_address, (result, error) => {

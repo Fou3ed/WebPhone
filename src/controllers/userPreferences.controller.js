@@ -51,7 +51,7 @@ export const getUserPreferenceById = (req, res) => {
  * 
  */
 export const createNewUserPreference = async (req, res) => {
-    if (!req.body.user_id || !req.body.ip_address || !req.body.day_start || !req.body.day_end || !req.body.time_start || !req.body.time_end || !req.body.two_factor_auth || !req.body.countries_auth) {
+    if (!req.body.user_id || !req.body.ip_address || !req.body.day_start || !req.body.day_end || !req.body.time_end || !req.body.two_factor_auth || !req.body.countries_auth) {
         res.status(400).send({
             success: false,
             message: 'wrong parameters',

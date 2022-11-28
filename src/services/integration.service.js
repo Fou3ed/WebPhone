@@ -12,7 +12,7 @@ var Integration = function (integration) {
     this.account_id = integration.account_id
     this.app_id = integration.app_id
     this.status = integration.status
-    this.date_start = integration.date_start
+    this.date_end = integration.date_end
 
 }
 /** get list of integrations 
@@ -51,6 +51,7 @@ Integration.createNewIntegration = (accountsData, dataPacket, user_id, ip_addres
         if (res.length === 0) {
             dbPool.query('INSERT INTO integrations SET ?', accountsData, (error, res) => {
                 if (error) {
+                    console.log(error)
                     result('false')
                 } else {
                     app_logs(dataPacket.account_id, dataPacket.action, element, res.insertId)
@@ -73,11 +74,12 @@ Integration.createNewIntegration = (accountsData, dataPacket, user_id, ip_addres
 Integration.updateIntegration = (id, integrationData, dataPacket, user_id, ip_address, result, _res) => {
     dbPool.query('SELECT * FROM integrations WHERE id= ? ', id, (error, resR1) => {
         if (resR1.length === 0) {
+
             result('false')
         } else {
             dbPool.query(
-                'UPDATE integrations SET app_id=? , status=?,date_start=? WHERE (id = ?)',
-                [integrationData.app_id, integrationData.status, integrationData.date_start, id],
+                'UPDATE integrations SET app_id=? , status=?,date_end=? WHERE (id = ?)',
+                [integrationData.app_id, integrationData.status, integrationData.date_end, id],
                 (error, res) => {
 
                     if (error) {

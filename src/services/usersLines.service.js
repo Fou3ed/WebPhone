@@ -14,7 +14,6 @@ var UsersLines = function (userLine) {
     this.line_id = userLine.line_id
     this.connect_limit = userLine.connect_limit
     this.status = userLine.status
-    this.date_start = userLine.date_start
     this.date_end = userLine.date_end
 }
 /** get list of users lines
@@ -120,7 +119,6 @@ UsersLines.deleteUserLine = (id, dataPacket, result) => {
         if (resR1.length === 0) {
             result('false')
         } else {
-            let action = "DELETE USER LINE"
             dbPool.query('DELETE FROM users_lines WHERE id=? ', id, (error, res) => {
                 if (error) {
                     result(error)

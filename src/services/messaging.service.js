@@ -12,7 +12,6 @@ var message = function (message) {
     this.sender = message.sender
     this.receiver = message.receiver
     this.message = message.message
-    this.time_sent = message.time_sent
     this.time_seen = message.time_seen
     this.status = message.status
 }
@@ -53,9 +52,10 @@ message.getMessageByUserId = (id, result) => {
  * Create new message
  */
 message.createNewMessage = (messageData, dataPacket, user_id, ip_address, result) => {
-    dbPool.query('INSERT INTO messaging SET sender=?,receiver=?,message=?,time_sent=CURRENT_TIMESTAMP,time_seen=?,status=? ',
-        [messageData.sender, messageData.receiver, messageData.message, messageData.time_seen, messageData.status], (error, res) => {
+    dbPool.query('INSERT INTO messaging SET sender=?,receiver=?,message=?,status=? ',
+        [messageData.sender, messageData.receiver, messageData.message, messageData.status], (error, res) => {
             if (error) {
+                console.log(error)
                 result('false')
             } else {
                 result(res)
@@ -73,13 +73,13 @@ message.createNewMessage = (messageData, dataPacket, user_id, ip_address, result
  * 
  */
 message.updateMessage = (sender, receiver, messageData, dataPacket, result, _res) => {
-    dbPool.query('SELECT id,time_sent FROM messaging WHERE sender=? and receiver=? order BY time_sent desc ', [sender, receiver], (error, resR1) => {
+    dbPool.query('SELECT id,time_sent,time_seen FROM messaging WHERE sender=? and receiver=? order BY time_sent desc ', [sender, receiver], (error, resR1) => {
         if (resR1.length === 0) {
             result('false')
         } else {
             let id = resR1[0].id
             dbPool.query(
-                'UPDATE messaging SET time_seen=? WHERE id<=? and time_seen="" ',
+                'UPDATE messaging SET time_seen=? WHERE id<=? and time_seen=NULL ',
                 [messageData.time_seen, id],
                 (error, res) => {
                     if (!error) {
@@ -87,7 +87,9 @@ message.updateMessage = (sender, receiver, messageData, dataPacket, result, _res
                         app_logs(dataPacket.account_id, dataPacket.action, element, id)
                         logs(dataPacket.account_id, user_id, dataPacket.action, element, id, ip_address)
                     } else {
+
                         _res.status(400).send(error)
+
                     }
                 }
             )

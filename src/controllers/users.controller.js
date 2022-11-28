@@ -102,7 +102,7 @@ export const createNewUsers = async (req, res, next) => {
                 message: "login already exist",
                 code: "login_Invalid"
             })
-        } else if (!req.body.username || !req.body.login || !req.body.password || !req.body.default_theme || !req.body.default_language || !req.body.default_timezone || !req.body.default_ring_sound || !req.body.email || !req.body.status || !req.body.date_start) {
+        } else if (!req.body.username || !req.body.login || !req.body.password || !req.body.default_theme || !req.body.default_language || !req.body.default_timezone || !req.body.default_ring_sound || !req.body.email || !req.body.status) {
             res.status(400).send({
                 success: false,
                 message: 'wrong parameters',
@@ -131,12 +131,6 @@ export const createNewUsers = async (req, res, next) => {
                 success: false,
                 message: 'status must be 1-2 or 3',
                 code: 'user_status_Invalid'
-            })
-        } else if (!validateDate(req.body.date_start)) {
-            res.status(400).send({
-                success: false,
-                message: 'date format Invalid',
-                code: 'user_dateStart_Invalid'
             })
         } else {
             const accountsData = new UsersModel(req.body);
@@ -179,7 +173,7 @@ export const updateUsers = async (req, res) => {
                 message: "login already exist",
                 code: "login_Invalid"
             })
-        } else if (!req.body.username || !req.body.login || !req.body.password || !req.body.default_theme || !req.body.default_language || !req.body.default_timezone || !req.body.default_ring_sound || !req.body.email || !req.body.status || !req.body.date_start) {
+        } else if (!req.body.username || !req.body.login || !req.body.password || !req.body.default_theme || !req.body.default_language || !req.body.default_timezone || !req.body.default_ring_sound || !req.body.email || !req.body.status ) {
             res.status(400).send({
                 success: false,
                 message: 'wrong parameters',
@@ -209,13 +203,7 @@ export const updateUsers = async (req, res) => {
                 message: 'status must be 1-2 or 3',
                 code: 'user_status_Invalid'
             })
-        } else if (!validateDate(req.body.date_start)) {
-            res.status(400).send({
-                success: false,
-                message: 'date format Invalid',
-                code: 'user_dateStart_Invalid'
-            })
-        } else {
+        }  else {
             const UsersData = new UsersModel(req.body);
             UsersModel.updateUser(req.params.id, UsersData, req.dataPacket, (result, error) => {
                 if (error) {

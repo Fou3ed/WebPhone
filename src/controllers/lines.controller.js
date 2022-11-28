@@ -56,7 +56,7 @@ export const getLineById = (req, res) => {
  * 
  */
 export const createNewLines = async (req, res) => {
-    if (!req.body.name || !req.body.host || !req.body.port || !req.body.user || !req.body.password || !req.body.status || !req.body.date_start) {
+    if (!req.body.name || !req.body.host || !req.body.port || !req.body.user || !req.body.password || !req.body.status) {
         res.status(400).send({
             success: false,
             message: 'wrong parameters ',
@@ -74,15 +74,10 @@ export const createNewLines = async (req, res) => {
             message: 'Status should be in 1-3 ',
             code: 'line_status_Invalid'
         })
-    } else if (!validateDate(req.body.date_start)) {
-        res.status(400).send({
-            success: false,
-            message: 'date must be in YYYY-MM-DD format',
-            code: 'line_dateStart_Invalid'
-        })
     } else {
         const linesData = new LineModel(req.body);
         LineModel.createNewLines(linesData, req.dataPacket, req.body.user_id, req.body.ip_address, (result, error) => {
+            console.log(req.body)
             if (error) {
                 res.send(error)
                 res.status(500).send({
@@ -91,7 +86,6 @@ export const createNewLines = async (req, res) => {
                     code: 'line_creationOperation_Invalid'
                 })
             }
-
             if (result == 'false') {
                 res.status(400).send({
                     success: false,
@@ -115,7 +109,7 @@ export const createNewLines = async (req, res) => {
  * 
  */
 export const updateLines = async (req, res) => {
-    if (!req.body.name || !req.body.host || !req.body.port || !req.body.user || !req.body.password || !req.body.status || !req.body.date_start) {
+    if (!req.body.name || !req.body.host || !req.body.port || !req.body.user || !req.body.password || !req.body.status || !req.body.date_end) {
         res.status(400).send({
             success: false,
             message: 'wrong parameters ',
@@ -133,11 +127,11 @@ export const updateLines = async (req, res) => {
             message: 'Status should be in 1-3 ',
             code: 'line_status_Invalid'
         })
-    } else if (!validateDate(req.body.date_start)) {
+    } else if (!validateDate(req.body.date_end)) {
         res.status(400).send({
             success: false,
             message: 'date must be in YYYY-MM-DD format',
-            code: 'line_dateStart_Invalid'
+            code: 'line_dateEnd_Invalid'
         })
     } else {
         const linesData = new LineModel(req.body);
