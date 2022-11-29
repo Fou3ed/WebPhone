@@ -21,7 +21,7 @@ var Contacts = function (contacts) {
 /** get list of contacts by user id 
  * */
 Contacts.getAllContacts = (id, result) => {
-    dbPool.query('SELECT C.*,L.user_id,PHN.* FROM webphone.contacts C INNER JOIN webphone.logs L ON L.user_id=0 AND L.element=1 AND L.element_id=C.id AND C.status=1 AND C.favorite=1 INNER JOIN contacts_numbers PHN on C.id=PHN.contact_id AND defaultt=1 AND L.action= POST/contacts/create/', id, (error, res) => {
+    dbPool.query('SELECT C.*,L.user_id,PHN.* FROM webphone.contacts C INNER JOIN webphone.logs L ON L.user_id=? AND L.element=1 AND L.element_id=C.id AND C.status=1 AND C.favorite=1 INNER JOIN contacts_numbers PHN on C.id=PHN.contact_id AND defaultt=1', id, (error, res) => {
         if (!error) {
             result(res)
         } else {
@@ -104,7 +104,7 @@ Contacts.updateContact = (id, contactsData, dataPacket, user_id, ip_address, res
  * Delete contact
  * 
  */
-Contacts.deleteContact = (id, dataPacket, result) => {
+Contacts.deleteContact = (id, dataPacket, user_id, ip_address, result) => {
     dbPool.query('SELECT * FROM contacts WHERE id= ? ', id, (error, resR1) => {
         if (resR1.length === 0) {
             result('false')
@@ -115,7 +115,7 @@ Contacts.deleteContact = (id, dataPacket, result) => {
                 } else {
                     result(res)
                     app_logs(dataPacket.account_id, dataPacket.action, element, id)
-                    logs(dataPacket.account_id, dataPacket.action, element, id)
+                    logs(dataPacket.account_id, user_id, dataPacket.action, element, ip_address, id)
 
                 }
             })

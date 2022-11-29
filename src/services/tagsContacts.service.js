@@ -19,7 +19,7 @@ var ContactTags = function (contactTags) {
 /** get list of  contact tags
  * */
 ContactTags.getAllContactTags = (id, result) => {
-    dbPool.query('SELECT TG.*,T.* FROM webphone.tags_contacts TG INNER JOIN webphone.tags T ON TG.contact_id=?  AND TG.tag_id=T.id;', id, (error, res) => {
+    dbPool.query('SELECT TG.*,T.name FROM tags_contacts TG INNER JOIN tags T ON TG.contact_id=?  AND TG.tag_id=T.id;', id, (error, res) => {
         if (!error) {
             result(res)
 
@@ -101,7 +101,7 @@ ContactTags.updateContactTags = (id, contactTagsData, dataPacket, user_id, ip_ad
  * Delete  contact tags
  * 
  */
-ContactTags.deleteContactTag = (id, dataPacket,user_id,ip_address, result) => {
+ContactTags.deleteContactTag = (id, dataPacket, user_id, ip_address, result) => {
     dbPool.query(' SELECT * FROM tags_contacts WHERE id=?', id, (error, resR1) => {
         if (resR1.length === 0) {
             result('false')
@@ -112,7 +112,7 @@ ContactTags.deleteContactTag = (id, dataPacket,user_id,ip_address, result) => {
                 if (!error) {
                     result(res)
                     app_logs(dataPacket.account_id, dataPacket.action, element, id)
-                    logs(dataPacket.account_id,user_id, dataPacket.action, element,ip_address, id)
+                    logs(dataPacket.account_id, user_id, dataPacket.action, element, ip_address, id)
 
 
                 } else {
