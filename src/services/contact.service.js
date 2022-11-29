@@ -21,7 +21,7 @@ var Contacts = function (contacts) {
 /** get list of contacts by user id 
  * */
 Contacts.getAllContacts = (id, result) => {
-    dbPool.query('SELECT C.*,L.user_id FROM webphone.contacts C INNER JOIN webphone.logs L ON L.user_id=? AND L.element=1 AND L.element_id=C.id ', id, (error, res) => {
+    dbPool.query('SELECT C.*,L.user_id,PHN.* FROM webphone.contacts C INNER JOIN webphone.logs L ON L.user_id=0 AND L.element=1 AND L.element_id=C.id AND C.status=1 AND C.favorite=1 INNER JOIN contacts_numbers PHN on C.id=PHN.contact_id AND defaultt=1 AND L.action= POST/contacts/create/', id, (error, res) => {
         if (!error) {
             result(res)
         } else {

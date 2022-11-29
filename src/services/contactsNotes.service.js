@@ -88,7 +88,7 @@ Notes.updateNote = (id, notesData, dataPacket, user_id, ip_address, result, _res
                     } else {
                         result(res)
                         app_logs(dataPacket.account_id, dataPacket.action, element, id)
-                        logs(dataPacket.account_id,user_id, dataPacket.action, element, id,ip_address)
+                        logs(dataPacket.account_id, user_id, dataPacket.action, element, id, ip_address)
 
 
                     }
@@ -101,7 +101,7 @@ Notes.updateNote = (id, notesData, dataPacket, user_id, ip_address, result, _res
 /**
  * Delete note
  */
-Notes.deleteNote = (id, dataPacket, result) => {
+Notes.deleteNote = (id, dataPacket, user_id, ip_address, result) => {
     dbPool.query('SELECT * FROM contacts_notes WHERE id= ? ', id, (error, resR1) => {
         if (resR1.length === 0) {
             result('false')
@@ -112,7 +112,7 @@ Notes.deleteNote = (id, dataPacket, result) => {
                 } else {
                     result(res)
                     app_logs(dataPacket.account_id, dataPacket.action, element, id)
-                    logs(dataPacket.account_id, dataPacket.action, element, id)
+                    logs(dataPacket.account_id, user_id, dataPacket.action, element, id, ip_address)
                 }
             })
         }

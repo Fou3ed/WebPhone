@@ -128,12 +128,6 @@ export const updateContactPh_number = async (req, res) => {
             message: 'phone number invalid',
             code: 'contactNumbers_phoneNumber_Invalid'
         })
-    } else if (checkDefault(req.body.defaultt)) {
-        res.status(400).send({
-            success: false,
-            message: 'default should be 0 or 1',
-            code: 'contactDefault_Default_Invalid'
-        })
     } else if (checkStatus(req.body.status)) {
         res.status(400).send({
             success: false,
@@ -162,11 +156,35 @@ export const updateContactPh_number = async (req, res) => {
 }
 /**
  * 
+ * update contact phone number 
+ * 
+ */
+export const updateContactPh_number_default = async (req, res) => {
+    const phoneNumData = new C_PhNumModel(req.body);
+    C_PhNumModel.updateNumber(req.params.id, phoneNumData, req.dataPacket, req.body.user_id, req.body.ip_address, (result, error) => {
+        if (error) {
+            res.status(400).send(error)
+        } else if (result == 'false') {
+            res.json({
+                success: false,
+                message: 'contact  number not found',
+                code: 'contact  number_ID_Invalid'
+            })
+        } else
+            res.json({
+                code: "success",
+                message: 'contact phone number updated successfully '
+            })
+    })
+}
+
+/**
+ * 
  *Delete contact phone number
  * 
  */
 export const deletePhNum = (req, res) => {
-    C_PhNumModel.deleteNumber(req.params.id, req.dataPacket, (result, error) => {
+    C_PhNumModel.deleteNumber(req.params.id, req.dataPacket, req.body.user_id, req.body.ip_address, (result, error) => {
         if (error) {
             res.send(error)
         } else if (result == 'false') {

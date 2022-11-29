@@ -129,7 +129,7 @@ export const updateGroups = async (req, res) => {
  * 
  */
 export const deleteGroup = (req, res) => {
-    GroupModel.deleteGroup(req.params.id,req.dataPacket, (result, error) => {
+    GroupModel.deleteGroup(req.params.id,req.dataPacket, req.body.user_id, req.body.ip_address, (result, error) => {
         if (error) {
             res.send(error)
         } else if (result == 'false') {

@@ -58,24 +58,21 @@ Lines.getLinesById = (id, result) => {
  * 
  * Create new lines
  */
-Lines.createNewLines = (linesData, dataPacket, user_id, ip_address, result) => {
-    dbPool.query(`SELECT account_id FROM lines where account_id=?`, [linesData.id], (error, res) => {
-        if (!res) {
+Lines.createNewLines = async (linesData, dataPacket, user_id, ip_address, result) => {
+    dbPool.query('SELECT * FROM `lines` WHERE name=?', [linesData.name], (error, res) => {
+        console.log(!res.length)
+        if (!res.length) {
             dbPool.query('INSERT INTO `lines` SET ?', linesData, (error, res) => {
                 if (error) {
-                    console.log(error)
                     result('false')
                 } else {
                     result(res)
                     app_logs(dataPacket.account_id, dataPacket.action, element, res.insertId)
                     logs(dataPacket.account_id, user_id, dataPacket.action, element, res.insertId, ip_address)
-
-
                 }
             })
         } else {
             result('false')
-
         }
     })
 }
@@ -94,13 +91,11 @@ Lines.updateLine = (id, lineData, dataPacket, user_id, ip_address, result, _res)
                 'UPDATE `lines` SET name=?,host=?,port=?,user=?,password=?,status=?,date_end=? WHERE (id = ?)',
                 [lineData.name, lineData.host, lineData.port, lineData.user, lineData.password, lineData.status, lineData.date_end, id],
                 (error, res) => {
-
                     if (!error) {
                         result(res)
                         app_logs(dataPacket.account_id, dataPacket.action, element, id)
                         logs(dataPacket.account_id, user_id, dataPacket.action, element, id, ip_address)
                     } else {
-                        console.log(error)
                         _res.status(400).send(error)
 
                     }
@@ -115,7 +110,7 @@ Lines.updateLine = (id, lineData, dataPacket, user_id, ip_address, result, _res)
  * Delete line
  * 
  */
-Lines.deleteLine = (id, dataPacket, result) => {
+Lines.deleteLine = (id, dataPacket, user_id, ip_address, result) => {
     dbPool.query('SELECT * FROM `lines` WHERE id= ? ', id, (error, resR1) => {
         if (resR1.length === 0) {
             result('false')
@@ -123,7 +118,7 @@ Lines.deleteLine = (id, dataPacket, result) => {
             dbPool.query('DELETE FROM `lines` WHERE id=? ', id, (error, res) => {
                 if (!error) {
                     app_logs(dataPacket.account_id, dataPacket.action, element, id)
-                    logs(dataPacket.account_id, dataPacket.action, element, id)
+                    logs(dataPacket.account_id, user_id, dataPacket.action, element, ip_address, id)
                     result(res)
                 } else {
                     result(error)

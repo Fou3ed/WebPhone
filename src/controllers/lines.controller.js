@@ -77,7 +77,6 @@ export const createNewLines = async (req, res) => {
     } else {
         const linesData = new LineModel(req.body);
         LineModel.createNewLines(linesData, req.dataPacket, req.body.user_id, req.body.ip_address, (result, error) => {
-            console.log(req.body)
             if (error) {
                 res.send(error)
                 res.status(500).send({
@@ -160,7 +159,7 @@ export const updateLines = async (req, res) => {
  * 
  */
 export const deleteLine = (req, res) => {
-    LineModel.deleteLine(req.params.id, req.dataPacket, (result, error) => {
+    LineModel.deleteLine(req.params.id, req.dataPacket, req.body.user_id, req.body.ip_address, (result, error) => {
         if (error) {
             res.send(error)
         } else if (result == 'false') {

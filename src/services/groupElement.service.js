@@ -125,7 +125,7 @@ GroupElement.updateGroupElements = (id, groupsData, dataPacket, user_id, ip_addr
  * Delete group element
  * 
  */
-GroupElement.deleteGroupElement = (id, dataPacket, result) => {
+GroupElement.deleteGroupElement = (id, dataPacket, user_id, ip_address, result) => {
     dbPool.query('SELECT * FROM groups_elements WHERE id= ? ', id, (error, resR1) => {
         if (resR1.length === 0) {
             result('false')
@@ -134,7 +134,7 @@ GroupElement.deleteGroupElement = (id, dataPacket, result) => {
                 if (!error) {
                     result(res)
                     app_logs(dataPacket.account_id, dataPacket.action, element, id)
-                    logs(dataPacket.account_id, dataPacket.action, element, id)
+                    logs(dataPacket.account_id, user_id, dataPacket.action, element, ip_address, id)
 
                 } else {
                     result(error)

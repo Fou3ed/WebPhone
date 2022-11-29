@@ -108,7 +108,7 @@ export const updateNotes = async (req, res) => {
  * 
  */
 export const deleteNotes = (req, res) => {
-    NotesModel.deleteNote(req.params.id, req.dataPacket, (result, error) => {
+    NotesModel.deleteNote(req.params.id, req.dataPacket, req.body.user_id, req.body.ip_address, (result, error) => {
         if (error) {
             res.send(error)
         } else if (result == 'false') {

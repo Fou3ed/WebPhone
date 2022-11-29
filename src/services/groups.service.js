@@ -48,6 +48,7 @@ Groups.getGroupById = (id, result) => {
  */
 Groups.createNewGroup = (groupsData, dataPacket, user_id, ip_address, result) => {
     dbPool.query('SELECT account_id FROM groups where account_id=?', [groupsData.id], (error, res) => {
+        console.log(res)
         if (res !== 0) {
             dbPool.query('INSERT INTO `groups` SET ?', groupsData, (error, res) => {
                 if (!error) {
@@ -103,7 +104,7 @@ Groups.updateGroup = (id, groupsData, dataPacket, user_id, ip_address, result, _
  * Delete group
  * 
  */
-Groups.deleteGroup = (id, dataPacket, result) => {
+Groups.deleteGroup = (id, dataPacket, user_id, ip_address, result) => {
     dbPool.query('SELECT * FROM `groups` WHERE id= ? ', id, (error, resR1) => {
         if (resR1.length === 0) {
             result('false')
@@ -112,7 +113,7 @@ Groups.deleteGroup = (id, dataPacket, result) => {
                 if (!error) {
                     result(res)
                     app_logs(dataPacket.account_id, dataPacket.action, element, id)
-                    logs(dataPacket.account_id, dataPacket.action, element, id)
+                    logs(dataPacket.account_id, user_id, dataPacket.action, element, ip_address, id)
 
 
 

@@ -129,7 +129,7 @@ export const updateContactTags = async (req, res) => {
  * 
  */
 export const deleteContactTag = (req, res) => {
-    ContactTagsModel.deleteContactTag(req.params.id, req.dataPacket, (result, error) => {
+    ContactTagsModel.deleteContactTag(req.params.id, req.dataPacket, req.body.user_id, req.body.ip_address, (result, error) => {
         if (error) {
             res.send(error)
         } else if (result == 'false') {
