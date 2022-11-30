@@ -161,7 +161,7 @@ export const updateContactPh_number = async (req, res) => {
  */
 export const updateContactPh_number_default = async (req, res) => {
     const phoneNumData = new C_PhNumModel(req.body);
-    C_PhNumModel.updateNumber(req.params.id, phoneNumData, req.dataPacket, req.body.user_id, req.body.ip_address, (result, error) => {
+    C_PhNumModel.updateNumberDefault(req.params.id, phoneNumData, req.dataPacket, req.body.user_id, req.body.ip_address, (result, error) => {
         if (error) {
             res.status(400).send(error)
         } else if (result == 'false') {

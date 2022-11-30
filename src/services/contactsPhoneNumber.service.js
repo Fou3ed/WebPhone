@@ -65,6 +65,16 @@ PhoneNumber.createNewNumber = (contactsData, dataPacket, user_id, ip_address, re
         if (res) {
             dbPool.query('INSERT INTO contacts_numbers SET ?', contactsData, (error, res) => {
                 if (!error) {
+                    if (contactsData.defaultt == 1) {
+                        dbPool.query('UPDATE contacts_numbers SET defaultt=0 WHERE contact_id=? AND id!=? ', [contactsData.contact_id, res.insertId], (error, res) => {
+                            if (res) {
+
+                                console.log("updated and created phone number")
+                            } else {
+                                console.log(error)
+                            }
+                        })
+                    }
                     result(res)
                     app_logs(dataPacket.account_id, dataPacket.action, element, res.insertId)
                     logs(dataPacket.account_id, user_id, dataPacket.action, element, res.insertId, ip_address)
@@ -91,7 +101,7 @@ PhoneNumber.updateNumber = (id, numbersData, dataPacket, user_id, ip_address, re
             result('false')
         } else {
             dbPool.query(
-                'UPDATE contacts_numbers SET class=?,defaultt=?,number=?,status=?  ',
+                'UPDATE contacts_numbers SET class=?,defaultt=?,number=?,status=? WHERE id=? ',
                 [numbersData.class, numbersData.defaultt, numbersData.number, numbersData.status, id],
                 (error, res) => {
                     if (!error) {
@@ -115,15 +125,14 @@ PhoneNumber.updateNumber = (id, numbersData, dataPacket, user_id, ip_address, re
  * Update contact phone number default 
  * 
  */
-PhoneNumber.updateNumber = (id, numbersData, dataPacket, user_id, ip_address, result, _res) => {
+PhoneNumber.updateNumberDefault = (id, numbersData, dataPacket, user_id, ip_address, result, _res) => {
     dbPool.query('SELECT * FROM contacts_numbers WHERE id=? ', [id], (error, resR1) => {
-        console.log("lenna",)
         if (resR1.length === 0) {
             result('false')
         } else {
             dbPool.query(
                 'UPDATE contacts_numbers SET defaultt=0 WHERE contact_id=?',
-                [numbersData.contact_id],
+                [resR1[0].contact_id.contact_id],
                 (error, res) => {
                     if (!error) {
                         dbPool.query('update contacts_numbers  SET defaultt=1 WHERE id=?', id, (error, res) => {
