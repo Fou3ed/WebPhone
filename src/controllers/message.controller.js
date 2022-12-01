@@ -4,11 +4,11 @@ import messageModel from '../services/messaging.service.js'
 
 /**
  * 
- * Get message Between sender and receiver
+ * Get messages Between sender and receiver
  * 
  */
 export const getMessageBySender = (req, res) => {
-    messageModel.getMessageBySender(req.query.sender_id, req.query.receiver_id, (messages, error) => {
+    messageModel.getMessageBySender(req.query.sender, req.query.receiver, (messages, error) => {
         if (!error) {
             res.status(200).send({
                 total: messages.length,
