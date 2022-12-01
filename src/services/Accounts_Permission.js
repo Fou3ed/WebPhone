@@ -1,7 +1,6 @@
 import {
     dbPool
 } from '../DB/database.js'
-import logs from '../middleware/logs/logs.js'
 import app_logs from '../middleware/logs/application_logs.js'
 /*********************************************************** ELEMENT =14  ****************************************************************/
 

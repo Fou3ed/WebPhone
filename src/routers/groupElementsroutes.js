@@ -4,7 +4,8 @@ import {
     getGroupElementsById,
     createNewGroupElement,
     updateGroupElement,
-    deleteGroupElement
+    deleteGroupElement,
+    getGroupElementsByElement
 } from '../controllers/groupeElement.controller.js'
 
 const router = express.Router()
@@ -22,6 +23,13 @@ router.get('/group/', getGroupElement)
  * 
  */
 router.get('/:id/', getGroupElementsById)
+
+/**
+ * get groupe element by ID
+ * http:/localhost:3000/group/{id}
+ * 
+ */
+router.get('/element/:element', getGroupElementsByElement)
 /**
  * Add New group element
  * http:/localhost:3000/group/

@@ -27,7 +27,8 @@ var PhoneNumber = function (phoneNumber) {
  * s
  * */
 PhoneNumber.getAllNumbers = (id, result) => {
-    dbPool.query('SELECT * FROM contacts_numbers WHERE contact_id=?', id, (error, res) => {
+    let offset = 0
+    dbPool.query('SELECT * FROM contacts_numbers WHERE contact_id=? LIMIT 10 OFFSET  ? ', [id, offset], (error, res) => {
         if (!error) {
             result(res)
 
@@ -37,7 +38,6 @@ PhoneNumber.getAllNumbers = (id, result) => {
         }
     })
 }
-
 /**
  * 
  * get contact phone number

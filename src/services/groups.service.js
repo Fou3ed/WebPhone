@@ -14,30 +14,47 @@ var Groups = function (groups) {
     this.name = groups.name
     this.class = groups.class
 }
-/** get list of groups
+/** get list of groups by user_id
  * */
-Groups.getAllGroups = (result) => {
-    dbPool.query('SELECT * FROM `groups` ', (error, res) => {
+Groups.getAllGroups = (id, result) => {
+    dbPool.query('SELECT distinct G.*,L.user_id FROM webphone.groups G INNER JOIN webphone.logs L ON L.user_id=? AND L.action="POST/groups/create/" LIMIT 10  ', id, (error, res) => {
         if (!error) {
             result(res)
 
         } else {
+            console.log(error)
             res.status(400).send(error)
 
         }
     })
 }
 
+
 /**
  * get group by id 
  */
 Groups.getGroupById = (id, result) => {
+
     dbPool.query('SELECT * FROM `groups` WHERE id= ? ', id, (error, res) => {
         if (!error) {
             result(res)
 
         } else {
             res.status(400).send(error)
+        }
+    })
+}
+/** get list of groups by user_id and class (from query)
+ * */
+Groups.getAllGroupsByClass = (id, classs, result) => {
+    dbPool.query('SELECT distinct G.*,L.user_id FROM webphone.groups G INNER JOIN webphone.logs L ON L.user_id=? AND L.action="POST/groups/create/" AND G.class=?  LIMIT 10  ', [id, classs], (error, res) => {
+        if (!error) {
+            result(res)
+
+        } else {
+            console.log(error)
+            res.status(400).send(error)
+
         }
     })
 }
@@ -76,7 +93,6 @@ Groups.createNewGroup = (groupsData, dataPacket, user_id, ip_address, result) =>
  */
 Groups.updateGroup = (id, groupsData, dataPacket, user_id, ip_address, result, _res) => {
     dbPool.query('SELECT * FROM `groups` WHERE id= ?  ', id, (error, resR1) => {
-
         if (resR1.length === 0) {
             result('false')
         } else {

@@ -8,10 +8,9 @@ function checkClass(classes) {
 /**
  * 
  * Get list of groups
- * 
  */
 export const getGroup = (req, res) => {
-    GroupModel.getAllGroups((groups, error) => {
+    GroupModel.getAllGroups(req.params.id, (groups, error) => {
         if (!error) {
             res.status(200).send({
                 code: "success",
@@ -19,10 +18,8 @@ export const getGroup = (req, res) => {
                 data: groups
             }
             )
-
         } else {
             res.status(400).send(error)
-
         }
     })
 }
@@ -49,7 +46,24 @@ export const getGroupsById = (req, res) => {
         }
     })
 }
-
+/**
+ * 
+ * Get list of groups
+ */
+export const getGroupBYclass = (req, res) => {
+    GroupModel.getAllGroupsByClass(req.params.id, req.query.class, (groups, error) => {
+        if (!error) {
+            res.status(200).send({
+                code: "success",
+                total: groups.length,
+                data: groups
+            }
+            )
+        } else {
+            res.status(400).send(error)
+        }
+    })
+}
 /**
  * 
  * Create new group
@@ -64,7 +78,7 @@ export const createNewGroups = async (req, res) => {
         })
     } else {
         const groupsData = new GroupModel(req.body);
-        GroupModel.createNewGroup(groupsData,req.dataPacket, req.body.user_id, req.body.ip_address, (result, error) => {
+        GroupModel.createNewGroup(groupsData, req.dataPacket, req.body.user_id, req.body.ip_address, (result, error) => {
             if (error) {
                 res.send(error)
                 res.status(500).send({
@@ -105,7 +119,7 @@ export const updateGroups = async (req, res) => {
 
     } else {
         const groupsData = new GroupModel(req.body);
-        GroupModel.updateGroup(req.params.id, groupsData, req.dataPacket, req.body.user_id, req.body.ip_address,(result, error) => {
+        GroupModel.updateGroup(req.params.id, groupsData, req.dataPacket, req.body.user_id, req.body.ip_address, (result, error) => {
             if (error) {
                 res.status(400).send(error)
             } else if (result == 'false') {
@@ -129,7 +143,7 @@ export const updateGroups = async (req, res) => {
  * 
  */
 export const deleteGroup = (req, res) => {
-    GroupModel.deleteGroup(req.params.id,req.dataPacket, req.body.user_id, req.body.ip_address, (result, error) => {
+    GroupModel.deleteGroup(req.params.id, req.dataPacket, req.body.user_id, req.body.ip_address, (result, error) => {
         if (error) {
             res.send(error)
         } else if (result == 'false') {

@@ -43,7 +43,24 @@ export const getGroupElementsById = (req, res) => {
         }
     })
 }
+/**
+ * 
+ * Get group by ID
+ * 
+ */
+export const getGroupElementsByElement = (req, res) => {
+    GroupElementModel.getGroupElementsByElement(req.params.element, req.query.element_id, (groups, error) => {
+        if (error) {
+            res.status(400).send(error)
+        } else {
+            res.status(200).send({
+                code: "success",
+                data: groups
+            })
 
+        }
+    })
+}
 /**
  * 
  * Create new group element

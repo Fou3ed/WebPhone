@@ -17,8 +17,8 @@ var Notes = function (notes) {
 /** get all notes by contact id 
  * */
 Notes.getAllNotes = (id, result) => {
-    dbPool.query('SELECT CN.*,U.username,L.action_date FROM webphone.contacts_notes CN INNER JOIN webphone.logs L ON CN.contact_id=? AND L.element=2 AND CN.id=L.element_id INNER JOIN webphone.users U ON L.user_id=U.id;', id, (error, res) => {
-
+    let offset = 0
+    dbPool.query('SELECT CN.*,U.username,L.action_date FROM webphone.contacts_notes CN INNER JOIN webphone.logs L ON CN.contact_id=? AND L.element=2 AND L.action="POST/notes/create/"  AND CN.id=L.element_id INNER JOIN webphone.users U ON L.user_id=U.id LIMIT 10 OFFSET ? ', [id, offset], (error, res) => {
         if (!error) {
             result(res)
         } else {

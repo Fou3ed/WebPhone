@@ -4,7 +4,8 @@ import {
     getGroupsById,
     createNewGroups,
     updateGroups,
-    deleteGroup
+    deleteGroup,
+    getGroupBYclass
 } from '../controllers/groups.controller.js'
 
 const router = express.Router()
@@ -15,13 +16,19 @@ const router = express.Router()
  * 
  *  http:/localhost:3000/group/
  */
-router.get('/', getGroup)
+router.get('/user/:id/', getGroup)
 /**
  * get group by ID
  * http:/localhost:3000/group/{id}
  * 
  */
 router.get('/:id/', getGroupsById)
+/**
+ * Get All group by classs
+ * 
+ *  http:/localhost:3000/group/
+ */
+router.get('/user/class/:id/', getGroupBYclass)
 /**
  * Add New group 
  * http:/localhost:3000/group/

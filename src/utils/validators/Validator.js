@@ -2,7 +2,7 @@ const regName = /^[a-zA-Z]+ [a-zA-Z]+$/;
 import validateDate from 'validate-date'
 
 function checkClass(classes) {
-    return isNaN(classes) || classes > 2 || classes < 1
+    return isNaN(classes) || classes > 3 || classes < 0
 }
 
 function checkPhNumber(phone) {

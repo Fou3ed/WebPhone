@@ -47,6 +47,43 @@ export const getContactsById = (req, res) => {
         }
     })
 }
+/**
+ * 
+ * Get contact by user id favorite=1
+ * 
+ */
+export const getContactsByFavorite = (req, res) => {
+
+    ContactModel.getContactByFavorite(req.params.id, (contacts, error) => {
+        if (error) {
+            res.status(400).send(error)
+        } else {
+            res.status(200).send({
+                code: "success",
+                data: contacts
+            })
+
+        }
+    })
+}
+/**
+ * 
+ * Get contact by name and last name
+ * 
+ */
+export const getContactsSearch = (req, res) => {
+    ContactModel.getContactsSearch(req.params.id, req.query.first_name, req.query.last_name, (contacts, error) => {
+        if (error) {
+            res.status(400).send(error)
+        } else {
+            res.status(200).send({
+                code: "success",
+                data: contacts
+            })
+
+        }
+    })
+}
 
 /**
  * 

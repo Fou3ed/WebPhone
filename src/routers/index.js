@@ -1,6 +1,3 @@
-
-
-
 import AccountsRoute from '../routers/accountsroutes.js'
 import ContactsRoute from '../routers/contactsrouter.js'
 import NotesRoute from '../routers/contactsNotesRoutes.js'
@@ -29,7 +26,6 @@ export default {
          */
         create() {
                 const app = REST.getApp()
-
                 /**
                  * Create accounts route
                  */
@@ -37,7 +33,7 @@ export default {
                 /**
                  * Create contacts route
                  */
-                app.use('/contacts', checkKey, ContactsRoute)
+                app.use('/contacts', ContactsRoute)
                 /**
                  * Create notes route
                  */

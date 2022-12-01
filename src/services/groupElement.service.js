@@ -20,7 +20,7 @@ var GroupElement = function (G_Element) {
  * */
 
 GroupElement.getAllGroupElement = (id, classs, result) => {
-    console.log(id)
+    console.log(classs, id)
     const Class = classs
     switch (Class) {
         case '1': dbPool.query('SELECT GE.*,G.class,C.* FROM webphone.groups_elements GE INNER JOIN webphone.groups G on GE.group_id=G.id AND group_id=? INNER JOIN webphone.contacts C ON C.id=GE.element_id ', id, (error, res) => {
@@ -52,7 +52,18 @@ GroupElement.getAllGroupElement = (id, classs, result) => {
     }
 
 }
-
+/**
+ * get group_element by element and element id
+ */
+GroupElement.getGroupElementsByElement = (element, element_id, result) => {
+    dbPool.query('SELECT GE.*,G.name FROM webphone.groups_elements GE INNER JOIN webphone.groups G on GE.group_id=G.id  AND GE.element=? AND GE.element_id=?  ', [element, element_id], (error, res) => {
+        if (!error) {
+            result(res)
+        } else {
+            res.status(400).send(error)
+        }
+    })
+}
 /**
  * get group_element by id 
  */

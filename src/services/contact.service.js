@@ -21,7 +21,8 @@ var Contacts = function (contacts) {
 /** get list of contacts by user id 
  * */
 Contacts.getAllContacts = (id, result) => {
-    dbPool.query('SELECT C.*,L.user_id,PHN.number,PHN.id as id_phone ,PHN.class  FROM contacts C INNER JOIN logs L ON L.user_id=? AND L.element=1 AND L.element_id=C.id AND C.status=1  INNER JOIN contacts_numbers PHN on C.id=PHN.contact_id AND PHN.defaultt=1', id, (error, res) => {
+    let offset = 0
+    dbPool.query('SELECT C.*,L.user_id,PHN.number,PHN.id as phone_id,PHN.class,PHN.status as phone_status FROM contacts C INNER JOIN logs L ON L.user_id=? AND L.element=1 AND L.action="POST/contacts/create/" AND L.element_id=C.id AND C.status=1 INNER JOIN contacts_numbers PHN on C.id=PHN.contact_id AND PHN.defaultt=1 LIMIT 10 OFFSET = ? ', [id, offset], (error, res) => {
         if (!error) {
             result(res)
         } else {
@@ -44,6 +45,36 @@ Contacts.getContactById = (id, result) => {
         }
     })
 }
+/**
+ * 
+ *get contact favorite by user_id
+ */
+Contacts.getContactByFavorite = (id, result) => {
+    let offset = 0
+    dbPool.query('SELECT C.*,L.user_id,PHN.number,PHN.id as phone_id,PHN.class,PHN.status as phone_status FROM contacts C INNER JOIN logs L ON L.user_id=? AND L.element=1 AND L.action="POST/contacts/create/" AND L.element_id=C.id AND C.status=1 AND C.favorite=1 INNER JOIN contacts_numbers PHN on C.id=PHN.contact_id AND PHN.defaultt=1 LIMIT 10 OFFSET  ? ', [id, offset], (error, res) => {
+        if (!error) {
+            result(res)
+        } else {
+            res.send(error)
+        }
+    })
+}
+
+/**
+ * 
+ *get contact by name and last name 
+ */
+Contacts.getContactsSearch = (id, first, last, result) => {
+    dbPool.query('SELECT C.*,L.user_id,PHN.number,PHN.id as phone_id,PHN.class,PHN.status as phone_status FROM contacts C INNER JOIN logs L ON L.user_id=? AND L.element=1 AND L.action="POST/contacts/create/" AND L.element_id=C.id AND C.status=1 AND C.favorite=1 AND C.first_name like "%${?}%" INNER JOIN contacts_numbers PHN on C.id=PHN.contact_id AND PHN.defaultt=1 LIMIT 10 ', [id, first], (error, res) => {
+        if (!error) {
+            result(res)
+        } else {
+            res.send(error)
+
+        }
+    })
+}
+
 
 /**
  * 
