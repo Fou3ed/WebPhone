@@ -49,7 +49,7 @@ Contacts.getContactById = (id, result) => {
  *get contact favorite by user_id
  */
 Contacts.getContactByFavorite = (id, result) => {
-    dbPool.query('SELECT C.*,L.user_id,PHN.number,PHN.id as phone_id,PHN.class,PHN.status as phone_status FROM contacts C INNER JOIN logs L ON L.user_id=? AND L.element=1 AND L.action="POST/contacts/create/" AND L.element_id=C.id AND C.status=1 AND C.favorite=1 INNER JOIN contacts_numbers PHN on C.id=PHN.contact_id AND PHN.defaultt=1 LIMIT 10', [id, offset], (error, res) => {
+    dbPool.query('SELECT C.*,L.user_id,PHN.number,PHN.id as phone_id,PHN.class,PHN.status as phone_status FROM contacts C INNER JOIN logs L ON L.user_id=? AND L.element=1 AND L.action="POST/contacts/create/" AND L.element_id=C.id AND C.status=1 AND C.favorite=1 INNER JOIN contacts_numbers PHN on C.id=PHN.contact_id AND PHN.defaultt=1 LIMIT 10', [id], (error, res) => {
         if (!error) {
             result(res)
         } else {
@@ -63,7 +63,8 @@ Contacts.getContactByFavorite = (id, result) => {
  *get contact by search
  */
 Contacts.getContactsSearch = (id, first, last, result) => {
-    dbPool.query('SELECT C.*,L.user_id,PHN.number,PHN.id as phone_id,PHN.class,PHN.status as phone_status FROM contacts C INNER JOIN logs L ON L.user_id=? AND L.element=1 AND L.action="POST/contacts/create/" AND L.element_id=C.id AND C.status=1 AND C.favorite=1 AND C.first_name like ? INNER JOIN contacts_numbers PHN on C.id=PHN.contact_id AND PHN.defaultt=1 LIMIT 10 ', [id, '%' + first + '%'], (error, res) => {
+    console.log(id)
+    dbPool.query('SELECT C.*,L.user_id,PHN.number,PHN.id as phone_id,PHN.class,PHN.status as phone_status FROM contacts C INNER JOIN logs L ON L.user_id=? AND L.element=1 AND L.action="POST/contacts/create/" AND L.element_id=C.id AND C.status=1 AND C.favorite=1 AND C.first_name like ? INNER JOIN contacts_numbers PHN on C.id=PHN.contact_id  LIMIT 10 ', [id, '%' + first + '%'], (error, res) => {
         if (!error) {
             result(res)
         } else {
