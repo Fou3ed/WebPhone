@@ -102,7 +102,7 @@ Integration.updateIntegration = (id, integrationData, dataPacket, user_id, ip_ad
  * Delete integration
  * 
  */
-Integration.deleteIntegration = (id, dataPacket, result) => {
+Integration.deleteIntegration = (id, dataPacket, user_id, ip_address, result) => {
     dbPool.query('SELECT * FROM integrations WHERE id= ? ', id, (error, resR1) => {
         if (resR1.length === 0) {
             result('false')
@@ -113,7 +113,7 @@ Integration.deleteIntegration = (id, dataPacket, result) => {
                 } else {
                     result(res)
                     app_logs(dataPacket.account_id, dataPacket.action, element, id)
-                    logs(dataPacket.account_id, dataPacket.action, element, id)
+                    logs(dataPacket.account_id, user_id, dataPacket.action, element, id, ip_address)
 
                 }
             })

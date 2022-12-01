@@ -96,7 +96,7 @@ Tags.updateTags = (id, tagsData, dataPacket, user_id, ip_address, result, _res) 
  * Delete tags
  * 
  */
-Tags.deleteTag = (id, dataPacket, result) => {
+Tags.deleteTag = (id, dataPacket, user_id, ip_address, result) => {
     dbPool.query('SELECT * FROM tags WHERE id= ? ', id, (error, resR1) => {
         if (resR1.length === 0) {
             result('false')
@@ -105,7 +105,7 @@ Tags.deleteTag = (id, dataPacket, result) => {
                 if (!error) {
                     result(res)
                     app_logs(dataPacket.account_id, dataPacket.action, element, id)
-                    logs(dataPacket.account_id, dataPacket.action, element, id)
+                    logs(dataPacket.account_id, user_id, dataPacket.action, element, id, ip_address)
 
 
                 } else {

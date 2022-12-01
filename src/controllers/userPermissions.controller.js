@@ -144,7 +144,7 @@ export const updateUserPermission = async (req, res) => {
  * 
  */
 export const deleteUsersLines = (req, res) => {
-    UserPermissionModel.deleteUserPermission(req.params.id, req.dataPacket, (result, error) => {
+    UserPermissionModel.deleteUserPermission(req.params.id, req.dataPacket,req.body.user_id, req.body.ip_address, (result, error) => {
         if (error) {
             res.send(error)
         } else if (result == 'false') {

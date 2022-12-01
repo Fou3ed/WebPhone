@@ -118,7 +118,7 @@ export const updateMessage = async (req, res) => {
  * 
  */
 export const deleteMessage = (req, res) => {
-    messageModel.deleteMessage(req.params.id, req.dataPacket, (result, error) => {
+    messageModel.deleteMessage(req.params.id, req.dataPacket, req.body.user_id, req.body.ip_address,(result, error) => {
         if (error) {
             res.send(error)
         } else if (result == 'false') {

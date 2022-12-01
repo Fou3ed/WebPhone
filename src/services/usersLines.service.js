@@ -114,7 +114,7 @@ UsersLines.updateUserLine = (id, usersData, dataPacket, ip_address, result, _res
  * Delete user line
  * 
  */
-UsersLines.deleteUserLine = (id, dataPacket, result) => {
+UsersLines.deleteUserLine = (id, dataPacket, user_id, ip_address, result) => {
     dbPool.query('SELECT ul.*, u.account_id  FROM users_lines ul INNER JOIN users u on ul.id=? ', id, (error, resR1) => {
         if (resR1.length === 0) {
             result('false')
@@ -125,7 +125,7 @@ UsersLines.deleteUserLine = (id, dataPacket, result) => {
                 } else {
                     result(res)
                     app_logs(dataPacket.account_id, dataPacket.action, element, id)
-                    logs(dataPacket.account_id, dataPacket.action, element, id)
+                    logs(dataPacket.account_id, user_id, dataPacket.action, element, id, ip_address)
 
 
 

@@ -118,7 +118,7 @@ Lines.deleteLine = (id, dataPacket, user_id, ip_address, result) => {
             dbPool.query('DELETE FROM `lines` WHERE id=? ', id, (error, res) => {
                 if (!error) {
                     app_logs(dataPacket.account_id, dataPacket.action, element, id)
-                    logs(dataPacket.account_id, user_id, dataPacket.action, element, ip_address, id)
+                    logs(dataPacket.account_id, user_id, dataPacket.action, element, id, ip_address)
                     result(res)
                 } else {
                     result(error)

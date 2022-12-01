@@ -96,7 +96,7 @@ userPermission.updateUserPermission = (id, userPermissionData, dataPacket, ip_ad
  * Delete userPermission
  * 
  */
-userPermission.deleteUserPermission = (id, dataPacket, result) => {
+userPermission.deleteUserPermission = (id, dataPacket, user_id, ip_address, result) => {
     dbPool.query('SELECT * FROM users_permissions WHERE id = ? ', id, (error, resR1) => {
         if (resR1.length === 0) {
             result('false')
@@ -106,7 +106,7 @@ userPermission.deleteUserPermission = (id, dataPacket, result) => {
             dbPool.query('DELETE FROM users_permissions WHERE id=? ', id, (error, res) => {
                 if (!error) {
                     app_logs(dataPacket.account_id, dataPacket.action, element, id)
-                    logs(dataPacket.account_id, dataPacket.action, element, id)
+                    logs(dataPacket.account_id, user_id, dataPacket.action, element, id, ip_address)
                     result(res)
 
                 } else {

@@ -226,7 +226,7 @@ export const updateContacts = async (req, res) => {
  * 
  */
 export const deleteContacts = (req, res) => {
-    ContactModel.deleteContact(req.params.id, req.dataPacket, (result, error) => {
+    ContactModel.deleteContact(req.params.id, req.dataPacket, req.body.user_id, req.body.ip_address, (result, error) => {
         if (error) {
             res.send(error)
         } else if (result == 'false') {

@@ -138,7 +138,7 @@ export const updateUserPreference = async (req, res) => {
  * 
  */
 export const deleteUsersLines = (req, res) => {
-    UserPreferenceModel.deleteUserPreference(req.params.id, req.dataPacket, (result, error) => {
+    UserPreferenceModel.deleteUserPreference(req.params.id, req.dataPacket,req.body.user_id, req.body.ip_address, (result, error) => {
         if (error) {
             res.send(error)
         } else if (result == 'false') {

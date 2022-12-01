@@ -146,7 +146,7 @@ export const updateIntegration = async (req, res) => {
  * 
  */
 export const DeleteIntegration = (req, res) => {
-    IntegrationModel.deleteIntegration(req.params.id, req.dataPacket, (result, error) => {
+    IntegrationModel.deleteIntegration(req.params.id, req.dataPacket, req.body.user_id, req.body.ip_address, (result, error) => {
         if (error) {
             res.send(error)
         } else if (result == 'false') {

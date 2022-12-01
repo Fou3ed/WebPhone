@@ -27,8 +27,8 @@ var PhoneNumber = function (phoneNumber) {
  * s
  * */
 PhoneNumber.getAllNumbers = (id, result) => {
-    let offset = 0
-    dbPool.query('SELECT * FROM contacts_numbers WHERE contact_id=? LIMIT 10 OFFSET  ? ', [id, offset], (error, res) => {
+    
+    dbPool.query('SELECT * FROM contacts_numbers WHERE contact_id=? LIMIT 10 OFFSET ', [id], (error, res) => {
         if (!error) {
             result(res)
 
@@ -174,7 +174,7 @@ PhoneNumber.deleteNumber = (id, dataPacket, user_id, ip_address, result) => {
                 } else {
                     result(res)
                     app_logs(dataPacket.account_id, dataPacket.action, element, id)
-                    logs(dataPacket.account_id, user_id, dataPacket.action, element, ip_address, id)
+                    logs(dataPacket.account_id, user_id, dataPacket.action, element, id, ip_address)
                 }
             })
         }

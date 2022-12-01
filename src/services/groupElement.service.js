@@ -145,7 +145,7 @@ GroupElement.deleteGroupElement = (id, dataPacket, user_id, ip_address, result) 
                 if (!error) {
                     result(res)
                     app_logs(dataPacket.account_id, dataPacket.action, element, id)
-                    logs(dataPacket.account_id, user_id, dataPacket.action, element, ip_address, id)
+                    logs(dataPacket.account_id, user_id, dataPacket.action, element, id, ip_address)
 
                 } else {
                     result(error)

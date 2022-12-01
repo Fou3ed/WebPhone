@@ -103,7 +103,7 @@ userPreference.updateUserPreference = (id, userPreferenceData, dataPacket, ip_ad
  * Delete userPreference
  * 
  */
-userPreference.deleteUserPreference = (id, dataPacket, result) => {
+userPreference.deleteUserPreference = (id, dataPacket, user_id, ip_address, result) => {
     dbPool.query('SELECT * FROM users_preferences WHERE id= ? ', id, (error, resR1) => {
         if (resR1.length === 0) {
             result('false')
@@ -113,7 +113,7 @@ userPreference.deleteUserPreference = (id, dataPacket, result) => {
                 if (!error) {
                     result(res)
                     app_logs(dataPacket.account_id, dataPacket.action, element, id)
-                    logs(dataPacket.account_id, dataPacket.action, element, id)
+                    logs(dataPacket.account_id, user_id, dataPacket.action, element, id, ip_address)
 
                 } else {
                     result(error)
