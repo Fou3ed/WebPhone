@@ -16,8 +16,8 @@ var Groups = function (groups) {
 }
 /** get list of groups by user_id
  * */
-Groups.getAllGroups = (id, result) => {
-    dbPool.query('SELECT distinct G.*,L.user_id FROM webphone.groups G INNER JOIN webphone.logs L ON L.user_id=? AND L.action="POST/groups/create/" LIMIT 10  ', id, (error, res) => {
+Groups.getAllGroups = (id, offset, result) => {
+    dbPool.query('SELECT distinct G.*,L.user_id FROM webphone.groups G INNER JOIN webphone.logs L ON L.user_id=? AND L.action="POST/groups/create/" LIMIT 10 offset ? ', [id, Number(offset)], (error, res) => {
         if (!error) {
             result(res)
 
@@ -46,8 +46,8 @@ Groups.getGroupById = (id, result) => {
 }
 /** get list of groups by user_id and class (from query)
  * */
-Groups.getAllGroupsByClass = (id, classs, result) => {
-    dbPool.query('SELECT distinct G.*,L.user_id FROM webphone.groups G INNER JOIN webphone.logs L ON L.user_id=? AND L.action="POST/groups/create/" AND G.class=?  LIMIT 10  ', [id, classs], (error, res) => {
+Groups.getAllGroupsByClass = (id, classs,offset, result) => {
+    dbPool.query('SELECT distinct G.*,L.user_id FROM webphone.groups G INNER JOIN webphone.logs L ON L.user_id=? AND L.action="POST/groups/create/" AND G.class=?  LIMIT 10 offset ? ', [id, classs,Number(offset)], (error, res) => {
         if (!error) {
             result(res)
 

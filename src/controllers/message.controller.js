@@ -8,11 +8,12 @@ import messageModel from '../services/messaging.service.js'
  * 
  */
 export const getMessageBySender = (req, res) => {
-    messageModel.getMessageBySender(req.query.sender, req.query.receiver, (messages, error) => {
+    messageModel.getMessageBySender(req.query.sender, req.query.receiver, req.query.offset, (messages, error) => {
         if (!error) {
             res.status(200).send({
                 total: messages.length,
                 code: "success",
+                NumPage: (Math.ceil((messages.length) / 10)),
                 data: messages
             })
 
@@ -118,7 +119,7 @@ export const updateMessage = async (req, res) => {
  * 
  */
 export const deleteMessage = (req, res) => {
-    messageModel.deleteMessage(req.params.id, req.dataPacket, req.body.user_id, req.body.ip_address,(result, error) => {
+    messageModel.deleteMessage(req.params.id, req.dataPacket, req.body.user_id, req.body.ip_address, (result, error) => {
         if (error) {
             res.send(error)
         } else if (result == 'false') {

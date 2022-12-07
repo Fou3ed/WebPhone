@@ -6,8 +6,7 @@ function checkClass(classes) {
 }
 
 function checkPhNumber(phone) {
-    var regex = /^\+(?:[0-9] ?){6,14}[0-9]$/
-    return !regex.test(phone)
+    return isNaN(phone)
 }
 
 function checkDefault(cDefault) {

@@ -10,12 +10,15 @@ function checkClass(classes) {
  * Get list of groups
  */
 export const getGroup = (req, res) => {
-    GroupModel.getAllGroups(req.params.id, (groups, error) => {
+    GroupModel.getAllGroups(req.params.id, req.query.offset, (groups, error) => {
         if (!error) {
             res.status(200).send({
                 code: "success",
                 total: groups.length,
+                NumPage: (Math.ceil((groups.length) / 10)),
+
                 data: groups
+
             }
             )
         } else {
@@ -51,11 +54,12 @@ export const getGroupsById = (req, res) => {
  * Get list of groups
  */
 export const getGroupBYclass = (req, res) => {
-    GroupModel.getAllGroupsByClass(req.params.id, req.query.class, (groups, error) => {
+    GroupModel.getAllGroupsByClass(req.params.id, req.query.class, req.query.offset, (groups, error) => {
         if (!error) {
             res.status(200).send({
                 code: "success",
                 total: groups.length,
+                NumPage: (Math.ceil((groups.length) / 10)),
                 data: groups
             }
             )

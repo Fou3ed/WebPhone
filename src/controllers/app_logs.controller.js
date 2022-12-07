@@ -14,8 +14,7 @@ export const getAllLogs = (req, res) => {
                 "code": "success",
                 "total": logs.length,
                 data: logs
-            }
-            )
+            })
         }
     })
 }

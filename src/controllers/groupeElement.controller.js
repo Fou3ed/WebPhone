@@ -11,13 +11,15 @@ function checkElement(element) {
  * 
  */
 export const getGroupElement = (req, res) => {
-    GroupElementModel.getAllGroupElement(req.query.group_id, req.query.class, (groups, error) => {
+    GroupElementModel.getAllGroupElement(req.query.group_id, req.query.class, req.query.offset, (groups, error) => {
         if (error) {
             res.status(400).send(error)
         } else {
             res.status(200).send({
                 code: "success",
                 total: groups.length,
+                NumPage: (Math.ceil((groups.length) / 10)),
+
                 data: groups
             })
         }
@@ -39,7 +41,6 @@ export const getGroupElementsById = (req, res) => {
                 code: "success",
                 data: groups
             })
-
         }
     })
 }
@@ -49,12 +50,14 @@ export const getGroupElementsById = (req, res) => {
  * 
  */
 export const getGroupElementsByElement = (req, res) => {
-    GroupElementModel.getGroupElementsByElement(req.params.element, req.query.element_id, (groups, error) => {
+    GroupElementModel.getGroupElementsByElement(req.params.element, req.query.element_id, req.query.offset, (groups, error) => {
         if (error) {
             res.status(400).send(error)
         } else {
             res.status(200).send({
                 code: "success",
+                NumPage: (Math.ceil((groups.length) / 10)),
+
                 data: groups
             })
 

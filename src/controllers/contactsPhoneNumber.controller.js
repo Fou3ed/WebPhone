@@ -2,6 +2,7 @@ import C_PhNumModel from '../services/contactsPhoneNumber.service.js'
 import {
     checkClass,
     checkDefault,
+    checkFavorite,
     checkPhNumber,
     checkStatus
 } from '../utils/validators/Validator.js'
@@ -13,11 +14,12 @@ import {
  * 
  */
 export const getContactPhNumbers = (req, res) => {
-    C_PhNumModel.getAllNumbers(req.params.id, (PhNumbers, error) => {
+    C_PhNumModel.getAllNumbers(req.params.id, req.query.offset, (PhNumbers, error) => {
         if (!error) {
             res.status(200).send({
                 code: "success",
                 total: PhNumbers.length,
+                NumPage: (Math.ceil((PhNumbers.length) / 10)),
                 data: PhNumbers
             })
         } else {
@@ -80,6 +82,12 @@ export const createNewContactPh_Number = async (req, res) => {
             success: false,
             message: 'status should be 1,2 or 3',
             code: 'contactNumbers_status_Invalid'
+        })
+    } else if (checkFavorite(req.body.type)) {
+        res.status(400).send({
+            success: false,
+            message: 'type should be 1 or 0',
+            code: 'type_value_Invalid'
         })
     } else {
         const contactsData = new C_PhNumModel(req.body);
