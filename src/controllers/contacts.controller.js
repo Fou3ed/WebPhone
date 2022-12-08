@@ -36,8 +36,7 @@ export const getContactsList = (req, res) => {
 
                 code: "success",
 
-                total: contacts.length,
-                NumPage: (Math.ceil((contacts.length) / 10)),
+                NumPage: (Math.ceil((contacts.total) / 10)),
                 data: contacts,
 
 
@@ -118,13 +117,9 @@ export const getContactsByFavorite = (req, res) => {
             res.status(400).send(error)
 
         } else {
-
             res.status(200).send({
-
                 code: "success",
-                NumPage: (Math.ceil((contacts.length) / 10)),
-
-
+                NumPage: (Math.ceil((contacts.total) / 10)),
                 data: contacts
 
             })
@@ -259,6 +254,7 @@ export const createNewContacts = async (req, res) => {
         const contactsData = new ContactModel(req.body);
 
         ContactModel.createNewContact(contactsData, req.dataPacket, req.body.user_id, req.body.ip_address, (result, error) => {
+            console.log(req.body)
             if (error) {
 
                 res.send(error)

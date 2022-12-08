@@ -120,38 +120,28 @@ Lines.getLinesById = (id, result) => {
 
 Lines.createNewLines = async (linesData, dataPacket, user_id, ip_address, result) => {
 
-    dbPool.query('SELECT * FROM `lines` WHERE name=?', [linesData.name], (error, res) => {
+    dbPool.query('INSERT INTO `lines` SET ?', linesData, (error, res) => {
 
+        if (error) {
 
-        if (res.length !==0) {
-
-            dbPool.query('INSERT INTO `lines` SET ?', linesData, (error, res) => {
-
-                if (error) {
-
-                    result('false')
-
-                } else {
-
-                    result(res)
-
-                    app_logs(dataPacket.account_id, dataPacket.action, element, res.insertId)
-
-                    logs(dataPacket.account_id, user_id, dataPacket.action, element, res.insertId, ip_address)
-
-                }
-
-            })
+            result('false')
 
         } else {
 
-            result('false')
+            result(res)
+
+            app_logs(dataPacket.account_id, dataPacket.action, element, res.insertId)
+
+            logs(dataPacket.account_id, user_id, dataPacket.action, element, res.insertId, ip_address)
 
         }
 
     })
 
 }
+
+
+
 
 
 

@@ -11,9 +11,8 @@ export const getMessageBySender = (req, res) => {
     messageModel.getMessageBySender(req.query.sender, req.query.receiver, req.query.offset, (messages, error) => {
         if (!error) {
             res.status(200).send({
-                total: messages.length,
                 code: "success",
-                NumPage: (Math.ceil((messages.length) / 10)),
+                NumPage: (Math.ceil((messages.total) / 10)),
                 data: messages
             })
 

@@ -1,7 +1,5 @@
 import LineModel from '../services/lines.service.js'
-import {
-    isIP
-} from 'is-ip';
+
 import {
     validateDate,
     checkStatus
@@ -61,12 +59,6 @@ export const createNewLines = async (req, res) => {
             success: false,
             message: 'wrong parameters ',
             code: 'line_information_Invalid'
-        })
-    } else if (!isIP(req.body.host)) {
-        res.status(400).send({
-            success: false,
-            message: 'IP wrong format',
-            code: 'line_host_Invalid'
         })
     } else if (checkStatus(req.body.status)) {
         res.status(400).send({

@@ -43,20 +43,20 @@ var message = function (message) {
  */
 
 message.getMessageBySender = async (sender, receiver, offset, result) => {
-
-
-    dbPool.query('SELECT *,count(*) OVER() as count,messaging.* FROM messaging   WHERE (sender=? and receiver=?) or (receiver=? and sender =?) ORDER BY time_sent DESC LIMIT 10 OFFSET  ? ', [sender, receiver, sender, receiver, Number(offset)], (error, res) => {
-
-
-
+    dbPool.query('SELECT *,messaging.* FROM messaging   WHERE (sender=? and receiver=?) or (receiver=? and sender =?) ORDER BY time_sent DESC LIMIT 10 OFFSET  ? ', [sender, receiver, sender, receiver, Number(offset)], (error, res) => {
         if (!error) {
-
-            result(res)
-
+            dbPool.query('SELECT  count(*) as total FROM messaging   WHERE (sender=? and receiver=?) or (receiver=? and sender =?) ', [sender, receiver, sender, receiver], (error, res2) => {
+                if (!error) {
+                    result({
+                        messages: res.concat(res2),
+                        total: res2[0].total
+                    })
+                } else {
+                    res2.status(400).send(error)
+                }
+            })
         } else {
-
             console.log(error)
-
             res.status(400).send(error)
 
         }
@@ -74,8 +74,6 @@ message.getMessageBySender = async (sender, receiver, offset, result) => {
  */
 
 message.getMessageByUserId = (id, offset, result) => {
-
-
     dbPool.query('SELECT M.*,count(*) over() as count , UL.user_id,U.username FROM webphone.messaging M INNER JOIN users_lines UL ON M.sender=UL.id  INNER JOIN users U ON U.id=? ORDER BY time_sent  DESC LIMIT 10 OFFSET ? ', [id, Number(offset)], (error, res) => {
 
         if (!error) {

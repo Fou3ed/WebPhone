@@ -35,6 +35,7 @@ var Contacts = function (contacts) {
     this.date_end = contacts.date_end
 
     this.status = contacts.status
+    this.photo = contacts.photo
 
 }
 
@@ -44,22 +45,25 @@ var Contacts = function (contacts) {
 
 Contacts.getAllContacts = (id, offset, result) => {
 
-    dbPool.query('SELECT C.*,L.user_id,PHN.number,PHN.id as phone_id,PHN.type as phone_type,PHN.class,PHN.status as phone_status FROM contacts C INNER JOIN logs L ON L.user_id=? AND L.element=1 AND L.action="POST/contacts/create/" AND L.element_id=C.id AND C.status!=2 INNER JOIN contacts_numbers PHN on C.id=PHN.contact_id AND PHN.defaultt=1 AND PHN.type = 0 LIMIT 10 OFFSET ? ', [id, Number(offset)], (error, res) => {
+    dbPool.query('SELECT  C.*,L.user_id,PHN.number,PHN.id as phone_id,PHN.type as phone_type,PHN.class,PHN.status as phone_status,count(*) over() as total FROM contacts C INNER JOIN logs L ON L.user_id=? AND L.element=1 AND L.action="POST/contacts/create/" AND L.element_id=C.id AND C.status!=2 INNER JOIN contacts_numbers PHN on C.id=PHN.contact_id AND PHN.defaultt=1 AND PHN.type = 0 limit 10 offset ? ', [id, Number(offset)], (error, res) => {
 
         if (!error) {
-
-            dbPool.query('SELECT C.*,L.user_id,PHN.number,PHN.type as phone_type,LI.id as line_id,LI.host,PHN.id as phone_id,PHN.class,PHN.status as phone_status FROM contacts C INNER JOIN logs L ON L.user_id=? AND L.element=1 AND L.action="POST/contacts/create/" AND L.element_id=C.id AND C.status!=2 INNER JOIN contacts_numbers PHN on C.id=PHN.contact_id AND PHN.defaultt=1 AND PHN.type = 1 INNER JOIN webphone.lines LI ON PHN.number=LI.user LIMIT 10  ', [id], (error, res2) => {
+            dbPool.query('SELECT count(*) over() as total, C.*,L.user_id,PHN.number,PHN.type as phone_type,LI.id as line_id,LI.host,PHN.id as phone_id,PHN.class,PHN.status as phone_status FROM contacts C INNER JOIN logs L ON L.user_id=? AND L.element=1 AND L.action="POST/contacts/create/" AND L.element_id=C.id AND C.status!=2 INNER JOIN contacts_numbers PHN on C.id=PHN.contact_id AND PHN.defaultt=1 AND PHN.type = 1 INNER JOIN webphone.lines LI ON PHN.number=LI.user LIMIT 10 offset ?', [id, Number(offset)], (error, res2) => {
 
                 if (!error) {
+                    dbPool.query('SELECT  count(*) as total  FROM contacts C INNER JOIN logs L ON L.user_id=? AND L.element=1 AND L.action="POST/contacts/create/" AND L.element_id=C.id AND C.status!=2  ', [id], (error, res3) => {
+                        if (!error) {
+                            result({
+                                contacts: res.concat(res2),
+                                total: res3[0].total
+                            })
 
-                    result(res.concat(res2))
-
-
-
+                        } else {
+                            res3.send(error)
+                        }
+                    })
                 } else {
-
                     res.send(error)
-
                 }
 
             })
@@ -114,14 +118,22 @@ Contacts.getContactById = (id, offset, result) => {
 
 Contacts.getContactByFavorite = (id, offset, result) => {
 
-    dbPool.query('SELECT C.*,L.user_id,PHN.number,PHN.id as phone_id,PHN.class,PHN.status as phone_status FROM contacts C INNER JOIN logs L ON L.user_id=? AND L.element=1 AND L.action="POST/contacts/create/" AND L.element_id=C.id AND C.status!=2 AND C.favorite=1 INNER JOIN contacts_numbers PHN on C.id=PHN.contact_id AND PHN.defaultt=1 LIMIT 10 offset ?', [id, Number(offset)], (error, res) => {
+    dbPool.query('SELECT count(*) over() as total, C.*,L.user_id,PHN.number,PHN.id as phone_id,PHN.class,PHN.status as phone_status FROM contacts C INNER JOIN logs L ON L.user_id=? AND L.element=1 AND L.action="POST/contacts/create/" AND L.element_id=C.id AND C.status!=2 AND C.favorite=1 INNER JOIN contacts_numbers PHN on C.id=PHN.contact_id AND PHN.defaultt=1 LIMIT 10 offset ?', [id, Number(offset)], (error, res) => {
 
         if (!error) {
+            dbPool.query('SELECT count(*)  as total FROM contacts C INNER JOIN logs L ON L.user_id=? AND L.element=1 AND L.action="POST/contacts/create/" AND L.element_id=C.id AND C.status!=2 AND C.favorite=1 INNER JOIN contacts_numbers PHN on C.id=PHN.contact_id AND PHN.defaultt=1  ', [id], (error, res3) => {
+                if (!error) {
+                    result({
+                        contacts: res,
+                        total: res3[0].total
+                    })
+                } else {
+                    res.send(error)
 
-            result(res)
+                }
+            })
 
         } else {
-
             res.send(error)
 
         }
@@ -174,6 +186,7 @@ Contacts.getContactsSearch = (id, first, last, result) => {
  */
 
 Contacts.createNewContact = (accountsData, dataPacket, user_id, ip_address, result) => {
+    console.log(accountsData)
 
     dbPool.query('SELECT * FROM contacts WHERE account_id=?', [accountsData.id], (error, res) => {
 
@@ -235,7 +248,7 @@ Contacts.updateContact = (id, contactsData, dataPacket, user_id, ip_address, res
 
                 'UPDATE contacts SET first_name=? , last_name=?, country=? ,source=? ,favorite=?,date_end=?, status=? WHERE (id = ?)',
 
-                [contactsData.first_name, contactsData.last_name, contactsData.country, contactsData.source, contactsData.favorite, contactsData.date_end, contactsData.status, id],
+                [contactsData.first_name, contactsData.last_name, contactsData.country, contactsData.source, contactsData.favorite, contactsData.date_end, contactsData.status, contactsData.photo, id],
 
                 (error, res) => {
 
