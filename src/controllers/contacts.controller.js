@@ -294,11 +294,9 @@ export const createNewContacts = async (req, res) => {
 
                         ...contactsData,
 
-                        new_id: result.insertId
+                        id: result.insertId
 
                     }
-
-
 
                 })
 

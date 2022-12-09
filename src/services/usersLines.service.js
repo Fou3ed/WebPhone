@@ -116,15 +116,13 @@ UsersLines.getUserLineByUserId = (id, result) => {
 
 UsersLines.createNewUserLine = (usersData, dataPacket, ip_address, result) => {
 
-    dbPool.query('SELECT user_id FROM users_lines where user_id=?', [usersData.id], (error, res) => {
+    dbPool.query('SELECT user_id FROM users_lines where user_id=? and line_id=?', [usersData.user_id,usersData.line_id], (error, res) => {
 
         if (res.length === 0) {
 
             dbPool.query('INSERT INTO users_lines SET ?', usersData, (error, res) => {
 
                 if (error) {
-
-
 
                     result('false')
 

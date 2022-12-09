@@ -14,12 +14,11 @@ import {
  * 
  */
 export const getContactPhNumbers = (req, res) => {
-    C_PhNumModel.getAllNumbers(req.params.id, req.query.offset, (PhNumbers, error) => {
+    C_PhNumModel.getAllNumbers(req.params.id, (PhNumbers, error) => {
         if (!error) {
             res.status(200).send({
                 code: "success",
                 total: PhNumbers.length,
-                NumPage: (Math.ceil((PhNumbers.length) / 10)),
                 data: PhNumbers
             })
         } else {

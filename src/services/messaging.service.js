@@ -48,7 +48,7 @@ message.getMessageBySender = async (sender, receiver, offset, result) => {
             dbPool.query('SELECT  count(*) as total FROM messaging   WHERE (sender=? and receiver=?) or (receiver=? and sender =?) ', [sender, receiver, sender, receiver], (error, res2) => {
                 if (!error) {
                     result({
-                        messages: res.concat(res2),
+                        messages: res,
                         total: res2[0].total
                     })
                 } else {

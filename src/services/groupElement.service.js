@@ -19,11 +19,11 @@ var GroupElement = function (G_Element) {
 /** get list of group element by group id
  * */
 
-GroupElement.getAllGroupElement = (id, classs, offset, result) => {
+GroupElement.getAllGroupElement = (id, classs, result) => {
     console.log(classs, id)
     const Class = classs
     switch (Class) {
-        case '1': dbPool.query('SELECT GE.*,G.class,C.first_name,C.last_name,PHN.number FROM webphone.groups_elements GE INNER JOIN webphone.groups G on GE.group_id=G.id AND group_id=? INNER JOIN webphone.contacts C ON C.id=GE.element_id INNER JOIN webphone.contacts_numbers PHN ON PHN.contact_id=C.id LIMIT 10 OFFSET ?', [id, Number(offset)], (error, res) => {
+        case '1': dbPool.query('SELECT GE.*,G.class,C.first_name,C.last_name,PHN.number FROM webphone.groups_elements GE INNER JOIN webphone.groups G on GE.group_id=G.id AND group_id=? INNER JOIN webphone.contacts C ON C.id=GE.element_id INNER JOIN webphone.contacts_numbers PHN ON PHN.contact_id=C.id', id, (error, res) => {
             if (!error) {
                 result(res)
 
@@ -32,7 +32,7 @@ GroupElement.getAllGroupElement = (id, classs, offset, result) => {
             }
         })
             break;
-        case '2': dbPool.query('SELECT GE.*,G.class,L.name,L.host,L.port,L.user FROM webphone.groups_elements GE INNER JOIN webphone.groups G on GE.group_id=G.id AND group_id=? INNER JOIN webphone.lines L ON L.id=GE.element_id LIMIT 10 OFFSET ?', [id, Number(offset)], (error, res) => {
+        case '2': dbPool.query('SELECT GE.*,G.class,L.name,L.host,L.port,L.user FROM webphone.groups_elements GE INNER JOIN webphone.groups G on GE.group_id=G.id AND group_id=? INNER JOIN webphone.lines L ON L.id=GE.element_id', id, (error, res) => {
             if (!error) {
                 result(res)
 
@@ -41,7 +41,7 @@ GroupElement.getAllGroupElement = (id, classs, offset, result) => {
             }
         })
             break;
-        case '3': dbPool.query('SELECT GE.*,G.class,U.username,U.email FROM webphone.groups_elements GE INNER JOIN webphone.groups G on GE.group_id=G.id AND group_id=? INNER JOIN webphone.users U ON U.id=GE.element_id LIMIT 10 OFFSET ? ', [id, Number(offset)], (error, res) => {
+        case '3': dbPool.query('SELECT GE.*,G.class,U.username,U.email FROM webphone.groups_elements GE INNER JOIN webphone.groups G on GE.group_id=G.id AND group_id=? INNER JOIN webphone.users U ON U.id=GE.element_id ', id, (error, res) => {
             if (!error) {
                 result(res)
 
@@ -55,8 +55,8 @@ GroupElement.getAllGroupElement = (id, classs, offset, result) => {
 /**
  * get group_element by element and element id
  */
-GroupElement.getGroupElementsByElement = (element, element_id,offset, result) => {
-    dbPool.query('SELECT GE.*,G.name FROM webphone.groups_elements GE INNER JOIN webphone.groups G on GE.group_id=G.id  AND GE.element=? AND GE.element_id=? LIMIT 10 OFFSET ?  ', [element, element_id, Number(offset)], (error, res) => {
+GroupElement.getGroupElementsByElement = (element, element_id, result) => {
+    dbPool.query('SELECT GE.*,G.name FROM webphone.groups_elements GE INNER JOIN webphone.groups G on GE.group_id=G.id  AND GE.element=? AND GE.element_id=?  ', [element, element_id], (error, res) => {
         if (!error) {
             result(res)
         } else {

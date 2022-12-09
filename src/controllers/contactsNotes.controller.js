@@ -12,7 +12,7 @@ export const getAllNotes = (req, res) => {
         if (!error) {
             res.status(200).send({
                 code: "success",
-                total: notes.length,
+                NumPage: (Math.ceil((notes.total) / 10)),
                 data: notes
             })
 

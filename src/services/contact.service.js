@@ -246,7 +246,7 @@ Contacts.updateContact = (id, contactsData, dataPacket, user_id, ip_address, res
 
             dbPool.query(
 
-                'UPDATE contacts SET first_name=? , last_name=?, country=? ,source=? ,favorite=?,date_end=?, status=? WHERE (id = ?)',
+                'UPDATE contacts SET first_name=? , last_name=?, country=? ,source=? ,favorite=?,date_end=?, status=?,photo=? WHERE (id = ?)',
 
                 [contactsData.first_name, contactsData.last_name, contactsData.country, contactsData.source, contactsData.favorite, contactsData.date_end, contactsData.status, contactsData.photo, id],
 
@@ -298,7 +298,6 @@ Contacts.updateContact = (id, contactsData, dataPacket, user_id, ip_address, res
 Contacts.deleteContact = (id, dataPacket, user_id, ip_address, result) => {
 
     dbPool.query('SELECT * FROM contacts WHERE id= ? ', id, (error, resR1) => {
-        console.log(resR1.length === 0)
         if (resR1.length === 0) {
 
             result('false')
@@ -318,7 +317,6 @@ Contacts.deleteContact = (id, dataPacket, user_id, ip_address, result) => {
                     app_logs(dataPacket.account_id, dataPacket.action, element, id)
 
                     logs(dataPacket.account_id, user_id, dataPacket.action, element, id, ip_address)
-
 
 
                 }

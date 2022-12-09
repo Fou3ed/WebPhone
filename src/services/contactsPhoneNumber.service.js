@@ -56,13 +56,15 @@ var PhoneNumber = function (phoneNumber) {
 
  * */
 
-PhoneNumber.getAllNumbers = (id,offset, result) => {
+PhoneNumber.getAllNumbers = (id, result) => {
 
-    dbPool.query('SELECT distinct CN.*,L.host FROM webphone.contacts_numbers CN INNER JOIN webphone.lines L ON contact_id=? AND L.user=CN.number LIMIT 10 OFFSET ?', [id,Number(offset)], (error, res) => {
+
+
+    dbPool.query('SELECT distinct CN.*,L.host FROM webphone.contacts_numbers CN INNER JOIN webphone.lines L ON contact_id=? AND L.user=CN.number ', [id], (error, res) => {
 
         if (!error) {
 
-            dbPool.query('SELECT  * FROM contacts_numbers CN WHERE contact_id=?  AND type=0 LIMIT 10 OFFSET ?  ', [id,Number(offset)], (error, res2) => {
+            dbPool.query('SELECT  * FROM contacts_numbers CN WHERE contact_id=?  AND type=0 LIMIT 10  ', [id], (error, res2) => {
 
                 if (!error) {
 
