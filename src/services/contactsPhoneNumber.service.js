@@ -58,8 +58,6 @@ var PhoneNumber = function (phoneNumber) {
 
 PhoneNumber.getAllNumbers = (id,offset, result) => {
 
-
-
     dbPool.query('SELECT distinct CN.*,L.host FROM webphone.contacts_numbers CN INNER JOIN webphone.lines L ON contact_id=? AND L.user=CN.number LIMIT 10 OFFSET ?', [id,Number(offset)], (error, res) => {
 
         if (!error) {

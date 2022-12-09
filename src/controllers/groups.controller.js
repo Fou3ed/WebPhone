@@ -14,11 +14,8 @@ export const getGroup = (req, res) => {
         if (!error) {
             res.status(200).send({
                 code: "success",
-                total: groups.length,
-                NumPage: (Math.ceil((groups.length) / 10)),
-
+                NumPage: (Math.ceil((groups.total) / 10)),
                 data: groups
-
             }
             )
         } else {
@@ -58,8 +55,7 @@ export const getGroupBYclass = (req, res) => {
         if (!error) {
             res.status(200).send({
                 code: "success",
-                total: groups.length,
-                NumPage: (Math.ceil((groups.length) / 10)),
+                NumPage: (Math.ceil((groups.total) / 10)),
                 data: groups
             }
             )

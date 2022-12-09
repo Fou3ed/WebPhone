@@ -256,7 +256,6 @@ Contacts.updateContact = (id, contactsData, dataPacket, user_id, ip_address, res
 
                     if (error) {
 
-                        console.log(error)
 
                         _res.status(400).send(error)
 
@@ -299,7 +298,7 @@ Contacts.updateContact = (id, contactsData, dataPacket, user_id, ip_address, res
 Contacts.deleteContact = (id, dataPacket, user_id, ip_address, result) => {
 
     dbPool.query('SELECT * FROM contacts WHERE id= ? ', id, (error, resR1) => {
-
+        console.log(resR1.length === 0)
         if (resR1.length === 0) {
 
             result('false')

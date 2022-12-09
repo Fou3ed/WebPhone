@@ -19,10 +19,18 @@ var Groups = function (groups) {
 Groups.getAllGroups = (id, offset, result) => {
     dbPool.query('SELECT distinct G.*,L.user_id FROM webphone.groups G INNER JOIN webphone.logs L ON L.user_id=? AND L.action="POST/groups/create/" LIMIT 10 offset ? ', [id, Number(offset)], (error, res) => {
         if (!error) {
-            result(res)
+            dbPool.query('SELECT count(*) as total FROM webphone.groups G INNER JOIN webphone.logs L ON L.user_id=? AND L.action="POST/groups/create/" ', [id], (error, res2) => {
+                if (!error) {
+                    result({
+                        total: res2[0].total,
+                        groups: res
+                    })
+                } else {
+                    res.status(400).send(error)
+                }
+            })
 
         } else {
-            console.log(error)
             res.status(400).send(error)
 
         }
@@ -46,13 +54,20 @@ Groups.getGroupById = (id, result) => {
 }
 /** get list of groups by user_id and class (from query)
  * */
-Groups.getAllGroupsByClass = (id, classs,offset, result) => {
-    dbPool.query('SELECT distinct G.*,L.user_id FROM webphone.groups G INNER JOIN webphone.logs L ON L.user_id=? AND L.action="POST/groups/create/" AND G.class=?  LIMIT 10 offset ? ', [id, classs,Number(offset)], (error, res) => {
+Groups.getAllGroupsByClass = (id, classs, offset, result) => {
+    dbPool.query('SELECT distinct G.*,L.user_id FROM webphone.groups G INNER JOIN webphone.logs L ON L.user_id=? AND L.action="POST/groups/create/" AND G.class=?  LIMIT 10 offset ? ', [id, classs, Number(offset)], (error, res) => {
         if (!error) {
-            result(res)
-
+            dbPool.query('SELECT count(*) as total FROM webphone.groups G INNER JOIN webphone.logs L ON L.user_id=? AND L.action="POST/groups/create/" AND G.class=? ', [id, classs], (error, res2) => {
+                if (!error) {
+                    result({
+                        groups: res,
+                        total: res2[0].total
+                    })
+                } else {
+                    res.status(400).send(error)
+                }
+            })
         } else {
-            console.log(error)
             res.status(400).send(error)
 
         }
