@@ -20,10 +20,9 @@ var GroupElement = function (G_Element) {
  * */
 
 GroupElement.getAllGroupElement = (id, classs, result) => {
-    console.log(classs, id)
     const Class = classs
     switch (Class) {
-        case '1': dbPool.query('SELECT GE.*,G.class,C.first_name,C.last_name,PHN.number FROM webphone.groups_elements GE INNER JOIN webphone.groups G on GE.group_id=G.id AND group_id=? INNER JOIN webphone.contacts C ON C.id=GE.element_id INNER JOIN webphone.contacts_numbers PHN ON PHN.contact_id=C.id', id, (error, res) => {
+        case '1': dbPool.query('SELECT GE.*,G.class,C.first_name,C.last_name,PHN.number FROM webphone.groups_elements GE INNER JOIN webphone.groups G on GE.group_id=G.id AND group_id=? INNER JOIN webphone.contacts C ON C.id=GE.element_id INNER JOIN webphone.contacts_numbers PHN ON PHN.contact_id=C.id and PHN.defaultt=1', id, (error, res) => {
             if (!error) {
                 result(res)
 
@@ -32,7 +31,7 @@ GroupElement.getAllGroupElement = (id, classs, result) => {
             }
         })
             break;
-        case '2': dbPool.query('SELECT GE.*,G.class,L.name,L.host,L.port,L.user FROM webphone.groups_elements GE INNER JOIN webphone.groups G on GE.group_id=G.id AND group_id=? INNER JOIN webphone.lines L ON L.id=GE.element_id', id, (error, res) => {
+        case '2': dbPool.query('SELECT GE.*,G.class,L.name,L.host,L.port,L.user FROM webphone.groups_elements GE INNER JOIN webphone.groups G on GE.group_id=G.id AND group_id=? INNER JOIN webphone.lines L ON L.id=GE.element_id  and PHN.defaultt=1 ', id, (error, res) => {
             if (!error) {
                 result(res)
 
@@ -41,7 +40,7 @@ GroupElement.getAllGroupElement = (id, classs, result) => {
             }
         })
             break;
-        case '3': dbPool.query('SELECT GE.*,G.class,U.username,U.email FROM webphone.groups_elements GE INNER JOIN webphone.groups G on GE.group_id=G.id AND group_id=? INNER JOIN webphone.users U ON U.id=GE.element_id ', id, (error, res) => {
+        case '3': dbPool.query('SELECT GE.*,G.class,U.username,U.email FROM webphone.groups_elements GE INNER JOIN webphone.groups G on GE.group_id=G.id AND group_id=? INNER JOIN webphone.users U ON U.id=GE.element_id   and PHN.defaultt=1', id, (error, res) => {
             if (!error) {
                 result(res)
 
