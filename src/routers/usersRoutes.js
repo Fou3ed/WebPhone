@@ -3,12 +3,12 @@ import {
     getUsersList,
     getUserById,
     createNewUsers,
-    updateUsers,
+    updateUser,
     deleteUsers,
     loginUser,
+    updateUserPw,
 
 } from '../controllers/users.controller.js'
-import checkKey from '../middleware/check api_key/check_api_key.js'
 const router = express.Router()
 
 
@@ -19,25 +19,31 @@ const router = express.Router()
  */
 router.get('/', getUsersList)
 /**
- * get Contact by ID
+ * get user by ID
  * http:/localhost:3000/user/{id}
  * 
  */
 router.get('/:id/', getUserById)
 /**
- * Add New Contact 
+ * Add New user 
  * http:/localhost:3000/user/
 
  */
 router.post('/create', createNewUsers)
 /**
- * update Contact
+ * update user
  * http:/localhost:3000/user/{id}
  * 
  */
-router.put('/update/:id', updateUsers)
+router.put('/update/:id', updateUser)
 /**
- * Delete Contact
+ * update user password
+ * http:/localhost:3000/user/{id}
+ * 
+ */
+router.put('/password/put/:id', updateUserPw)
+/**
+ * Delete user
  * http:/localhost:3000/user/{id}
  */
 router.delete('/delete/:id', deleteUsers)

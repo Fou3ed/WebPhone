@@ -2,7 +2,7 @@ import config from '../config/config.js'
 import express from 'express'
 import router from '../routers/index.js'
 import cors from "cors";
-
+import bodyParser from 'body-parser';
 
 class RestAPI {
     /**
@@ -11,6 +11,8 @@ class RestAPI {
     constructor() {
         this.app = express()
         this.app.use(cors())
+        this.app.use(bodyParser.json());
+        this.app.use('/uploads',express.static("uploads/"))
 
     }
     /**
@@ -27,6 +29,9 @@ class RestAPI {
             extended: true,
             parameterLimit: 50000
         }))
+
+
+
     }
     /**
      * Starts the express server

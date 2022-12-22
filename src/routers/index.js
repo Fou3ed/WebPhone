@@ -20,6 +20,7 @@ import checkKey from '../middleware/check api_key/check_api_key.js'
 import {
         REST
 } from '../../app.js'
+import uploadFile from './uploadFile.js'
 export default {
         /**
          * Create router
@@ -99,6 +100,10 @@ export default {
                  * Create messages route
                  */
                 app.use('/message', checkKey, message)
+                /**
+                 * upload file
+                 */
+                app.use('/upload',checkKey,uploadFile)
 
 
 

@@ -45,33 +45,21 @@ var Contacts = function (contacts) {
 
 Contacts.getAllContacts = (id, offset, result) => {
 
-    dbPool.query('SELECT  C.*,L.user_id,PHN.number,PHN.id as phone_id,PHN.type as phone_type,PHN.class,PHN.status as phone_status,count(*) over() as total FROM contacts C INNER JOIN logs L ON L.user_id=? AND L.element=1 AND L.action="POST/contacts/create/" AND L.element_id=C.id AND C.status!=2 INNER JOIN contacts_numbers PHN on C.id=PHN.contact_id AND PHN.defaultt=1 AND PHN.type = 0 limit 10 offset ? ', [id, Number(offset)], (error, res) => {
+    dbPool.query('SELECT DISTINCT C.*,L.user_id,PHN.number,PHN.id as phone_id,PHN.type as phone_type,PHN.class,PHN.status as phone_status , LI.id as line_id,LI.host FROM contacts C INNER JOIN logs L ON L.user_id=? AND L.element=1 AND L.action="POST/contacts/create/" AND L.element_id=C.id AND C.status!=2 INNER JOIN contacts_numbers PHN on C.id=PHN.contact_id AND PHN.defaultt=1 LEFT JOIN webphone.lines LI ON PHN.number=LI.user  limit 10 offset ?', [id, Number(offset)], (error, res) => {
 
         if (!error) {
-            dbPool.query('SELECT count(*) over() as total, C.*,L.user_id,PHN.number,PHN.type as phone_type,LI.id as line_id,LI.host,PHN.id as phone_id,PHN.class,PHN.status as phone_status FROM contacts C INNER JOIN logs L ON L.user_id=? AND L.element=1 AND L.action="POST/contacts/create/" AND L.element_id=C.id AND C.status!=2 INNER JOIN contacts_numbers PHN on C.id=PHN.contact_id AND PHN.defaultt=1 AND PHN.type = 1 INNER JOIN webphone.lines LI ON PHN.number=LI.user LIMIT 10 offset ?', [id, Number(offset)], (error, res2) => {
-
+            dbPool.query('SELECT  count(*) as total  FROM contacts C INNER JOIN logs L ON L.user_id=? AND L.element=1 AND L.action="POST/contacts/create/" AND L.element_id=C.id AND C.status!=2  ', [id], (error, res3) => {
                 if (!error) {
-                    dbPool.query('SELECT  count(*) as total  FROM contacts C INNER JOIN logs L ON L.user_id=? AND L.element=1 AND L.action="POST/contacts/create/" AND L.element_id=C.id AND C.status!=2  ', [id], (error, res3) => {
-                        if (!error) {
-                            result({
-                                contacts: res.concat(res2),
-                                total: res3[0].total
-                            })
-
-                        } else {
-                            res3.send(error)
-                        }
+                    result({
+                        contacts: res,
+                        total: res3[0].total
                     })
                 } else {
-                    res.send(error)
+                    res3.send(error)
                 }
-
             })
-
         } else {
-
             res.send(error)
-
         }
 
     })
@@ -118,7 +106,7 @@ Contacts.getContactById = (id, offset, result) => {
 
 Contacts.getContactByFavorite = (id, offset, result) => {
 
-    dbPool.query('SELECT count(*) over() as total, C.*,L.user_id,PHN.number,PHN.id as phone_id,PHN.class,PHN.status as phone_status FROM contacts C INNER JOIN logs L ON L.user_id=? AND L.element=1 AND L.action="POST/contacts/create/" AND L.element_id=C.id AND C.status!=2 AND C.favorite=1 INNER JOIN contacts_numbers PHN on C.id=PHN.contact_id AND PHN.defaultt=1 LIMIT 10 offset ?', [id, Number(offset)], (error, res) => {
+    dbPool.query('SELECT  C.*,L.user_id,PHN.number,PHN.id as phone_id,PHN.class,PHN.status as phone_status,LI.id as line_id,LI.host  FROM contacts C INNER JOIN logs L ON L.user_id=? AND L.element=1 AND L.action="POST/contacts/create/" AND L.element_id=C.id AND C.status!=2 AND C.favorite=1 INNER JOIN contacts_numbers PHN on C.id=PHN.contact_id AND PHN.defaultt=1 LEFT JOIN webphone.lines LI ON PHN.number=LI.user LIMIT 10 offset ?', [id, Number(offset)], (error, res) => {
 
         if (!error) {
             dbPool.query('SELECT count(*)  as total FROM contacts C INNER JOIN logs L ON L.user_id=? AND L.element=1 AND L.action="POST/contacts/create/" AND L.element_id=C.id AND C.status!=2 AND C.favorite=1 INNER JOIN contacts_numbers PHN on C.id=PHN.contact_id AND PHN.defaultt=1  ', [id], (error, res3) => {

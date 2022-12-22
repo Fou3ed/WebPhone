@@ -207,6 +207,9 @@ PhoneNumber.createNewNumber = (contactsData, dataPacket, user_id, ip_address, re
 PhoneNumber.updateNumber = (id, numbersData, dataPacket, user_id, ip_address, result, _res) => {
 
     dbPool.query('SELECT * FROM contacts_numbers WHERE id= ? ', id, (error, resR1) => {
+
+
+
         if (resR1.length === 0) {
 
             result('false')
@@ -272,19 +275,21 @@ PhoneNumber.updateNumberDefault = (id, numbersData, dataPacket, user_id, ip_addr
     dbPool.query('SELECT * FROM contacts_numbers WHERE id=? ', [id], (error, resR1) => {
 
         if (resR1.length === 0) {
-            console.log(resR1)
 
             result('false')
 
         } else {
+
             dbPool.query(
 
                 'UPDATE contacts_numbers SET defaultt=0 WHERE contact_id=?',
 
                 [resR1[0].contact_id],
+
                 (error, res) => {
 
                     if (!error) {
+
                         dbPool.query('update contacts_numbers  SET defaultt=1 WHERE id=?', id, (error, res) => {
 
                             if (!error) {

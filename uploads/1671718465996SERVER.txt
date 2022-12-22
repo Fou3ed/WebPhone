@@ -1,0 +1,23 @@
+Domain name
+
+URL :  foued.local.itwise.pro
+ 
+
+SSH credentials
+
+IP : 143.198.55.254
+User : fouedlo
+Password : JQH54N8aXw!ix7m@1878
+Port : 22
+ 
+
+Database credentials
+
+URL : https://143.198.55.254:2031/pma/
+User : fouedlo
+Password : JQH54N8aXw!ix7m@1878
+
+
+
+ATLAS :
+PW : HJz1hkPtuQdWaMnu

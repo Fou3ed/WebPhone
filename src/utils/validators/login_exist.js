@@ -10,8 +10,6 @@ let login_check = function async(login) {
         }
         )
     })
-
-
 }
 
 export default login_check

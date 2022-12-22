@@ -31,14 +31,13 @@ export const getContactsList = (req, res) => {
     ContactModel.getAllContacts(req.params.id, req.query.offset, (contacts, error) => {
 
         if (!error) {
-            console.log(contacts)
+
             res.status(200).send({
 
                 code: "success",
 
                 NumPage: (Math.ceil((contacts.total) / 10)),
                 data: contacts,
-
 
 
             })

@@ -100,7 +100,7 @@ message.getMessageByUserId = (id, offset, result) => {
 
  */
 
-message.createNewMessage = (messageData, dataPacket, user_id, ip_address, result) => {
+message.createNewMessage = (messageData, dataPacket,user_id ,ip_address, result) => {
 
     dbPool.query('INSERT INTO messaging SET sender=?,receiver=?,message=?,status=? ',
 
@@ -142,7 +142,7 @@ message.createNewMessage = (messageData, dataPacket, user_id, ip_address, result
 
  */
 
-message.updateMessage = (sender, receiver, messageData, dataPacket, result, _res) => {
+message.updateMessage = (sender, receiver, messageData, dataPacket,user_id,ip_address, result) => {
 
     dbPool.query('SELECT id,time_sent,time_seen FROM messaging WHERE sender=? and receiver=?  order BY time_sent desc ', [sender, receiver], (error, resR1) => {
 
@@ -173,7 +173,7 @@ message.updateMessage = (sender, receiver, messageData, dataPacket, result, _res
 
 
 
-                        _res.status(400).send(error)
+                        res.status(400).send(error)
 
 
 

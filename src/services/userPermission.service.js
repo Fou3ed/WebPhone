@@ -72,7 +72,6 @@ userPermission.updateUserPermission = (id, userPermissionData, dataPacket, ip_ad
         if (resR1.length === 0) {
             result('false')
         } else {
-            let action = "Update user permission "
             dbPool.query(
                 'UPDATE users_permissions SET action=? , status=? WHERE (id = ?)',
                 [userPermissionData.action, userPermissionData.status, id],

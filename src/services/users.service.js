@@ -23,6 +23,7 @@ var Users = function (users) {
     this.email = users.email
     this.status = users.status
     this.date_end = users.date_end
+    this.photo=users.photo
 }
 /**
  * 
@@ -104,7 +105,6 @@ Users.createNewUser = (userData, dataPacket, result) => {
                     app_logs(dataPacket.account_id, dataPacket.action, element, res.insertId)
                     logs(dataPacket.account_id, dataPacket.action, element, res.insertId)
                 } else {
-                    console.log(error)
                     result('false')
                 }
             })
@@ -117,33 +117,58 @@ Users.createNewUser = (userData, dataPacket, result) => {
  * Update user
  * 
  */
-Users.updateUser = (id, usersData, dataPacket, user_id, ip_address, result, _res) => {
-
+Users.updateUser = (id, usersData, dataPacket, ip_address,result) => {
     dbPool.query('SELECT * FROM users WHERE id= ? ', id, (error, resR1) => {
         if (resR1.length === 0) {
             result('false')
         } else {
             dbPool.query(
-                'UPDATE users SET username=? ,login=?,  password=? , default_theme=? , default_language=? , default_timezone=? ,default_ring_sound=?,email=?,status=?,date_end=? WHERE id = ?',
-                [usersData.username, usersData.login, usersData.password, usersData.default_theme, usersData.default_language, usersData.default_timezone, usersData.default_ring_sound, usersData.email, usersData.status, usersData.date_end,  id],
+                'UPDATE users SET username=? ,default_theme=? , default_language=? , default_timezone=? ,default_ring_sound=?,email=?,status=?,date_end=?,photo? WHERE id = ?',
+                [usersData.username, usersData.default_theme, usersData.default_language, usersData.default_timezone, usersData.default_ring_sound, usersData.email, usersData.status, usersData.date_end,usersData.photo,  id],
                 (error, res) => {
                     if (error) {
-                        res.status(400).send(error)
                         console.log(error)
+
+                        res.status(400).send(error)
                     } else {
                         result(res)
                         app_logs(dataPacket.account_id, dataPacket.action, element, id)
-                        logs(dataPacket.account_id, user_id, dataPacket.action, element, id, ip_address)
+                        logs(dataPacket.account_id, id, dataPacket.action, element, id, ip_address)
                     }
                 }
             )
         }
     })
 }
-
+/**
+ * Update user password only
+ * 
+ */
+Users.updateUserPw = (id, usersData, dataPacket,ip_address, result) => {
+    dbPool.query('SELECT * FROM users WHERE id= ? ', id, async (error, resR1) => {
+                const hashedPassword = await bcrypt.hash(usersData.password, 10)
+        if (resR1.length === 0) {
+            result('false')
+        } else {
+            usersData.password=hashedPassword
+            dbPool.query(
+                'UPDATE users SET password=? WHERE id = ?',
+                [usersData.password,  id],
+                (error, res) => {
+                    if (error) {
+                        res.status(400).send(error)
+                    } else {
+                        result(res)
+                        app_logs(dataPacket.account_id, dataPacket.action, element, id)
+                        logs(dataPacket.account_id,id,dataPacket.action,element,id,ip_address)
+                    }
+                }
+            )
+        }
+    })
+}
 /**
  * Delete users
- * 
  */
 Users.deleteUser = (id, dataPacket, user_id, ip_address, result) => {
     dbPool.query('SELECT * FROM users WHERE id= ? ', id, (error, resR1) => {

@@ -2,7 +2,6 @@ import AccountModel from '../services/account.service.js'
 import {
     checkStatus,
     checkName,
-    validateDate
 } from '../utils/validators/Validator.js'
 
 
