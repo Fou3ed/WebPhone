@@ -23,7 +23,7 @@ var Users = function (users) {
     this.email = users.email
     this.status = users.status
     this.date_end = users.date_end
-    this.photo=users.photo
+    this.photo = users.photo
 }
 /**
  * 
@@ -97,6 +97,7 @@ Users.createNewUser = (userData, dataPacket, result) => {
 
     dbPool.query('SELECT * FROM users WHERE account_id=?', [userData.account_id], async (error, res) => {
         const hashedPassword = await bcrypt.hash(userData.password, 10)
+
         if (res.length !== 0) {
             userData.password = hashedPassword
             dbPool.query('INSERT INTO users SET ?', userData, async (error, res) => {
@@ -117,14 +118,14 @@ Users.createNewUser = (userData, dataPacket, result) => {
  * Update user
  * 
  */
-Users.updateUser = (id, usersData, dataPacket, ip_address,result) => {
+Users.updateUser = (id, usersData, dataPacket, ip_address, result) => {
     dbPool.query('SELECT * FROM users WHERE id= ? ', id, (error, resR1) => {
         if (resR1.length === 0) {
             result('false')
         } else {
             dbPool.query(
                 'UPDATE users SET username=? ,default_theme=? , default_language=? , default_timezone=? ,default_ring_sound=?,email=?,status=?,date_end=?,photo? WHERE id = ?',
-                [usersData.username, usersData.default_theme, usersData.default_language, usersData.default_timezone, usersData.default_ring_sound, usersData.email, usersData.status, usersData.date_end,usersData.photo,  id],
+                [usersData.username, usersData.default_theme, usersData.default_language, usersData.default_timezone, usersData.default_ring_sound, usersData.email, usersData.status, usersData.date_end, usersData.photo, id],
                 (error, res) => {
                     if (error) {
                         console.log(error)
@@ -144,26 +145,33 @@ Users.updateUser = (id, usersData, dataPacket, ip_address,result) => {
  * Update user password only
  * 
  */
-Users.updateUserPw = (id, usersData, dataPacket,ip_address, result) => {
-    dbPool.query('SELECT * FROM users WHERE id= ? ', id, async (error, resR1) => {
-                const hashedPassword = await bcrypt.hash(usersData.password, 10)
-        if (resR1.length === 0) {
-            result('false')
-        } else {
-            usersData.password=hashedPassword
-            dbPool.query(
-                'UPDATE users SET password=? WHERE id = ?',
-                [usersData.password,  id],
-                (error, res) => {
-                    if (error) {
-                        res.status(400).send(error)
-                    } else {
-                        result(res)
-                        app_logs(dataPacket.account_id, dataPacket.action, element, id)
-                        logs(dataPacket.account_id,id,dataPacket.action,element,id,ip_address)
+Users.updateUserPw = (id, usersData, dataPacket, ip_address, oldPassword, result) => {
+    dbPool.query('SELECT password FROM users WHERE id= ? ', id, async (error, resR1) => {
+        let Password = resR1[0].password
+        const ValidPassword = await bcrypt.compare(oldPassword, Password)
+        if (!ValidPassword){ 
+                result('pw')
+                
+        }  else {
+            const hashedPassword = await bcrypt.hash(usersData.password, 10)
+            if (resR1.length === 0) {
+                result('false')
+            } else {
+                usersData.password = hashedPassword
+                dbPool.query(
+                    'UPDATE users SET password=? WHERE id = ?',
+                    [usersData.password, id],
+                    (error, res) => {
+                        if (error) {
+                            res.status(400).send(error)
+                        } else {
+                            result(res)
+                            app_logs(dataPacket.account_id, dataPacket.action, element, id)
+                            logs(dataPacket.account_id, id, dataPacket.action, element, id, ip_address)
+                        }
                     }
-                }
-            )
+                )
+            }
         }
     })
 }

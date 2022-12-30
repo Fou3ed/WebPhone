@@ -45,9 +45,6 @@ var Lines = function (lines) {
     this.date_end = lines.date_end
 
 
-
-
-
 }
 
 /** get list of lines 
@@ -127,7 +124,6 @@ Lines.createNewLines = async (linesData, dataPacket, user_id, ip_address, result
                     result('false')
 
                 } else {
-
                     result(res)
 
                     app_logs(dataPacket.account_id, dataPacket.action, element, res.insertId)

@@ -196,7 +196,7 @@ export const updateUser = async (req, res) => {
             message: 'status must be 1-2 or 3',
             code: 'user_status_Invalid'
         })
-    }  else {
+    } else {
         const UsersData = new UsersModel(req.body);
         UsersModel.updateUser(req.params.id, UsersData, req.dataPacket, req.body.ip_address, (result, error) => {
             if (error) {
@@ -226,15 +226,15 @@ export const updateUser = async (req, res) => {
  * 
  */
 export const updateUserPw = async (req, res) => {
-    if (!req.body.password ) {
+    if (!req.body.password) {
         res.status(400).send({
             success: false,
             message: 'wrong parameters',
             code: 'users_information_Invalid'
         })
-    }  else {
+    } else {
         const UsersData = new UsersModel(req.body);
-        UsersModel.updateUserPw(req.params.id, UsersData, req.dataPacket,req.body.ip_address,  (result, error) => {
+        UsersModel.updateUserPw(req.params.id, UsersData, req.dataPacket, req.body.ip_address, req.body.oldPassword, (result, error) => {
             if (error) {
                 res.status(400).send(error)
             } else if (result == 'false') {
@@ -242,6 +242,12 @@ export const updateUserPw = async (req, res) => {
                     success: false,
                     message: 'users ID not found',
                     code: 'users_ID_Invalid'
+                })
+            } else if (result == 'pw') {
+                res.json({
+                    success: false,
+                    message: 'your old password does not match',
+                    code: 'password_Invalide'
                 })
             } else {
                 res.json({

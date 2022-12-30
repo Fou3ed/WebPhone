@@ -139,8 +139,7 @@ export const createNewLines = async (req, res) => {
         LineModel.createNewLines(linesData, req.dataPacket, req.body.user_id, req.body.ip_address, (result, error) => {
 
             if (error) {
-
-            }
+            
                 res.send(error)
 
                 res.status(500).send({
@@ -152,7 +151,7 @@ export const createNewLines = async (req, res) => {
                     code: 'line_creationOperation_Invalid'
 
                 })
-
+            } else 
 
             if (result == 'false') {
 
@@ -174,7 +173,7 @@ export const createNewLines = async (req, res) => {
 
                     message: 'line created',
 
-                    data: linesData
+                    data: [linesData]
 
                 })
 
